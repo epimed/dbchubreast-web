@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>epimed</groupId>
-	<artifactId>dbchubreast-web</artifactId>
-	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>dbchubreast-web Maven Webapp</name>
-	<url>http://maven.apache.org</url>
-
-	<properties>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>epimed</groupId>
+  <artifactId>dbchubreast-web</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>dbchubreast-web Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>4.3.1.RELEASE</spring.version>
@@ -33,7 +33,7 @@
 	</properties>
 
 	<dependencies>
-
+	
 		<!-- Validator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -54,6 +54,13 @@
 			<version>${commons.io.version}</version>
 		</dependency>
 
+
+		<!-- MongoDB Java driver -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongo.java.version}</version>
+		</dependency>
 
 		<!-- PostgreSQL driver -->
 		<dependency>
@@ -104,6 +111,12 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+		<!-- Logging SLF4J -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+			<version>${slf4j.version}</version> </dependency> <dependency> <groupId>org.slf4j</groupId> 
+			<artifactId>slf4j-simple</artifactId> <version>${slf4j.version}</version> 
+			</dependency> -->
+
 		<!-- Bridge logging from JCL to SLF4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -141,11 +154,36 @@
 			<version>${apache.commons.version}</version>
 		</dependency>
 
+		<!-- Thymeleaf for Spring 4 -->
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf-spring4</artifactId>
+			<version>${thymeleaf.version}</version>
+		</dependency>
+
 		<!-- Apache POI - Java API To Access Microsoft Format Files -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
+		</dependency>
+
+
+		<!-- Jackson (JSON mapping) -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- Open CSV -->
@@ -156,7 +194,6 @@
 		</dependency>
 
 	</dependencies>
-
 
 	<build>
 
@@ -183,9 +220,6 @@
 			</plugin>
 
 		</plugins>
-
-		<finalName>dbchubreast-web</finalName>
-
 	</build>
 
 </project>

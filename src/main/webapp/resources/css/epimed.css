@@ -1,0 +1,42 @@
+@charset "utf-8";
+/*
+* EpiMed CSS
+*/
+
+/* =============================================================================
+   Select box
+   ========================================================================== */
+.epimed-select select {
+	width: 300px;
+}
+
+/* =============================================================================
+   Tables
+   ========================================================================== */
+
+
+/* Result table */
+.resultTable td {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 7px;
+	padding-right: 7px;
+	border: #4e95f4 1px solid;
+}
+
+.resultTable tr:hover {
+	cursor: pointer;
+	background-color: #ffff99;
+}
+
+.resultTableNoClic td {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 7px;
+	padding-right: 7px;
+	border: #4e95f4 1px solid;
+}
+
+.resultTableNoClic tr:hover {
+	background-color: #ffff99;
+}

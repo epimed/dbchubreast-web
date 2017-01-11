@@ -37,7 +37,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc //<mvc:annotation-driven />
 @Configuration
-@ComponentScan({"dbchubreast_web.controller"})
+@ComponentScan({"dbchubreast_web"})
 @Import({HibernateConfig.class})
 public class SpringWebConfig extends WebMvcConfigurerAdapter {
 
@@ -50,9 +50,16 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	// === Resources directory ===
+	/*
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**")
 		.addResourceLocations("/resources/");
+	}
+	 */
+
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// registry.addResourceHandler("resources/").addResourceLocations("resources/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
 	// === Enable file uploading ===
