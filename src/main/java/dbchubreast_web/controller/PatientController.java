@@ -31,9 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.service.ChuPatientService;
-import dbchubreast_web.service.ChuTumeurService;
 
 
 @Controller
@@ -41,10 +39,6 @@ public class PatientController extends BaseController {
 
 	@Autowired
 	private ChuPatientService patientService;
-
-	@Autowired
-	private ChuTumeurService tumeurService;
-
 
 	/** ====================================================================================== */
 
@@ -105,10 +99,7 @@ public class PatientController extends BaseController {
 			return "redirect:/patient";
 		}
 
-		List<ChuTumeur> listTumeurs = tumeurService.find(idPatient);
-
 		model.addAttribute("patient", patient);
-		model.addAttribute("listTumeurs", listTumeurs);
 
 		return "patient/show";
 	}

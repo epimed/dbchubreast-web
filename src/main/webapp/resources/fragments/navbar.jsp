@@ -30,6 +30,13 @@
 					
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">Tumeurs<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="${pageContext.request.contextPath}/tumeur">Rechercher une tumeur</a></li>
+					</ul></li>
+					
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Exports<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="${pageContext.request.contextPath}/download/patients">Exporter les patients</a></li>

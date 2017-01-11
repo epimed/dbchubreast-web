@@ -87,6 +87,14 @@
 			</div>
 		</div>
 
+		<p></p>
+
+		<div>
+			<spring:url
+				value="/patient/${patient.idPatient}/tumeurs"
+				var="url" />
+			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher les tumeurs de ce patient</button>
+		</div>
 
 	</div>
 

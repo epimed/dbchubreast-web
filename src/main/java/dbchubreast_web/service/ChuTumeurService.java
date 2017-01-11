@@ -34,8 +34,20 @@ public class ChuTumeurService {
 		return tumeurDao.find(idPatient);
 	}
 	
-	public ChuTumeur find(Integer idTumeur) {
-		return tumeurDao.find(idTumeur);
+	public List<ChuTumeur> findWithDependencies(String idPatient) {
+		return tumeurDao.findWithDependencies(idPatient);
+	}
+	
+	public ChuTumeur findWithDependencies(Integer idTumeur) {
+		return tumeurDao.findWithDependencies(idTumeur);
+	}
+	
+	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur) {
+		return tumeurDao.findAsListWithDependencies(idTumeur);
+	}
+	
+	public List<ChuTumeur> findInAttributesWithDependencies(String text) {
+		return tumeurDao.findInAttributesWithDependencies(text);
 	}
 	
 }

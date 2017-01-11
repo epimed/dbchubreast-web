@@ -1,4 +1,3 @@
-
 <c:if test="${not empty listPatients }">
 
 	<table class="table table-striped">
@@ -28,9 +27,9 @@
 				<td>${patient.dateNaissance}</td>
 				<td>${patient.dateDeces}</td>
 				<td>${patient.statutBrca}</td>
-				
-				<td><spring:url value
-						="/patient/${patient.idPatient}/update" var="updateUrl" />
+
+				<td><spring:url value="/patient/${patient.idPatient}/update"
+						var="updateUrl" />
 					<button class="btn btn-primary"
 						onclick="location.href='${updateUrl}'">Modifier</button></td>
 			</tr>

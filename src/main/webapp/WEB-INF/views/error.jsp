@@ -21,7 +21,7 @@
 
 		<div class="starter-template">
 			<h1>Erreur</h1>
-			<p class="lead">Une erreur est survenue lors d'accès à cette page.</p>
+			<p class="lead">Une erreur est survenue lors de l'affichage de cette page.</p>
 			<p>Message d'erreur : ${errorMessage}</p>
 		</div>
 

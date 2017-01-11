@@ -78,7 +78,7 @@ public class ChuPrelevement implements java.io.Serializable {
 		this.idPrelevement = idPrelevement;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_morphologie")
 	public ChuMorphologie getChuMorphologie() {
 		return this.chuMorphologie;
@@ -88,7 +88,7 @@ public class ChuPrelevement implements java.io.Serializable {
 		this.chuMorphologie = chuMorphologie;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_phase", nullable = false)
 	public ChuPhaseTumeur getChuPhaseTumeur() {
 		return this.chuPhaseTumeur;
@@ -98,7 +98,7 @@ public class ChuPrelevement implements java.io.Serializable {
 		this.chuPhaseTumeur = chuPhaseTumeur;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_type_prelevement", nullable = false)
 	public ChuTypePrelevement getChuTypePrelevement() {
 		return this.chuTypePrelevement;

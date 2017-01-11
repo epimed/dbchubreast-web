@@ -18,18 +18,16 @@
 	<!-- Container -->
 	<div class="container">
 
-
 		<div class="starter-template">
-			<h1>Rechercher un patient</h1>
+			<h1>Rechercher une tumeur</h1>
 		</div>
 
 		<form:form class="form-inline" method="POST" commandName="form"
-			action="patient">
+			action="tumeur">
 
 			<div class="form-group">
-				<label for="text">Nom, RCP ou ID</label> <input type="text"
-					class="form-control" name="text" id="text" value="${text}"
-					placeholder="EPT0001">
+				<label for="text">ID tumeur, patient, topo, statut</label> <input type="text"
+					class="form-control" name="text" id="text" value="${text}" placeholder="1 ou EPT0001 ou C50.2 ou RC">
 			</div>
 
 			<p></p>
@@ -39,8 +37,12 @@
 
 		</form:form>
 
-		<!-- Results -->
-		<%@ include file="../inc/tablePatients.jsp"%>
+		<div>
+
+			<!-- Results -->
+			<%@ include file="../inc/tableTumeurs.jsp"%>
+
+		</div>
 
 	</div>
 

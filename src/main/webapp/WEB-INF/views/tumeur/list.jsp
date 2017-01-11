@@ -1,0 +1,51 @@
+<%@ include file="/resources/fragments/jstlTags.jsp"%>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>EpiMed Database - BD "Cancer du sein"</title>
+
+<!-- Header -->
+<%@ include file="/resources/fragments/header.jsp"%>
+
+</head>
+
+<body>
+
+	<!-- Navigation bar -->
+	<%@ include file="/resources/fragments/navbar.jsp"%>
+
+	<!-- Container -->
+	<div class="container">
+
+		<!-- Fil d'Ariane -->
+		<%@ include file="../inc/filAriane.jsp"%>
+
+		<div>
+
+			<!-- H1 Patient -->
+			<%@ include file="../inc/h1Patient.jsp"%>
+
+			<h2>Tumeurs :</h2>
+
+			<!-- Results -->
+			<%@ include file="../inc/tableTumeurs.jsp"%>
+
+		</div>
+
+		<p></p>
+
+		<div>
+			<spring:url value="/patient/${patient.idPatient}/tumeur/add"
+				var="url" />
+			<button class="btn btn-primary" onclick="location.href='${url}'">Ajouter
+				une tumeur</button>
+		</div>
+
+	</div>
+
+	<!-- Footer -->
+	<%@ include file="/resources/fragments/footer.jsp"%>
+
+</body>
+</html>

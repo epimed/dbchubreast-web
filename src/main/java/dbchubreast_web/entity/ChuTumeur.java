@@ -88,7 +88,7 @@ public class ChuTumeur implements java.io.Serializable {
 		this.idTumeur = idTumeur;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_evolution")
 	public ChuEvolution getChuEvolution() {
 		return this.chuEvolution;
@@ -98,7 +98,7 @@ public class ChuTumeur implements java.io.Serializable {
 		this.chuEvolution = chuEvolution;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_patient", nullable = false)
 	public ChuPatient getChuPatient() {
 		return this.chuPatient;
@@ -108,7 +108,7 @@ public class ChuTumeur implements java.io.Serializable {
 		this.chuPatient = chuPatient;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_topographie")
 	public ChuTopographie getChuTopographie() {
 		return this.chuTopographie;
@@ -219,7 +219,7 @@ public class ChuTumeur implements java.io.Serializable {
 		this.remarque = remarque;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "chuTumeur")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuTumeur")
 	public List<ChuPhaseTumeur> getChuPhaseTumeurs() {
 		return this.chuPhaseTumeurs;
 	}

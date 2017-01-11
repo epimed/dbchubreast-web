@@ -94,7 +94,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 		this.idPhase = idPhase;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_ps")
 	public ChuPerformanceStatus getChuPerformanceStatus() {
 		return this.chuPerformanceStatus;
@@ -114,7 +114,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 		this.chuTumeur = chuTumeur;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_type_phase", nullable = false)
 	public ChuTypePhase getChuTypePhase() {
 		return this.chuTypePhase;
