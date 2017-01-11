@@ -20,9 +20,9 @@
 	<div class="container">
 
 		<div class="starter-template">
-			<h1>Error</h1>
-			<p class="lead">Sorry, an error has occurred while accessing this web page.</p>
-			<p>Error message: ${errorMessage}</p>
+			<h1>Erreur</h1>
+			<p class="lead">Une erreur est survenue lors d'accès à cette page.</p>
+			<p>Message d'erreur : ${errorMessage}</p>
 		</div>
 
 	</div>

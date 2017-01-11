@@ -14,16 +14,25 @@
 				aria-hidden="true" title="Epimed"></span>
 			</a>
 		</div>
+
 		<div id="navbar" class="navbar-collapse collapse">
+
 			<ul class="nav navbar-nav">
 
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">Patients <span class="caret"></span></a>
+					aria-expanded="false">Patients<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="${pageContext.request.contextPath}/patient">Rechercher un patient</a></li>
 						<li><a href="${pageContext.request.contextPath}/patient/add">Ajouter un patient</a></li>
 						<li><a href="${pageContext.request.contextPath}/patients">Liste des patients</a></li>
+					</ul></li>
+					
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">Exports<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="${pageContext.request.contextPath}/download/patients">Exporter les patients</a></li>
 					</ul></li>
 
 			</ul>

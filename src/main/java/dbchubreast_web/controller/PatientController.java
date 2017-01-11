@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuTumeur;
@@ -152,6 +153,7 @@ public class PatientController extends BaseController {
 	public String saveOrUpdatePatient(Model model, 
 			@ModelAttribute("patient") @Valid ChuPatient patient, 
 			BindingResult result,
+			final RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
@@ -160,7 +162,15 @@ public class PatientController extends BaseController {
 		if (result.hasErrors()) {
 			return "patient/form";
 		}
-		
+
+		redirectAttributes.addFlashAttribute("css", "success");
+		if(patient.getIdPatient()==null) {
+			redirectAttributes.addFlashAttribute("msg", "Le nouveau patient a été ajouté avec succès !");
+		}
+		else {
+			redirectAttributes.addFlashAttribute("msg", "La modification a été effectuée avec succès !");
+		}
+
 		patientService.saveOrUpdate(patient);
 
 		// POST/REDIRECT/GET

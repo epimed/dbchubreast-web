@@ -30,19 +30,22 @@ public class ChuPatientService {
 
 	@Autowired
 	private ChuPatientDao patientDao;
-	
+
+	@Autowired
+	private FormatService formatService;
+
 	public List<ChuPatient> list() {
 		return patientDao.list();
 	}
-	
+
 	public String getLastIdPatient() {
 		return patientDao.getLastIdPatient();
 	}
-	
+
 	public ChuPatient find(String nom, String prenom, Date dateNaissance) {
 		return patientDao.find(nom, prenom, dateNaissance);
 	}
-	
+
 	public ChuPatient find(String idPatient) {
 		return patientDao.find(idPatient);
 	}
@@ -50,27 +53,36 @@ public class ChuPatientService {
 	public Long count() {
 		return patientDao.count();
 	}
-	
+
 	public ChuPatient find(Integer idTumeur) {
 		return patientDao.find(idTumeur);
 	}
-	
+
 	public List<ChuPatient> findInAttributes(String text) {
 		return patientDao.findInAttributes(text);
 	}
-	
-	public void update(ChuPatient patient) {
-		patientDao.update(patient);
-	}
-	
-	public void save(ChuPatient patient) {
-		patientDao.save(patient);
-	}
-	
+
+
 	public void saveOrUpdate(ChuPatient patient) {
+
+		// Format nom prenom
+		String nom = patient.getNom();
+		if (nom!=null) {
+			patient.setNom(nom.toUpperCase());
+		}
+
+		String prenom = patient.getPrenom();
+		if (prenom!=null) {
+			patient.setPrenom(formatService.formatFisrtName(prenom));
+		}
+
+
+		// New patient
 		if (patient.getIdPatient()==null) {
 			patientDao.save(patient);
 		}
+
+		// Existing patient
 		else {
 			patientDao.update(patient);
 		}

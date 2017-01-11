@@ -28,9 +28,21 @@
 		</c:choose>
 
 		<form:form class="form-horizontall" method="post"
-			modelAttribute="patient" action="update">
+			modelAttribute="patient"
+			action="${pageContext.request.contextPath}/patient/update">
 
 			<form:hidden path="idPatient" />
+
+			<spring:bind path="rcp">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-2 control-label">Numéro RCP</label>
+					<div class="col-10">
+						<form:input path="rcp" type="text" class="form-control " id="rcp"
+							placeholder="RCP" />
+						<form:errors path="rcp" class="control-label" />
+					</div>
+				</div>
+			</spring:bind>
 
 			<spring:bind path="prenom">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
@@ -50,17 +62,6 @@
 						<form:input path="nom" type="text" class="form-control " id="nom"
 							placeholder="Nom" />
 						<form:errors path="nom" class="control-label" />
-					</div>
-				</div>
-			</spring:bind>
-
-			<spring:bind path="rcp">
-				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label">Numéro RCP</label>
-					<div class="col-10">
-						<form:input path="rcp" type="text" class="form-control " id="rcp"
-							placeholder="RCP" />
-						<form:errors path="rcp" class="control-label" />
 					</div>
 				</div>
 			</spring:bind>
@@ -126,16 +127,30 @@
 				</div>
 			</spring:bind>
 
+			<spring:bind path="consentement">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-2 control-label">Consentement</label>
+					<div class="col-10">
+						<label class="radio-inline"> <form:radiobutton
+								path="consentement" value="true" />oui
+						</label> <label class="radio-inline"> <form:radiobutton
+								path="consentement" value="false" />non
+						</label> <br />
+						<form:errors path="consentement" class="control-label" />
+					</div>
+				</div>
+			</spring:bind>
+
 			<div class="form-group">
 				<div class="col-offset-2 col-10">
-				<p></p>
+					<p></p>
 					<button type="submit" class="btn-lg btn-primary pull-right">Enregistrer</button>
 				</div>
 			</div>
 
 
 		</form:form>
-		
+
 	</div>
 
 	<!-- Footer -->

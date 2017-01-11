@@ -19,49 +19,73 @@
 	<div class="container">
 
 
-		<div class="starter-template">
-			<h1>Patient ${patient.idPatient}</h1>
-			<p class="lead">${patient.nom} &nbsp; ${patient.prenom} &nbsp; ${patient.dateNaissance}</p>
+		<c:if test="${not empty msg}">
+			<div class="alert alert-${css} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>${msg}</strong>
+			</div>
+		</c:if>
+
+		<h1>Détail du patient</h1>
+		<br />
+
+		<div class="row">
+			<label class="col-sm-2">ID patient</label>
+			<div class="col-sm-10">${patient.idPatient}</div>
 		</div>
 
+		<div class="row">
+			<label class="col-sm-2">RCP</label>
+			<div class="col-sm-10">${patient.rcp}</div>
+		</div>
 
-		<h2>Tumeurs :</h2>
+		<div class="row">
+			<label class="col-sm-2">Prénom</label>
+			<div class="col-sm-10">${patient.prenom}</div>
+		</div>
 
+		<div class="row">
+			<label class="col-sm-2">Nom</label>
+			<div class="col-sm-10">${patient.nom}</div>
+		</div>
 
+		<div class="row">
+			<label class="col-sm-2">Sexe</label>
+			<div class="col-sm-10">${patient.sexe}</div>
+		</div>
 
-		<table class="table table-bordered">
-			<thead>
-				<tr class="success">
-					<th>#ID tumeur</th>
-					<th>Date</th>
-					<th>Age</th>
-					<th>Topo</th>
-					<th>Côté</th>
-					<th>Dernière nouvelle</th>
-					<th>Statut</th>
-					<th>TN</th>
-					<th>Survie OS/DFS</th>
+		<div class="row">
+			<label class="col-sm-2">Date de naissance</label>
+			<div class="col-sm-10">${patient.dateNaissance}</div>
+		</div>
 
-				</tr>
-			</thead>
+		<div class="row">
+			<label class="col-sm-2">Date de décès</label>
+			<div class="col-sm-10">${patient.dateDeces}</div>
+		</div>
 
-			<c:forEach var="tumeur" items="${listTumeurs}">
-				<tr>
-					<td><a href="<spring:url value="/tumeur/${tumeur.idTumeur}"/>">
-							${tumeur.idTumeur}</a></td>
-					<td>${tumeur.dateDiagnostic}</td>
-					<td>${tumeur.ageDiagnostic}</td>
-					<td><abbr title="${tumeur.chuTopographie.nomFr}">${tumeur.chuTopographie.idTopographie}</abbr></td>
-					<td>${tumeur.cote}</td>
-					<td>${tumeur.dateEvolution}</td>
-					<td><abbr title="${tumeur.chuEvolution.nom}">${tumeur.chuEvolution.code}</abbr></td>
-					<td class="warning">${tumeur.tripleNegative}</td>
-					<td class="warning">${tumeur.osMonths}/${tumeur.dfsMonths}</td>
-				</tr>
-			</c:forEach>
-		</table>
+		<div class="row">
+			<label class="col-sm-2">Cause de décès</label>
+			<div class="col-sm-10">${patient.causeDeces}</div>
+		</div>
 
+		<div class="row">
+			<label class="col-sm-2">Statut BRCA</label>
+			<div class="col-sm-10">${patient.statutBrca}</div>
+		</div>
 
+		<div class="row">
+			<label class="col-sm-2">Consentement</label>
+			<div class="col-sm-10">
+				<c:if
+					test="${not empty patient.consentement and patient.consentement}">oui</c:if>
+				<c:if
+					test="${not empty patient.consentement and not patient.consentement}">non</c:if>
+			</div>
+		</div>
 
 
 	</div>
