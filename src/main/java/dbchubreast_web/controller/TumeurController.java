@@ -30,10 +30,10 @@ import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuTopographie;
 import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.form.FormTumeurInitiale;
-import dbchubreast_web.service.ChuPatientService;
-import dbchubreast_web.service.ChuTopographieService;
-import dbchubreast_web.service.ChuTumeurService;
-import dbchubreast_web.service.FormatService;
+import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.business.ChuTopographieService;
+import dbchubreast_web.service.business.ChuTumeurService;
+import dbchubreast_web.service.util.FormatService;
 
 
 @Controller

@@ -26,8 +26,9 @@
 			action="tumeur">
 
 			<div class="form-group">
-				<label for="text">ID tumeur, patient, topo, statut</label> <input type="text"
-					class="form-control" name="text" id="text" value="${text}" placeholder="1 ou EPT0001 ou C50.2 ou RC">
+				<label for="text">ID tumeur, patient, topo, statut</label> <input
+					type="text" class="form-control" name="text" id="text"
+					value="${text}" placeholder="1 ou EPT0001 ou C50.2 ou RC">
 			</div>
 
 			<p></p>

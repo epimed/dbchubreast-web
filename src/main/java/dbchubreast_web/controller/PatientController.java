@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.service.ChuPatientService;
+import dbchubreast_web.service.business.ChuPatientService;
 
 
 @Controller

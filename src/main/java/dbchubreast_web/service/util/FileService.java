@@ -11,7 +11,7 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service;
+package dbchubreast_web.service.util;
 
 import java.io.File;
 import java.io.FileReader;

@@ -17,20 +17,9 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import dbchubreast_web.entity.ChuTumeur;
+import dbchubreast_web.entity.ChuEvolution;
 
+public interface ChuEvolutionDao  {
 
-public interface  ChuTumeurDao {
-
-	
-	public ChuTumeur findWithDependencies(Integer idTumeur);
-
-	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur); 
-	
-	public List<ChuTumeur> find(String idPatient);
-	
-	public List<ChuTumeur> findWithDependencies(String idPatient);
-	
-	public List<ChuTumeur>  findInAttributesWithDependencies(String text);
-	
+	public List<ChuEvolution> list();
 }

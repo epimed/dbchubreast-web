@@ -89,6 +89,20 @@
 					<form:errors path="dateEvolution" />
 				</div>
 			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Statut</label>
+				<div class="col-sm-10">
+					<form:select class="form-control" path="idEvolution">
+						<form:option value="NONE" label="--- Sélectionner ---" />
+						<c:forEach var="evolution" items="${listEvolutions}">
+							<form:option value="${evolution.idEvolution}"
+								label="${evolution.idEvolution} - ${evolution.code} - ${evolution.nom}" />
+						</c:forEach>
+					</form:select>
+					<form:errors path="idEvolution" class="control-label" />
+				</div>
+			</div>
 
 			<!-- Button -->
 

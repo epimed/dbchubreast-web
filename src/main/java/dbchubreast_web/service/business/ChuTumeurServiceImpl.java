@@ -11,7 +11,7 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service;
+package dbchubreast_web.service.business;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import dbchubreast_web.entity.ChuTumeur;
 
 
 @Service
-public class ChuTumeurService {
+public class ChuTumeurServiceImpl implements ChuTumeurService {
 
 	@Autowired
 	private ChuTumeurDao tumeurDao;

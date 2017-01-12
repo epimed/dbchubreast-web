@@ -11,7 +11,7 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service;
+package dbchubreast_web.service.business;
 
 import java.util.Date;
 import java.util.List;
@@ -21,12 +21,13 @@ import org.springframework.stereotype.Service;
 
 import dbchubreast_web.dao.ChuPatientDao;
 import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.service.util.FormatService;
 
 
 
 
 @Service
-public class ChuPatientService {
+public class ChuPatientServiceImpl implements ChuPatientService {
 
 	@Autowired
 	private ChuPatientDao patientDao;

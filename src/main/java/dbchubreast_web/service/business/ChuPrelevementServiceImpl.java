@@ -11,25 +11,24 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service;
+package dbchubreast_web.service.business;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dbchubreast_web.dao.ChuTopographieDao;
-import dbchubreast_web.entity.ChuTopographie;
-
+import dbchubreast_web.dao.ChuPrelevementDao;
+import dbchubreast_web.entity.ChuPrelevement;
 
 @Service
-public class ChuTopographieService {
+public class ChuPrelevementServiceImpl  implements ChuPrelevementService {
 
 	@Autowired
-	private ChuTopographieDao topographieDao;
+	private ChuPrelevementDao prelevementDao;
 	
-	public List<ChuTopographie> list(String idGroupeTopo){
-		return topographieDao.list(idGroupeTopo);
+	public List<ChuPrelevement> find(Integer idTumeur) {
+		return prelevementDao.find(idTumeur);
 	}
 	
 }
