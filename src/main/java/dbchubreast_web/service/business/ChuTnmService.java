@@ -13,11 +13,8 @@
  */
 package dbchubreast_web.service.business;
 
-import java.util.List;
+import dbchubreast_web.entity.ChuTnm;
 
-import dbchubreast_web.entity.ChuEvolution;
-
-public interface ChuEvolutionService {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();	
+public interface ChuTnmService {
+	public ChuTnm find(Integer idPhase, String type);
 }

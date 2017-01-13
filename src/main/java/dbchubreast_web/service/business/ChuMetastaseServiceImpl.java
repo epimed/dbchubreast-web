@@ -18,22 +18,31 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dbchubreast_web.dao.ChuEvolutionDao;
-import dbchubreast_web.entity.ChuEvolution;
+import dbchubreast_web.dao.ChuMetastaseDao;
+import dbchubreast_web.entity.ChuMetastase;
 
 
 @Service
-public class ChuEvolutionServiceImpl implements ChuEvolutionService {
+public class ChuMetastaseServiceImpl implements ChuMetastaseService {
 
 	@Autowired
-	private ChuEvolutionDao evolutionDao;
+	private ChuMetastaseDao metastaseDao;
 	
-	public List<ChuEvolution> list(){
-		return evolutionDao.list();
+	public List<ChuMetastase> list(){
+		return metastaseDao.list();
 	}
+
+	public ChuMetastase find(Integer idMetastase) {
+		return metastaseDao.find(idMetastase);
+	}
+
 	
-	public ChuEvolution find(Integer idEvolution) {
-		return evolutionDao.find(idEvolution);
+	public List<ChuMetastase> list(List<Integer> listIdMetastases) {
+		return metastaseDao.list(listIdMetastases);
+	}
+
+	public List<ChuMetastase> list(Integer idPhaseTumeur) {
+		return metastaseDao.list(idPhaseTumeur);
 	}
 	
 }

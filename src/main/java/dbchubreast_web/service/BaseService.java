@@ -12,14 +12,14 @@
  *
  */
 
-package dbchubreast_web.dao;
+package dbchubreast_web.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-import java.util.List;
+public class BaseService {
 
-import dbchubreast_web.entity.ChuEvolution;
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-public interface ChuEvolutionDao  {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();
 }

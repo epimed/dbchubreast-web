@@ -15,13 +15,17 @@ package dbchubreast_web.service.business;
 
 import java.util.List;
 
+import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTumeur;
+import dbchubreast_web.form.FormTumeurInitiale;
 
-public interface ChuTumeurService {
-	public ChuTumeur find(Integer idTumeur);
-	public ChuTumeur findWithDependencies(Integer idTumeur);
-	public List<ChuTumeur> find(String idPatient);
-	public List<ChuTumeur> findWithDependencies(String idPatient);
-	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur);
-	public List<ChuTumeur> findInAttributesWithDependencies(String text);
+public interface ChuPhaseTumeurService {
+
+	public ChuPhaseTumeur find(Integer idPhase);
+	public ChuPhaseTumeur findWithDependencies(Integer idPhase);
+	public List<ChuPhaseTumeur> list();
+	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase);
+	
+	public void saveOrUpdateForm(FormTumeurInitiale form);
+	public FormTumeurInitiale getFormTumeurInitiale(ChuTumeur tumeur);
 }

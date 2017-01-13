@@ -21,19 +21,27 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import dbchubreast_web.entity.ChuEvolution;
+import dbchubreast_web.entity.ChuMetastase;
 import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTopographie;
 import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.form.FormTumeurInitiale;
+import dbchubreast_web.service.business.ChuEvolutionService;
+import dbchubreast_web.service.business.ChuMetastaseService;
 import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.business.ChuPhaseTumeurService;
 import dbchubreast_web.service.business.ChuTopographieService;
 import dbchubreast_web.service.business.ChuTumeurService;
-import dbchubreast_web.service.util.FormatService;
 
 
 @Controller
@@ -44,12 +52,19 @@ public class TumeurController extends BaseController {
 
 	@Autowired
 	private ChuTumeurService tumeurService;
-	
+
+	@Autowired
+	private ChuPhaseTumeurService phaseTumeurService;
+
 	@Autowired
 	private ChuTopographieService topographieService;
 
 	@Autowired
-	private FormatService formatService;
+	private ChuEvolutionService evolutionService;
+
+	@Autowired
+	private ChuMetastaseService metastaseService;
+
 
 	/** ====================================================================================== */
 
@@ -75,29 +90,24 @@ public class TumeurController extends BaseController {
 
 	@RequestMapping(value ="/tumeur", method = {RequestMethod.GET, RequestMethod.POST})
 	public String searchTumor(Model model,
-			@RequestParam(value = "text", required = false) String text,
+			@RequestParam(value = "idPatient", required = false) String idPatient,
 			HttpServletRequest request
 			) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
+		logger.debug("idPatient {}", idPatient);
 
-		logger.debug("text {}", text);
-
-
-		if (text!=null) {
-			Integer idTumeur = formatService.recognizeInteger(text);
-			List<ChuTumeur> listTumeurs = null;
-			if (idTumeur!=null) {
-				listTumeurs = tumeurService.findAsListWithDependencies(idTumeur);
-			}
-			else {
-				listTumeurs = tumeurService.findInAttributesWithDependencies(text);
-			}
+		if (idPatient!=null) {
+			ChuPatient patient = patientService.find(idPatient);
+			List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
+			model.addAttribute("patient", patient);
 			model.addAttribute("listTumeurs", listTumeurs);
 		}
-		
-		model.addAttribute("text", text);
+
+		List<ChuPatient> listPatients = patientService.list();;
+		model.addAttribute("idPatient", idPatient);
+		model.addAttribute("listPatients", listPatients);
 
 		return "tumeur/search";
 	}
@@ -119,10 +129,14 @@ public class TumeurController extends BaseController {
 		ChuPatient patient = patientService.find(idTumeur);
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
 		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
+		List<ChuPhaseTumeur> listPhasesInitiales = phaseTumeurService.list(idTumeur, 1);
+		List<ChuPhaseTumeur> listPhasesRechutes = phaseTumeurService.list(idTumeur, 2);
 
 		model.addAttribute("patient", patient);
 		model.addAttribute("tumeur", tumeur);
 		model.addAttribute("listTumeurs", listTumeurs);
+		model.addAttribute("listPhasesInitiales", listPhasesInitiales);
+		model.addAttribute("listPhasesRechutes", listPhasesRechutes);
 
 		return "tumeur/show";
 	}
@@ -137,20 +151,16 @@ public class TumeurController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		ChuPatient patient = patientService.find(idPatient);
-		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
-		List<ChuTopographie> listTopographies = topographieService.list("C50");
-		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient());
 
-		model.addAttribute("patient", patient);
+		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient());
 		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
-		model.addAttribute("listTumeurs", listTumeurs);
-		model.addAttribute("listTopographies", listTopographies);
+		this.populateAddTumorForm(patient, model);
 
 		return "tumeur/formTumeurInitiale";
 	}
-	
+
 	/** ====================================================================================== */
-	
+
 	@RequestMapping(value = "/tumeur/{idTumeur}/update", method = RequestMethod.GET)
 	public String showUpdateTumorForm(Model model, 
 			@PathVariable Integer idTumeur,
@@ -159,14 +169,66 @@ public class TumeurController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
-		List<ChuTumeur> listTumeurs = tumeurService.find(tumeur.getChuPatient().getIdPatient());
-		
-		model.addAttribute("patient", tumeur.getChuPatient());
-		model.addAttribute("tumeur", tumeur);
-		model.addAttribute("listTumeurs", listTumeurs);
+		ChuPatient patient = tumeur.getChuPatient();
 
-		return "tumeur/show";
+		FormTumeurInitiale formTumeurInitiale = phaseTumeurService.getFormTumeurInitiale(tumeur);
+		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
+
+		this.populateAddTumorForm(patient, model);
+
+		return "tumeur/formTumeurInitiale";
 	}
-	
+
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/tumeur/update", method = RequestMethod.GET)
+	public String redirectTumeur() {
+		// POST/REDIRECT/GET
+		return "redirect:/tumeur";
+	}
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/tumeur/update", method = RequestMethod.POST)
+	public String saveOrUpdateTumorForm(Model model, 
+			@ModelAttribute("formTumeurInitiale") FormTumeurInitiale formTumeurInitiale, 
+			BindingResult result,
+			final RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+
+		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+
+		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
+
+		phaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
+
+		if (result.hasErrors()) {
+			ChuPatient patient = patientService.find(formTumeurInitiale.getIdPatient());
+			this.populateAddTumorForm(patient, model);
+			model.addAttribute("formTumeurInitiale", formTumeurInitiale);
+			return "tumeur/formTumeurInitiale";
+		}
+
+		// POST/REDIRECT/GET
+		return "redirect:/tumeur/" + formTumeurInitiale.getIdTumeur();
+	}
+
+	/** ====================================================================================== */
+
+	public void populateAddTumorForm(ChuPatient patient, Model model) {
+
+		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
+		List<ChuTopographie> listTopographies = topographieService.list("C50");
+		List<ChuEvolution> listEvolutions = evolutionService.list();
+		List<ChuMetastase> listMetastases = metastaseService.list();
+
+		model.addAttribute("patient", patient);
+		model.addAttribute("listTumeurs", listTumeurs);
+		model.addAttribute("listTopographies", listTopographies);
+		model.addAttribute("listEvolutions", listEvolutions);
+		model.addAttribute("listMetastases", listMetastases);
+	}
+
 	/** ====================================================================================== */
 }

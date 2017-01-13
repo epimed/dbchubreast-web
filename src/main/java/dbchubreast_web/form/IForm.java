@@ -11,13 +11,8 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service.business;
+package dbchubreast_web.form;
 
-import java.util.List;
-
-import dbchubreast_web.entity.ChuEvolution;
-
-public interface ChuEvolutionService {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();	
+public interface IForm {
+	public boolean isNew();
 }

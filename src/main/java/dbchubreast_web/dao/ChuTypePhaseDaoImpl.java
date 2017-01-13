@@ -15,50 +15,32 @@
 package dbchubreast_web.dao;
 
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import dbchubreast_web.entity.ChuTopographie;
+import dbchubreast_web.entity.ChuTypePhase;
 
 
 @Transactional
 @Repository
 
-@SuppressWarnings("unchecked")
-public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao {
+public class ChuTypePhaseDaoImpl extends BaseDao implements ChuTypePhaseDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	/** =================================================*/
-
-	public ChuTopographie find(String idTopographie) {
-		ChuTopographie result = (ChuTopographie) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
-				.add(Restrictions.eq("idTopographie", idTopographie))
+	public ChuTypePhase find(Integer idTypePhase) {
+		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession()
+				.createCriteria(ChuTypePhase.class)
+				.add(Restrictions.eq("idTypePhase", idTypePhase))
 				.uniqueResult();
 		return result;
 	}
 
 	/** =================================================*/
 
-	public List<ChuTopographie> list(String idGroupeTopo){
-
-		List<ChuTopographie> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
-				.createAlias("chuGroupeTopographie", "chuGroupeTopographie")
-				.add(Restrictions.eq("chuGroupeTopographie.idGroupeTopo", idGroupeTopo))
-				.addOrder(Order.asc("idTopographie"))
-				.list();
-
-		return result;
-	}
-
-	/** =================================================*/
 }

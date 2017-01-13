@@ -21,5 +21,6 @@ import dbchubreast_web.entity.ChuTopographie;
 
 public interface ChuTopographieDao {
 
+	public ChuTopographie find(String idTopographie);
 	public List<ChuTopographie> list(String idGroupeTopo);
 }

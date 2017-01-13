@@ -5,19 +5,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FormTumeurInitiale {
+public class FormTumeurInitiale implements IForm {
 
+	
 	private Integer idTumeur;
+
 	private String idPatient;
 	private Date dateDiagnostic;
 	private Double ageDiagnostic;
 	private String cote;
-	
+
 	private String idTopographie;
-	
+
 	private Date dateEvolution;
 	private Integer idEvolution;
-	
+
 	private Integer idPhase;
 	private Integer idTypePhase = 1; // phase initiale
 	private String natureDiagnostic;
@@ -27,14 +29,14 @@ public class FormTumeurInitiale {
 	private String cN;
 	private String cM;
 	private String cTaille;
-	
+
 	private String pT;
 	private String pN;
 	private String pM;
 	private String pTaille;
-	
+
 	private String remarque;
-	
+
 	private List<Integer> listIdMetastases = new ArrayList<Integer>(0);
 
 
@@ -279,5 +281,14 @@ public class FormTumeurInitiale {
 				+ ", pN=" + pN + ", pM=" + pM + ", pTaille=" + pTaille + ", remarque=" + remarque
 				+ ", listIdMetastases=" + listIdMetastases + "]";
 	}
+
+	/** ====================================================================================== */
+
+	public boolean isNew() {
+		return this.idTumeur==null;
+	}
+
+	/** ====================================================================================== */
+
 
 }

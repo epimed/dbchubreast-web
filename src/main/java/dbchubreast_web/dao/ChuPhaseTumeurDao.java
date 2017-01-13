@@ -17,9 +17,15 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import dbchubreast_web.entity.ChuEvolution;
+import dbchubreast_web.entity.ChuPhaseTumeur;
 
-public interface ChuEvolutionDao  {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();
+public interface ChuPhaseTumeurDao  {
+
+	public ChuPhaseTumeur find(Integer idPhase);
+	public ChuPhaseTumeur findWithDependencies(Integer idPhase);
+	public List<ChuPhaseTumeur> list();
+	public void save (ChuPhaseTumeur phaseTumeur);
+	public void update (ChuPhaseTumeur phaseTumeur);
+	public void saveOrUpdate (ChuPhaseTumeur phaseTumeur);
+	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase);
 }

@@ -22,29 +22,49 @@
 			<h1>Rechercher une tumeur</h1>
 		</div>
 
-		<form:form class="form-inline" method="POST" commandName="form"
-			action="tumeur">
+		<form:form class="form-inline" method="POST"
+			action="${pageContext.request.contextPath}/tumeur">
 
+			<!-- Liste des patient -->
 			<div class="form-group">
-				<label for="text">ID tumeur, patient, topo, statut</label> <input
-					type="text" class="form-control" name="text" id="text"
-					value="${text}" placeholder="1 ou EPT0001 ou C50.2 ou RC">
+				<label>Patient</label> <select class="form-control" id="idPatient"
+					name="idPatient">
+					<option value="">--- Sélectionner ---</option>
+					<c:forEach var="patient" items="${listPatients}">
+						<c:choose>
+							<c:when
+								test="${not empty patient and patient.idPatient==idPatient}">
+								<option value="${patient.idPatient}" selected="selected">${patient.idPatient}
+									- ${patient.nom} ${patient.prenom} ${patient.dateNaissance}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${patient.idPatient}">${patient.idPatient}
+									- ${patient.nom} ${patient.prenom} ${patient.dateNaissance}</option>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</select> <input class="btn btn-primary" type="submit" value="Rechercher" />
 			</div>
-
-			<p></p>
-			<input class="btn btn-primary" type="submit" value="Rechercher" />
-			<span class="text-danger">${message}</span>
-			<p></p>
-
 		</form:form>
 
-		<div>
+		<p></p>
 
-			<!-- Results -->
-			<%@ include file="../inc/tableTumeurs.jsp"%>
+		<c:if test="${not empty patient}">
+			<div>
+				<!-- H1 Patient -->
+				<%@ include file="../inc/h1Patient.jsp"%>
 
-		</div>
+				<h2>Tumeurs :</h2>
 
+				<!-- Results -->
+				<%@ include file="../inc/tableTumeurs.jsp"%>
+
+			</div>
+
+			<!-- Bouton ajouter tumeur -->
+			<%@ include file="../inc/boutonAjouterTumeur.jsp"%>
+
+		</c:if>
 	</div>
 
 	<!-- Footer -->

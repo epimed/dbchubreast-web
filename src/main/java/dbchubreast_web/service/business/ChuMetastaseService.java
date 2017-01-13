@@ -15,9 +15,11 @@ package dbchubreast_web.service.business;
 
 import java.util.List;
 
-import dbchubreast_web.entity.ChuEvolution;
+import dbchubreast_web.entity.ChuMetastase;
 
-public interface ChuEvolutionService {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();	
+public interface ChuMetastaseService {
+	public ChuMetastase find(Integer idMetastase);
+	public List<ChuMetastase> list();
+	public List<ChuMetastase> list(List<Integer> listIdMetastases);
+	public List<ChuMetastase> list(Integer idPhaseTumeur);
 }

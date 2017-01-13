@@ -20,6 +20,7 @@ import dbchubreast_web.entity.ChuTopographie;
 
 public interface ChuTopographieService {
 
+	public ChuTopographie find(String idTopographie);
 	public List<ChuTopographie> list(String idGroupeTopo);
 
 }

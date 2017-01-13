@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,16 @@ public class ChuEvolutionDaoImpl extends BaseDao implements ChuEvolutionDao {
 				.addOrder(Order.asc("idEvolution"))
 				.list();
 
+		return result;
+	}
+
+	/** =================================================*/
+
+	public ChuEvolution find(Integer idEvolution) {
+		ChuEvolution result = (ChuEvolution) sessionFactory.getCurrentSession()
+				.createCriteria(ChuEvolution.class)
+				.add(Restrictions.eq("idEvolution", idEvolution))
+				.uniqueResult();
 		return result;
 	}
 

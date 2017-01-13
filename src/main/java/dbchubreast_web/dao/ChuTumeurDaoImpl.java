@@ -41,6 +41,18 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	/** =================================================*/
 
+	public ChuTumeur find(Integer idTumeur) {
+
+		ChuTumeur tumeur = (ChuTumeur) sessionFactory.getCurrentSession()
+				.createCriteria(ChuTumeur.class)	
+				.add(Restrictions.eq("idTumeur", idTumeur))
+				.uniqueResult();
+		
+		return tumeur;
+	}
+
+	/** =================================================*/
+
 	public ChuTumeur findWithDependencies(Integer idTumeur) {
 
 		ChuTumeur tumeur = (ChuTumeur) sessionFactory.getCurrentSession()
@@ -130,6 +142,19 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		return list;
 	}
 
+
+	/** =================================================*/
+	
+	public void save(ChuTumeur tumeur) {
+		sessionFactory.getCurrentSession().save(tumeur);
+	}
+	
+/** =================================================*/
+	
+	public void update(ChuTumeur tumeur) {
+		sessionFactory.getCurrentSession().update(tumeur);
+	}
+	
 	/** =================================================*/
 	
 	

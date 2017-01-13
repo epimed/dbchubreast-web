@@ -14,51 +14,51 @@
 
 package dbchubreast_web.dao;
 
-
-import java.util.List;
-
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import dbchubreast_web.entity.ChuTopographie;
-
+import dbchubreast_web.entity.ChuTnm;
 
 @Transactional
 @Repository
 
-@SuppressWarnings("unchecked")
-public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao {
+public class ChuTnmDaoImpl extends BaseDao implements ChuTnmDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	/** =================================================*/
-
-	public ChuTopographie find(String idTopographie) {
-		ChuTopographie result = (ChuTopographie) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
-				.add(Restrictions.eq("idTopographie", idTopographie))
+	public ChuTnm find(Integer idPhase, String type) {
+		ChuTnm result = (ChuTnm) sessionFactory.getCurrentSession()
+				.createCriteria(ChuTnm.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
+				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
+				.add(Restrictions.eq("type", type))
 				.uniqueResult();
 		return result;
 	}
 
 	/** =================================================*/
 
-	public List<ChuTopographie> list(String idGroupeTopo){
+	public void save(ChuTnm tnm) {
+		sessionFactory.getCurrentSession().save(tnm);
+	}
+	
+	/** =================================================*/
 
-		List<ChuTopographie> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
-				.createAlias("chuGroupeTopographie", "chuGroupeTopographie")
-				.add(Restrictions.eq("chuGroupeTopographie.idGroupeTopo", idGroupeTopo))
-				.addOrder(Order.asc("idTopographie"))
-				.list();
-
-		return result;
+	public void update(ChuTnm tnm) {
+		sessionFactory.getCurrentSession().update(tnm);
 	}
 
 	/** =================================================*/
+
+	public void saveOrUpdate(ChuTnm tnm) {
+		sessionFactory.getCurrentSession().saveOrUpdate(tnm);
+	}
+
+	/** =================================================*/
+
 }

@@ -13,11 +13,21 @@
  */
 package dbchubreast_web.service.business;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import dbchubreast_web.entity.ChuEvolution;
+import dbchubreast_web.dao.ChuTypePhaseDao;
+import dbchubreast_web.entity.ChuTypePhase;
 
-public interface ChuEvolutionService {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();	
+
+@Service
+public class ChuTypePhaseServiceImpl implements ChuTypePhaseService {
+
+	@Autowired
+	private ChuTypePhaseDao typePhaseDao;
+
+	public ChuTypePhase find(Integer idTypePhase) {
+		return typePhaseDao.find(idTypePhase);
+	}
+	
 }

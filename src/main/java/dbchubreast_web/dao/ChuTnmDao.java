@@ -14,12 +14,11 @@
 
 package dbchubreast_web.dao;
 
+import dbchubreast_web.entity.ChuTnm;
 
-import java.util.List;
-
-import dbchubreast_web.entity.ChuEvolution;
-
-public interface ChuEvolutionDao  {
-	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();
+public interface ChuTnmDao  {
+	public ChuTnm find(Integer idPhase, String type);
+	public void save (ChuTnm tnm);
+	public void update (ChuTnm tnm);
+	public void saveOrUpdate (ChuTnm tnm);
 }

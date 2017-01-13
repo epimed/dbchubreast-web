@@ -28,6 +28,10 @@ public class ChuTopographieServiceImpl implements ChuTopographieService {
 	@Autowired
 	private ChuTopographieDao topographieDao;
 	
+	public ChuTopographie find(String idTopographie) {
+		return topographieDao.find(idTopographie);
+	}
+	
 	public List<ChuTopographie> list(String idGroupeTopo){
 		return topographieDao.list(idGroupeTopo);
 	}

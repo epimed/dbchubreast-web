@@ -28,6 +28,9 @@ public class GlobalExceptionController {
 
 		ModelAndView model = new ModelAndView("error");
 		model.addObject("errorMessage", ex.toString());
+		
+		ex.printStackTrace();
+		
 		return model;
 
 	}

@@ -263,10 +263,11 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "ChuPhaseTumeur [idPhase=" + idPhase + ", chuTumeur=" + chuTumeur + ", chuTypePhase=" + chuTypePhase
-				+ ", numeroRechute=" + numeroRechute + ", dateDiagnostic=" + dateDiagnostic + ", natureDiagnostic="
-				+ natureDiagnostic + ", profondeur=" + profondeur + ", locale=" + locale + ", metastases=" + metastases
-				+ ", nodules=" + nodules + ", remarque=" + remarque + "]";
+		return "ChuPhaseTumeur [idPhase=" + idPhase + ", numeroRechute=" + numeroRechute + ", dateDiagnostic="
+				+ dateDiagnostic + ", natureDiagnostic=" + natureDiagnostic + ", profondeur=" + profondeur + ", locale="
+				+ locale + ", metastases=" + metastases + ", nodules=" + nodules + ", remarque=" + remarque + "]";
 	}
+
+
 
 }
