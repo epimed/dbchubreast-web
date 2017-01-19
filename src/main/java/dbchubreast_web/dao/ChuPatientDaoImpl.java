@@ -133,6 +133,21 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 	}
 
 	/** =================================================*/
+	
+
+	public ChuPatient findByIdPrelevement(Integer idPrelevement) {
+		ChuPatient patient =  (ChuPatient) sessionFactory.getCurrentSession()
+				.createCriteria(ChuPatient.class)
+				.createAlias("chuTumeurs", "chuTumeurs")
+				.createAlias("chuTumeurs.chuPhaseTumeurs", "chuPhaseTumeurs")
+				.createAlias("chuPhaseTumeurs.chuPrelevements", "chuPrelevements")
+				.add(Restrictions.eq("chuPrelevements.idPrelevement", idPrelevement))
+				.uniqueResult();
+		return patient;
+	}
+
+	
+	/** =================================================*/
 
 	public List<ChuPatient> findInAttributes(String text) {
 

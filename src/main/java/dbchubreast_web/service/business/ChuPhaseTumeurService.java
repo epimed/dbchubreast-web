@@ -16,16 +16,15 @@ package dbchubreast_web.service.business;
 import java.util.List;
 
 import dbchubreast_web.entity.ChuPhaseTumeur;
-import dbchubreast_web.entity.ChuTumeur;
-import dbchubreast_web.form.FormTumeurInitiale;
 
 public interface ChuPhaseTumeurService {
 
 	public ChuPhaseTumeur find(Integer idPhase);
 	public ChuPhaseTumeur findWithDependencies(Integer idPhase);
+	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur);
 	public List<ChuPhaseTumeur> list();
+	public List<ChuPhaseTumeur> listWithDependencies();
+	public List<ChuPhaseTumeur> list(Integer idTumeur);
+	public List<ChuPhaseTumeur> listWithDependencies(Integer idTumeur);
 	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase);
-	
-	public void saveOrUpdateForm(FormTumeurInitiale form);
-	public FormTumeurInitiale getFormTumeurInitiale(ChuTumeur tumeur);
 }

@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.Months;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -118,7 +120,7 @@ public class FormatService {
 		return result;
 
 	}
-	
+
 	/** ====================================================================================== */
 
 	public Double recognizeDouble (String text) {
@@ -135,7 +137,7 @@ public class FormatService {
 		return result;
 
 	}
-	
+
 	/** ====================================================================================== */
 
 	public Integer recognizeInteger (Object object) {
@@ -159,7 +161,7 @@ public class FormatService {
 	}
 
 	/** ====================================================================================== */
-	
+
 	public String recognizeString (Object object) {
 		String result = null;
 		try {
@@ -176,16 +178,16 @@ public class FormatService {
 				else {
 					result = resultInteger.toString();
 				}
-				
+
 			}
 			catch (ClassCastException e2) {
-				
+
 				try {
 					Integer resultInteger = (Integer) object;
 					result = resultInteger.toString();
 				}
 				catch (ClassCastException e3) {
-					
+
 					try {
 						Date date = (Date) object;
 						result = date.toString();
@@ -195,15 +197,15 @@ public class FormatService {
 						System.err.println("WARNING! Value " + object + " cannot be recongnized as a string.");
 						e4.printStackTrace();
 					}
-					
-					
+
+
 				}
 			}
 		}
 		return result;
 	}
-	
-	
+
+
 	/** ====================================================================================== */
 
 	public List<Integer> getPow2Indexes (Double initialValue) {
@@ -229,6 +231,25 @@ public class FormatService {
 	public Double log2(Double value) {
 		Double log = Math.log10(value) / Math.log10(2.);
 		return log;
+	}
+
+	/** ====================================================================================== */
+
+	public Double calculateAge(Date dateBegin, Date dateEnd) {
+
+		DateTime begin =  new DateTime(dateBegin);
+		DateTime end = new DateTime(dateEnd);
+
+		if (begin!=null && end!=null) {
+
+			int months = Months.monthsBetween(begin, end).getMonths();
+			Double age = months/12.0;
+			Double roundedAge = Math.round(age*10d)/10d;
+			return roundedAge;
+		}
+		
+		return null;
+
 	}
 
 	/** ====================================================================================== */

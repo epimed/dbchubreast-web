@@ -17,4 +17,5 @@ import dbchubreast_web.entity.ChuTypePhase;
 
 public interface ChuTypePhaseService {
 	public ChuTypePhase find(Integer idTypePhase);
+	public ChuTypePhase findByIdPhase(Integer idPhase);
 }

@@ -27,8 +27,20 @@ public class ChuPrelevementServiceImpl  implements ChuPrelevementService {
 	@Autowired
 	private ChuPrelevementDao prelevementDao;
 	
-	public List<ChuPrelevement> find(Integer idTumeur) {
-		return prelevementDao.find(idTumeur);
+	public ChuPrelevement find(Integer idPrelevement) {
+		return prelevementDao.find(idPrelevement);
+	}
+	
+	public List<ChuPrelevement> listByIdPhase(Integer idPhase) {
+		return prelevementDao.listByIdPhase(idPhase);
+	}
+	
+	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur) {
+		return prelevementDao.listByIdTumeur(idTumeur);
+	}
+	
+	public List<ChuPrelevement> listByIdPatient(String idPatient) {
+		return prelevementDao.listByIdPatient(idPatient);
 	}
 	
 }

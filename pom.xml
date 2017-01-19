@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>epimed</groupId>
-  <artifactId>dbchubreast-web</artifactId>
-  <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>dbchubreast-web Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  
-  <properties>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>epimed</groupId>
+	<artifactId>dbchubreast-web</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>dbchubreast-web Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>4.3.1.RELEASE</spring.version>
@@ -30,10 +30,11 @@
 		<commons.io.version>2.5</commons.io.version>
 		<hibernate.validator.version>5.3.1.Final</hibernate.validator.version>
 		<opencsv.version>3.8</opencsv.version>
+		<joda.version>2.9.3</joda.version>
 	</properties>
 
 	<dependencies>
-	
+
 		<!-- Validator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -191,6 +192,14 @@
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 			<version>${opencsv.version}</version>
+		</dependency>
+
+
+		<!-- Joda time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda.version}</version>
 		</dependency>
 
 	</dependencies>

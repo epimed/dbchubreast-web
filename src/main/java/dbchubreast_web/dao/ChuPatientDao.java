@@ -29,6 +29,7 @@ public interface ChuPatientDao {
 	public Long count(); 
 	public ChuPatient find(String idPatient); 
 	public ChuPatient find(Integer idTumeur); 
+	public ChuPatient findByIdPrelevement(Integer idPrelevement); 
 	public List<ChuPatient> findInAttributes(String text); 
 	public void update(ChuPatient patient);  
 	public void save(ChuPatient patient); 

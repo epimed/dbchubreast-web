@@ -5,12 +5,13 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr class="danger">
-				<th>ID phase rechute</th>
+				<th>#ID phase rechute</th>
 				<th>Date</th>
-				<th>PS</th>
+				<th>Performance status</th>
 				<th>Locale</th>
 				<th>Métastases</th>
 				<th>Nodules</th>
+				<th>Actions</th>
 
 			</tr>
 		</thead>
@@ -26,10 +27,15 @@
 							test="${not loop.last}">, </c:if>
 					</c:forEach></td>
 				<td class="warning">${phase.nodules}</td>
+				<td>
+				<spring:url value="/rechute/${phase.idPhase}/update"
+						var="updateUrl" />
+					<button class="btn btn-primary"
+						onclick="location.href='${updateUrl}'">Modifier</button></td>
 			</tr>
 			<c:if test="${not empty phase.remarque}">
 				<tr>
-					<td colspan="6">${phase.remarque}</td>
+					<td colspan="7">${phase.remarque}</td>
 				</tr>
 			</c:if>
 		</c:forEach>

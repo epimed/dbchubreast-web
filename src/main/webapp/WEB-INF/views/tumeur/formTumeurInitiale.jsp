@@ -31,7 +31,9 @@
 				</h2>
 			</c:when>
 			<c:otherwise>
-				<h2>Modifier une tumeur <small>en phase initiale</small></h2>
+				<h2>
+					Modifier une tumeur <small>en phase initiale</small>
+				</h2>
 			</c:otherwise>
 		</c:choose>
 
@@ -41,42 +43,57 @@
 
 			<form:hidden path="idTumeur" />
 			<form:hidden path="idPatient" />
+			<form:hidden path="dateDeces" />
 			<form:hidden path="idPhase" />
+			<form:hidden path="idEvolution" />
+			<form:hidden path="dateEvolution" />
 
 			<!-- Date de diagnostic -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Date du diagnostic</label>
-				<div class="col-sm-10">
-					<form:input class="form-control" path="dateDiagnostic" type="date" />
-					<form:errors path="dateDiagnostic" />
+			<spring:bind path="dateDiagnostic">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-sm-2 control-label">Date du diagnostic</label>
+					<div class="col-sm-10">
+						<form:input class="form-control" path="dateDiagnostic" type="date" />
+						<form:errors path="dateDiagnostic" class="control-label" />
+					</div>
 				</div>
-			</div>
+			</spring:bind>
 
 			<!-- Age au diagnostic -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Age au diagnostic</label>
-				<div class="col-sm-1">
-					<form:input class="form-control" path="ageDiagnostic" type="text" />
-					<form:errors path="ageDiagnostic" />
+			<spring:bind path="ageDiagnostic">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-sm-2 control-label">Age au diagnostic</label>
+					<div class="col-sm-1">
+						<form:input class="form-control" path="ageDiagnostic" type="text" />
+					</div>
+					<div class="col-sm-9">
+						<form:errors path="ageDiagnostic" class="control-label" />
+						<span id="helpBlock" class="help-block">L'age est à saisir
+							uniquement si la date du diagnostic et/ou la date de naissance ne
+							sont pas connues. Si les deux dates sont renseignées, l'age au
+							diagnostic sera calculé automatiquement.</span>
+					</div>
 				</div>
-				<div class="col-sm-9">
-					<span id="helpBlock" class="help-block">L'age est à saisir
-						uniquement si la date du diagnostic et/ou la date de naissance ne
-						sont pas connues. Si les deux dates sont renseignées, l'age au
-						diagnostic sera calculé automatiquement.</span>
-				</div>
-			</div>
+			</spring:bind>
 
 			<!-- Nature de diagnostic -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Nature de diagnostic</label>
-				<div class="col-sm-10">
-					<form:input class="form-control" path="natureDiagnostic"
-						type="text"
-						placeholder="Texte libre : Biopsie, Mammo/Echo, TEP, IRM, ..." />
-					<form:errors path="natureDiagnostic" />
+			<spring:bind path="natureDiagnostic">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-sm-2 control-label">Nature de diagnostic</label>
+					<div class="col-sm-10">
+						<form:input class="form-control" path="natureDiagnostic"
+							type="text" list="listNatureDiagnostic" />
+						<datalist id="listNatureDiagnostic">
+							<option value="Biopsie" />
+							<option value="Mammo/Echo" />
+							<option value="Mammographie" />
+							<option value="TEP" />
+							<option value="IRM" />
+						</datalist>
+						<form:errors path="natureDiagnostic" class="control-label" />
+					</div>
 				</div>
-			</div>
+			</spring:bind>
 
 			<!-- Topographie ICD-O -->
 			<div class="form-group">
@@ -112,7 +129,7 @@
 				<div class="col-sm-10">
 
 					<c:choose>
-						<c:when test="${formTumeurInitiale.idEvolution==5}">
+						<c:when test="${formTumeurInitiale.idEvolution==5  or not empty formTumeurInitiale.dateDeces}">
 							<form:input class="form-control" path="dateEvolution" type="date"
 								disabled="true" />
 						</c:when>
@@ -130,7 +147,7 @@
 				<label class="col-sm-2 control-label">Statut</label>
 				<div class="col-sm-10">
 					<c:choose>
-						<c:when test="${formTumeurInitiale.idEvolution==5}">
+						<c:when test="${formTumeurInitiale.idEvolution==5 or not empty formTumeurInitiale.dateDeces}">
 							<form:select class="form-control" path="idEvolution"
 								disabled="true">
 								<form:option value="" label="--- Sélectionner ---" />

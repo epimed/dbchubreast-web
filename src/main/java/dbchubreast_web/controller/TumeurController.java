@@ -32,16 +32,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import dbchubreast_web.entity.ChuEvolution;
 import dbchubreast_web.entity.ChuMetastase;
 import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.entity.ChuPerformanceStatus;
 import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTopographie;
 import dbchubreast_web.entity.ChuTumeur;
+import dbchubreast_web.form.FormPhaseRechute;
 import dbchubreast_web.form.FormTumeurInitiale;
 import dbchubreast_web.service.business.ChuEvolutionService;
 import dbchubreast_web.service.business.ChuMetastaseService;
 import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.business.ChuPerformanceStatusService;
 import dbchubreast_web.service.business.ChuPhaseTumeurService;
 import dbchubreast_web.service.business.ChuTopographieService;
 import dbchubreast_web.service.business.ChuTumeurService;
+import dbchubreast_web.service.form.FormPhaseTumeurService;
+import dbchubreast_web.validator.FormPhaseRechuteValidator;
+import dbchubreast_web.validator.FormTumeurInitialeValidator;
 
 
 @Controller
@@ -64,6 +70,19 @@ public class TumeurController extends BaseController {
 
 	@Autowired
 	private ChuMetastaseService metastaseService;
+
+	@Autowired
+	private ChuPerformanceStatusService performanceStatusService;
+
+	@Autowired
+	private FormPhaseTumeurService formPhaseTumeurService;
+
+	@Autowired
+	private FormTumeurInitialeValidator formTumeurInitialeValidator;
+	
+	@Autowired
+	private FormPhaseRechuteValidator formPhaseRechuteValidator;
+
 
 
 	/** ====================================================================================== */
@@ -152,7 +171,11 @@ public class TumeurController extends BaseController {
 
 		ChuPatient patient = patientService.find(idPatient);
 
-		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient());
+		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient(), patient.getDateDeces());
+
+		logger.debug("Patient {}", patient);
+		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
+
 		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 		this.populateAddTumorForm(patient, model);
 
@@ -170,8 +193,11 @@ public class TumeurController extends BaseController {
 
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
 		ChuPatient patient = tumeur.getChuPatient();
+		FormTumeurInitiale formTumeurInitiale = formPhaseTumeurService.getFormTumeurInitiale(tumeur);
 
-		FormTumeurInitiale formTumeurInitiale = phaseTumeurService.getFormTumeurInitiale(tumeur);
+		logger.debug("Patient {}", patient);
+		logger.debug("formTumeurInitiale {}",  formTumeurInitiale);
+
 		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 
 		this.populateAddTumorForm(patient, model);
@@ -201,7 +227,7 @@ public class TumeurController extends BaseController {
 
 		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
 
-		phaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
+		formTumeurInitialeValidator.validate(formTumeurInitiale, result);
 
 		if (result.hasErrors()) {
 			ChuPatient patient = patientService.find(formTumeurInitiale.getIdPatient());
@@ -209,9 +235,131 @@ public class TumeurController extends BaseController {
 			model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 			return "tumeur/formTumeurInitiale";
 		}
+		else {
+			logger.debug("Validation OK");
+			
+			redirectAttributes.addFlashAttribute("css", "success");
+			if(formTumeurInitiale.isNew()) {
+				redirectAttributes.addFlashAttribute("msg", "Une nouvelle tumeur a été ajoutée avec succès !");
+			}
+			else {
+				redirectAttributes.addFlashAttribute("msg", "La modification de la tumeur a été effectuée avec succès !");
+			}
+			
+			formPhaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
+		}
 
 		// POST/REDIRECT/GET
 		return "redirect:/tumeur/" + formTumeurInitiale.getIdTumeur();
+	}
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/tumeur/{idTumeur}/rechute/add", method = RequestMethod.GET)
+	public String showAddRelapseForm(Model model, 
+			@PathVariable Integer idTumeur,
+			HttpServletRequest request) {
+
+		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+
+
+		ChuPatient patient = patientService.find(idTumeur);
+		ChuTumeur tumeur = tumeurService.find(idTumeur);
+
+		if (tumeur!=null) {
+			FormPhaseRechute formPhaseRechute = new FormPhaseRechute(patient.getIdPatient(), tumeur.getIdTumeur());
+
+			logger.debug("Patient {}", patient);
+			logger.debug("formPhaseRechute {}", formPhaseRechute);
+
+			model.addAttribute("formPhaseRechute", formPhaseRechute);
+			model.addAttribute("tumeur", tumeur);
+			
+			this.populateAddTumorForm(patient, model);
+
+			return "tumeur/formPhaseRechute";
+		}
+
+		// POST/REDIRECT/GET
+		return "redirect:/tumeur";
+	}
+
+	
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/rechute/{idPhase}/update", method = RequestMethod.GET)
+	public String showUpdateRelapseForm(Model model, 
+			@PathVariable Integer idPhase,
+			HttpServletRequest request) {
+
+		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+
+		ChuPhaseTumeur phase = phaseTumeurService.findWithDependencies(idPhase);
+		ChuTumeur tumeur = tumeurService.findWithDependencies(phase.getChuTumeur().getIdTumeur());
+		ChuPatient patient = tumeur.getChuPatient();
+		
+		FormPhaseRechute formPhaseRechute = formPhaseTumeurService.getFormPhaseRechute(phase);
+
+		model.addAttribute("tumeur", tumeur);
+		model.addAttribute("formPhaseRechute", formPhaseRechute);
+
+		logger.debug("formPhaseRechute {}", formPhaseRechute);
+		
+		this.populateAddTumorForm(patient, model);
+
+		return "tumeur/formPhaseRechute";
+	}
+
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/rechute/update", method = RequestMethod.GET)
+	public String redirectRelapse() {
+		// POST/REDIRECT/GET
+		return "redirect:/tumeur";
+	}
+
+	/** ====================================================================================== */
+	
+	@RequestMapping(value = "/rechute/update", method = RequestMethod.POST)
+	public String saveOrUpdateRelapseForm(Model model, 
+			@ModelAttribute("formPhaseRechute") FormPhaseRechute formPhaseRechute, 
+			BindingResult result,
+			final RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+
+		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+
+		logger.debug("FormPhaseRechute {}", formPhaseRechute);
+
+		formPhaseRechuteValidator.validate(formPhaseRechute, result);
+		
+		if (result.hasErrors()) {
+			ChuPatient patient = patientService.find(formPhaseRechute.getIdPatient());
+			ChuTumeur tumeur = tumeurService.find(formPhaseRechute.getIdTumeur());
+			model.addAttribute("formPhaseRechute", formPhaseRechute);
+			model.addAttribute("tumeur", tumeur);
+			this.populateAddTumorForm(patient, model);
+			return "tumeur/formPhaseRechute";
+		}
+		else {
+			logger.debug("Validation OK");
+			
+			redirectAttributes.addFlashAttribute("css", "success");
+			if(formPhaseRechute.isNew()) {
+				redirectAttributes.addFlashAttribute("msg", "Une nouvelle rechute a été ajoutée avec succès !");
+			}
+			else {
+				redirectAttributes.addFlashAttribute("msg", "La modification de la rechute " + formPhaseRechute.getIdPhase() + " a été effectuée avec succès !");
+			}
+			
+			formPhaseTumeurService.saveOrUpdateForm(formPhaseRechute);
+		}
+
+		// POST/REDIRECT/GET
+		return "redirect:/tumeur/" + formPhaseRechute.getIdTumeur();
+		
+		
 	}
 
 	/** ====================================================================================== */
@@ -222,12 +370,14 @@ public class TumeurController extends BaseController {
 		List<ChuTopographie> listTopographies = topographieService.list("C50");
 		List<ChuEvolution> listEvolutions = evolutionService.list();
 		List<ChuMetastase> listMetastases = metastaseService.list();
+		List<ChuPerformanceStatus> listPerformanceStatus = performanceStatusService.list();
 
 		model.addAttribute("patient", patient);
 		model.addAttribute("listTumeurs", listTumeurs);
 		model.addAttribute("listTopographies", listTopographies);
 		model.addAttribute("listEvolutions", listEvolutions);
 		model.addAttribute("listMetastases", listMetastases);
+		model.addAttribute("listPerformanceStatus", listPerformanceStatus);
 	}
 
 	/** ====================================================================================== */

@@ -21,6 +21,19 @@
 		<!-- Fil d'Ariane -->
 		<%@ include file="../inc/filAriane.jsp"%>
 
+
+		<c:if test="${not empty msg}">
+			<p></p>
+			<div class="alert alert-${css} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>${msg}</strong>
+			</div>
+		</c:if>
+
+
 		<div>
 
 			<!-- H1 Patient -->
@@ -67,11 +80,6 @@
 					${tumeur.chuEvolution.nom}</div>
 			</div>
 
-			<div class="row">
-				<label class="col-sm-2">Remarque</label>
-				<div class="col-sm-10">${tumeur.remarque}</div>
-			</div>
-
 		</div>
 
 		<!-- Phases de la tumeur -->
@@ -80,6 +88,12 @@
 		</div>
 		<div>
 			<%@ include file="../inc/tablePhasesRechutes.jsp"%>
+			<p></p>
+
+			<spring:url value="/tumeur/${tumeur.idTumeur}/rechute/add" var="url" />
+			<button class="btn btn-danger" onclick="location.href='${url}'">Ajouter
+				une rechute</button>
+
 		</div>
 
 	</div>

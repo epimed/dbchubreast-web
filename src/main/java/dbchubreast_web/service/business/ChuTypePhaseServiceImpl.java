@@ -29,5 +29,9 @@ public class ChuTypePhaseServiceImpl implements ChuTypePhaseService {
 	public ChuTypePhase find(Integer idTypePhase) {
 		return typePhaseDao.find(idTypePhase);
 	}
+
+	public ChuTypePhase findByIdPhase(Integer idPhase) {
+		return typePhaseDao.findByIdPhase(idPhase);
+	}
 	
 }

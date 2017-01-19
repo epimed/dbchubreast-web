@@ -28,7 +28,7 @@
 			<h2>Guide d'utilisation :</h2>
 			<ol>
 				<li><a href="${pageContext.request.contextPath}/patient/add">Créer un nouveau patient</a> ou <a href="${pageContext.request.contextPath}/patient">rechercher un patient existant</a></li>
-				<li>Saisir l'information sur les tumeurs du patient, en phase initiale et éventuellement en rechutes</li>
+				<li><a href="${pageContext.request.contextPath}/tumeur">Saisir l'information sur les tumeurs du patient</a>, en phase initiale et éventuellement en rechutes</li>
 				<li>Renseigner les prélèvements et les biomarqueurs</li>
 				<li>Renseigner les traitements</li>
 				<li>Exporter les données en format Excel : <a href="${pageContext.request.contextPath}/download/patients">patients</a>, prélèvements, traitements</li>

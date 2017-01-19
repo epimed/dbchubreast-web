@@ -21,6 +21,9 @@ import dbchubreast_web.entity.ChuPrelevement;
 
 public interface ChuPrelevementDao {
 
-	public List<ChuPrelevement> find(Integer idTumeur);
+	public ChuPrelevement find(Integer idPrelevement);
+	public List<ChuPrelevement> listByIdPhase(Integer idPhase);
+	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur);
+	public List<ChuPrelevement> listByIdPatient(String idPatient);
 	
 }

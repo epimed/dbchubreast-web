@@ -33,10 +33,22 @@ public class ChuTypePhaseDaoImpl extends BaseDao implements ChuTypePhaseDao {
 	private SessionFactory sessionFactory;
 
 	/** =================================================*/
+	
 	public ChuTypePhase find(Integer idTypePhase) {
 		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession()
 				.createCriteria(ChuTypePhase.class)
 				.add(Restrictions.eq("idTypePhase", idTypePhase))
+				.uniqueResult();
+		return result;
+	}
+
+	/** =================================================*/
+	
+	public ChuTypePhase findByIdPhase(Integer idPhase) {
+		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession()
+				.createCriteria(ChuTypePhase.class)
+				.createAlias("chuPhaseTumeurs", "chuPhaseTumeurs")
+				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhase))
 				.uniqueResult();
 		return result;
 	}

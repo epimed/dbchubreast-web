@@ -23,7 +23,11 @@ public interface ChuPhaseTumeurDao  {
 
 	public ChuPhaseTumeur find(Integer idPhase);
 	public ChuPhaseTumeur findWithDependencies(Integer idPhase);
+	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur);
 	public List<ChuPhaseTumeur> list();
+	public List<ChuPhaseTumeur> listWithDependencies();
+	public List<ChuPhaseTumeur> list(Integer idTumeur);
+	public List<ChuPhaseTumeur> listWithDependencies(Integer idTumeur);
 	public void save (ChuPhaseTumeur phaseTumeur);
 	public void update (ChuPhaseTumeur phaseTumeur);
 	public void saveOrUpdate (ChuPhaseTumeur phaseTumeur);

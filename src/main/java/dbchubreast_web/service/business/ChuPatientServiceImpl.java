@@ -58,6 +58,10 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	public ChuPatient find(Integer idTumeur) {
 		return patientDao.find(idTumeur);
 	}
+	
+	public ChuPatient findByIdPrelevement(Integer idPrelevement) {
+		return patientDao.findByIdPrelevement(idPrelevement);
+	}
 
 	public List<ChuPatient> findInAttributes(String text) {
 		return patientDao.findInAttributes(text);
@@ -66,7 +70,8 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 
 	public void saveOrUpdate(ChuPatient patient) {
 
-		// Format nom prenom
+		// === Format nom prenom ===
+
 		String nom = patient.getNom();
 		if (nom!=null) {
 			patient.setNom(nom.toUpperCase());
@@ -77,7 +82,6 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 			patient.setPrenom(formatService.formatFisrtName(prenom));
 		}
 
-
 		// New patient
 		if (patient.getIdPatient()==null) {
 			patientDao.save(patient);
@@ -87,5 +91,9 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 		else {
 			patientDao.update(patient);
 		}
+
 	}
+
+	
+	
 }

@@ -18,86 +18,109 @@
 	<!-- Container -->
 	<div class="container">
 
-
-		<div class="starter-template">
-			<h1>Patient <a href="${pageContext.request.contextPath}/patient/${patient.idPatient}">${patient.idPatient}</a></h1>
-			<p class="lead">
-			${patient.nom}&nbsp;${patient.prenom}&nbsp;${patient.dateNaissance}</p>
-		</div>
+		<!-- Fil d'Ariane -->
+		<%@ include file="../inc/filAriane.jsp"%>
 
 
-		<h2>Tumeur :</h2>
-		<table class="table table-bordered">
-			<thead>
-				<tr class="success">
-					<th>#ID tumeur</th>
-					<th>Date</th>
-					<th>Age</th>
-					<th>Topo</th>
-					<th>Côté</th>
-					<th>Dernière nouvelle</th>
-					<th>Statut</th>
-					<th>TN</th>
-					<th>Survie OS/DFS</th>
-
-				</tr>
-			</thead>
-				<tr>
-					<td>${tumeur.idTumeur}</td>
-					<td>${tumeur.dateDiagnostic}</td>
-					<td>${tumeur.ageDiagnostic}</td>
-					<td><abbr title="${tumeur.chuTopographie.nomFr}">${tumeur.chuTopographie.idTopographie}</abbr></td>
-					<td>${tumeur.cote}</td>
-					<td>${tumeur.dateEvolution}</td>
-					<td><abbr title="${tumeur.chuEvolution.nom}">${tumeur.chuEvolution.code}</abbr></td>
-					<td class="warning">${tumeur.tripleNegative}</td>
-					<td class="warning">${tumeur.osMonths}/${tumeur.dfsMonths}</td>
-				</tr>
-		</table>
-
-		<h2>Prélèvements :</h2>
+		<c:if test="${not empty msg}">
+			<p></p>
+			<div class="alert alert-${css} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>${msg}</strong>
+			</div>
+		</c:if>
 
 
+		<div>
 
-		<table class="table table-bordered">
-			<thead>
-				<tr class="info">
-					<th>#ID prélèvement</th>
-					<th>Date</th>
-					<th>Phase</th>
-					<th>Type</th>
-					<th>Site</th>
-					<th>Morpho</th>
-					<th>Histologie</th>
-					<th>CIS</th>
-					<th>Métastases</th>
-					<th>Nodules</th>
-				</tr>
-			</thead>
+			<!-- H1 Patient -->
+			<%@ include file="../inc/h1Patient.jsp"%>
 
-			<c:forEach var="prel" items="${listPrelevements}">
-				<tr>
-					<td>${prel.idPrelevement}</td>
-					<td>${prel.datePrelevement}</td>
-					<td>${prel.chuPhaseTumeur.chuTypePhase.nom}</td>
-					<td>${prel.chuTypePrelevement.nom}</td>
-					<td>${prel.sitePrelevement}</td>
-					<td><abbr title="${prel.chuMorphologie.nomEn}">${prel.chuMorphologie.idMorphologie}</abbr></td>
-					<td>${prel.typeHistologique}</td>
-					<td>${prel.associationCis}</td>
-					<td>${prel.chuPhaseTumeur.metastases}</td>
-					<td>${prel.chuPhaseTumeur.nodules}</td>
-				</tr>
+			<h2>Détail du prélèvement</h2>
+
+			<br />
+
+			<!-- Prelevement ID -->
+			<div class="row">
+				<label class="col-sm-2">ID prélèvement</label>
+				<div class="col-sm-10">${prelevement.idPrelevement}</div>
+			</div>
+
+			<!-- Tumeur ID -->
+			<div class="row">
+				<label class="col-sm-2">ID tumeur</label>
+				<div class="col-sm-10">${prelevement.chuPhaseTumeur.chuTumeur.idTumeur}</div>
+			</div>
+
+			<!-- Phase tumeur ID -->
+			<div class="row">
+				<label class="col-sm-2">ID phase de la tumeur</label>
+				<div class="col-sm-10">${prelevement.chuPhaseTumeur.idPhase} (phase ${prelevement.chuPhaseTumeur.chuTypePhase.nom})</div>
+			</div>
+
+			<!-- Type de prelevement -->
+			<div class="row">
+				<label class="col-sm-2">Type de prélèvement</label>
+				<div class="col-sm-10">${prelevement.chuTypePrelevement.nom}</div>
+			</div>
+
+			<!-- Date de prelevement -->
+			<div class="row">
+				<label class="col-sm-2">Date de prélèvement</label>
+				<div class="col-sm-10">${prelevement.datePrelevement}</div>
+			</div>
+
+			<!-- Site de prelevement -->
+			<div class="row">
+				<label class="col-sm-2">Site de prélèvement</label>
+				<div class="col-sm-10">${prelevement.sitePrelevement}</div>
+			</div>
+
+			<!-- Morphologie -->
+			<div class="row">
+				<label class="col-sm-2">Morphologie ICD-O</label>
+				<div class="col-sm-10">${prelevement.chuMorphologie.idMorphologie}
+					- ${prelevement.chuMorphologie.nomEn}</div>
+			</div>
+
+			<!-- Histologie -->
+			<div class="row">
+				<label class="col-sm-2">Histologie</label>
+				<div class="col-sm-10">${prelevement.typeHistologique}</div>
+			</div>
+
+			<!-- Association CIS -->
+			<div class="row">
+				<label class="col-sm-2">Association "carcinoma in situ"
+					(CIS)</label>
+				<div class="col-sm-10">${prelevement.associationCis}</div>
+			</div>
+
+			<!-- Biomarqueurs -->
+			
+			<h3>Biomarqueurs:</h3>
+			<c:forEach var="prelBio" items="${listPrelevementBiomarqueurs}">
+
+				<div class="row">
+					<label class="col-sm-2">${prelBio.chuBiomarqueur.nom}</label>
+					<div class="col-sm-10">${prelBio.valeur}
+						<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if>
+					</div>
+				</div>
+
 			</c:forEach>
-		</table>
 
 
 
 
+
+		</div>
 	</div>
 
 	<!-- Footer -->
 	<%@ include file="/resources/fragments/footer.jsp"%>
-
 </body>
 </html>

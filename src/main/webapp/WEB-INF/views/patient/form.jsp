@@ -19,7 +19,7 @@
 	<div class="container">
 
 		<c:choose>
-			<c:when test="${empty patient or empty patient.idPatient}">
+			<c:when test="${formPatient['new']}">
 				<h1>Ajouter un patient</h1>
 			</c:when>
 			<c:otherwise>
@@ -28,7 +28,7 @@
 		</c:choose>
 
 		<form:form class="form-horizontall" method="post"
-			modelAttribute="patient"
+			modelAttribute="formPatient"
 			action="${pageContext.request.contextPath}/patient/update">
 
 			<form:hidden path="idPatient" />
@@ -46,7 +46,7 @@
 
 			<spring:bind path="prenom">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label">Prénom</label>
+					<label class="col-2 control-label required-field">Prénom</label>
 					<div class="col-10">
 						<form:input path="prenom" type="text" class="form-control "
 							id="prenom" placeholder="Prénom" />
@@ -57,7 +57,7 @@
 
 			<spring:bind path="nom">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label">Nom</label>
+					<label class="col-2 control-label required-field">Nom</label>
 					<div class="col-10">
 						<form:input path="nom" type="text" class="form-control " id="nom"
 							placeholder="Nom" />
@@ -68,7 +68,7 @@
 
 			<spring:bind path="sexe">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label">Sexe</label>
+					<label class="col-2 control-label required-field">Sexe</label>
 					<div class="col-10">
 						<label class="radio-inline"> <form:radiobutton path="sexe"
 								value="F" />Femme
@@ -82,7 +82,7 @@
 
 			<spring:bind path="dateNaissance">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label">Date de naissance</label>
+					<label class="col-2 control-label required-field">Date de naissance</label>
 					<div class="col-10">
 						<form:input path="dateNaissance" type="date" class="form-control "
 							id="dateNaissance" placeholder="Date de naissance" />
@@ -109,8 +109,16 @@
 					<label class="col-2 control-label">Cause de décès</label>
 					<div class="col-10">
 						<form:input path="causeDeces" type="text" class="form-control "
-							id="causeDeces"
-							placeholder="Suites néoplasiques / Autre cancer / Maladie intercurrente / Cause inconue" />
+							id="causeDeces" list="listCauses" />
+						<datalist id="listCauses">
+							<option value="Suites néoplasiques" />
+							<option value="Autre cancer" />
+							<option value="Autre cancer du sein" />
+							<option value="Multiples cancers dont le sein" />
+							<option value="Maladie intercurrente (ou suicide)" />
+							<option value="Complications liées au traitement" />
+							<option value="Cause inconnue" />
+						</datalist>
 						<form:errors path="causeDeces" class="control-label" />
 					</div>
 				</div>
@@ -121,7 +129,12 @@
 					<label class="col-2 control-label">Statut BRCA</label>
 					<div class="col-10">
 						<form:input path="statutBrca" type="text" class="form-control "
-							id="statutBrca" placeholder="Non mutée / BRCA1 / BRCA2" />
+							id="statutBrca" list="listBrcaMutations" />
+						<datalist id="listBrcaMutations">
+							<option value="Non muté" />
+							<option value="BRCA1" />
+							<option value="BRCA2" />
+						</datalist>
 						<form:errors path="statutBrca" class="control-label" />
 					</div>
 				</div>

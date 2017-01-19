@@ -16,4 +16,18 @@
 		<a
 			href="${pageContext.request.contextPath}/tumeur/${tumeur.idTumeur}">Tumeur&nbsp;${tumeur.idTumeur}</a>&nbsp;>
 </c:if>
+
+
+<!-- Prélèvement -->
+<c:if test="${not empty listPrelevements}">
+		<a
+			href="${pageContext.request.contextPath}/patient/${patient.idPatient}/prelevements">Prélèvements</a>&nbsp;>
+</c:if>
+
+<!-- Prelevement ID -->
+<c:if test="${not empty prelevement  and not empty prelevement.idPrelevement}">
+		<a
+			href="${pageContext.request.contextPath}/prelevement/${prelevement.idPrelevement}">Prélèvement&nbsp;${prelevement.idPrelevement}</a>&nbsp;>
+</c:if>
+
 </div>

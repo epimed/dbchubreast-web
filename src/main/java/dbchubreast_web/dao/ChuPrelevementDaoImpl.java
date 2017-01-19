@@ -17,7 +17,9 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -37,21 +39,91 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 	private SessionFactory sessionFactory;
 
 
-	/** =================================================*/
+	/** ================================================= */
 
-	public List<ChuPrelevement> find(Integer idTumeur) {
+	public ChuPrelevement find(Integer idPrelevement) {
+		ChuPrelevement result = (ChuPrelevement) sessionFactory.getCurrentSession()
+				.createCriteria(ChuPrelevement.class)
+				.add(Restrictions.eq("idPrelevement", idPrelevement))
+				.uniqueResult();
+		this.populateDependencies(result);
+		return result;
+	}
+
+	/** ================================================= */
+
+	public List<ChuPrelevement> listByIdPhase(Integer idPhase) {
+
+		List<ChuPrelevement> result = sessionFactory.getCurrentSession()
+				.createCriteria(ChuPrelevement.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
+				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
+				.addOrder(Order.asc("datePrelevement"))
+				.addOrder(Order.asc("idPrelevement"))
+				.list();
+
+		this.populateDependencies(result);
+
+		return result;
+	}
+
+	/** ================================================= */
+
+	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur) {
 
 		List<ChuPrelevement> result = sessionFactory.getCurrentSession()
 				.createCriteria(ChuPrelevement.class)
 				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
 				.createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
 				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
+				.addOrder(Order.asc("datePrelevement"))
+				.addOrder(Order.asc("idPrelevement"))
 				.list();
-		
-		logger.debug("Prelevements {}", result);
-		
+
+		this.populateDependencies(result);
+
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
+
+
+	public List<ChuPrelevement> listByIdPatient(String idPatient) {
+		List<ChuPrelevement> result = sessionFactory.getCurrentSession()
+				.createCriteria(ChuPrelevement.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
+				.createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
+				.createAlias("chuTumeur.chuPatient", "chuPatient")
+				.add(Restrictions.eq("chuPatient.idPatient", idPatient))
+				.addOrder(Order.asc("datePrelevement"))
+				.addOrder(Order.asc("idPrelevement"))
+				.list();
+		this.populateDependencies(result);
+
+		return result;
+	}
+
+	/** ================================================= */
+
+	private void populateDependencies(List<ChuPrelevement> list) {
+		
+		
+		for (ChuPrelevement prel : list) {
+			this.populateDependencies(prel);
+		}
+	}
+	
+	/** ================================================= */
+
+	private void populateDependencies(ChuPrelevement prel) {
+		
+		Hibernate.initialize(prel.getChuMorphologie());
+		Hibernate.initialize(prel.getChuTypePrelevement());
+		Hibernate.initialize(prel.getChuPhaseTumeur());
+		Hibernate.initialize(prel.getChuPhaseTumeur().getChuTypePhase());
+		Hibernate.initialize(prel.getChuPhaseTumeur().getChuTumeur());
+	}
+	
+	/** ================================================= */
+	
 }

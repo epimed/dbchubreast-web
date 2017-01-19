@@ -31,7 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.form.FormPatient;
 import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.form.FormPatientService;
 
 
 @Controller
@@ -39,6 +41,9 @@ public class PatientController extends BaseController {
 
 	@Autowired
 	private ChuPatientService patientService;
+	
+	@Autowired
+	private FormPatientService formPatientService;
 
 	/** ====================================================================================== */
 
@@ -112,7 +117,7 @@ public class PatientController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		model.addAttribute("patient", new ChuPatient());
+		model.addAttribute("formPatient", new FormPatient());
 
 		return "patient/form";
 	}
@@ -133,7 +138,7 @@ public class PatientController extends BaseController {
 			return "redirect:/patient";
 		}
 
-		model.addAttribute("patient", patient);
+		model.addAttribute("formPatient", formPatientService.getFormPatient(patient));
 
 		return "patient/form";
 	}
@@ -142,30 +147,30 @@ public class PatientController extends BaseController {
 
 	@RequestMapping(value = {"/patient/update", "/patient/{idPatient}/update"}, method = RequestMethod.POST)
 	public String saveOrUpdatePatient(Model model, 
-			@ModelAttribute("patient") @Valid ChuPatient patient, 
+			@ModelAttribute("formPatient") @Valid FormPatient formPatient, 
 			BindingResult result,
 			final RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-		logger.debug("Patient {}", patient);
+		logger.debug("Form Patient {}", formPatient);
 
 		if (result.hasErrors()) {
 			return "patient/form";
 		}
 
 		redirectAttributes.addFlashAttribute("css", "success");
-		if(patient.getIdPatient()==null) {
+		if(formPatient.isNew()) {
 			redirectAttributes.addFlashAttribute("msg", "Le nouveau patient a été ajouté avec succès !");
 		}
 		else {
 			redirectAttributes.addFlashAttribute("msg", "La modification a été effectuée avec succès !");
 		}
 
-		patientService.saveOrUpdate(patient);
+		formPatientService.saveOrUpdateForm(formPatient);
 
 		// POST/REDIRECT/GET
-		return "redirect:/patient/" + patient.getIdPatient();
+		return "redirect:/patient/" + formPatient.getIdPatient();
 	}
 
 	/** ====================================================================================== */
