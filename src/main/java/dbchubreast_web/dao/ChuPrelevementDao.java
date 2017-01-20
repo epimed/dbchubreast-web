@@ -26,4 +26,8 @@ public interface ChuPrelevementDao {
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur);
 	public List<ChuPrelevement> listByIdPatient(String idPatient);
 	
+	public void save(ChuPrelevement prelevement);
+	public void update(ChuPrelevement prelevement);
+	public void saveOrUpdate(ChuPrelevement prelevement);
+	
 }

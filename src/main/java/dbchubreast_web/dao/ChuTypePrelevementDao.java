@@ -17,7 +17,6 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import dbchubreast_web.entity.ChuTypePhase;
 import dbchubreast_web.entity.ChuTypePrelevement;
 
 public interface ChuTypePrelevementDao  {

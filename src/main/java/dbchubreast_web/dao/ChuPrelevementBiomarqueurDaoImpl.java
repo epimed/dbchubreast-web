@@ -40,6 +40,25 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 	@Autowired
 	private SessionFactory sessionFactory;
 
+
+	/** ================================================= */
+
+	public ChuPrelevementBiomarqueur find(Integer idPrelevement, String idBiomarqueur) {
+		if (idPrelevement==null || idBiomarqueur==null) {
+			return null;
+		}
+		ChuPrelevementBiomarqueur result = (ChuPrelevementBiomarqueur) sessionFactory.getCurrentSession()
+				.createCriteria(ChuPrelevementBiomarqueur.class)
+				.createAlias("chuPrelevement", "chuPrelevement")
+				.createAlias("chuBiomarqueur", "chuBiomarqueur")
+				.add(Restrictions.eq("chuPrelevement.idPrelevement", idPrelevement))
+				.add(Restrictions.eq("chuBiomarqueur.idBiomarqueur", idBiomarqueur))
+				.uniqueResult();
+		this.populateDependencies(result);
+		return result;
+	}
+
+
 	/** ================================================= */
 
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement) {
@@ -64,7 +83,7 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 		if (listIdPrelevements==null || listIdPrelevements.isEmpty()) {
 			return null;
 		}
-		
+
 		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession()
 				.createCriteria(ChuPrelevementBiomarqueur.class)
 				.createAlias("chuPrelevement", "chuPrelevement")
@@ -80,6 +99,30 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 
 	/** ================================================= */
 
+	public void save(ChuPrelevementBiomarqueur prelBio) {
+		sessionFactory.getCurrentSession().save(prelBio);
+	}
+
+	/** ================================================= */
+
+	public void update(ChuPrelevementBiomarqueur prelBio) {
+		sessionFactory.getCurrentSession().update(prelBio);
+	}
+
+	/** ================================================= */
+
+	public void saveOrUpdate(ChuPrelevementBiomarqueur prelBio) {
+		sessionFactory.getCurrentSession().saveOrUpdate(prelBio);
+	}
+
+	/** ================================================= */
+
+	public void delete(ChuPrelevementBiomarqueur prelBio) {
+		sessionFactory.getCurrentSession().delete(prelBio);
+	}
+
+	/** ================================================= */
+
 	private void populateDependencies(List<ChuPrelevementBiomarqueur> list) {
 		for (ChuPrelevementBiomarqueur prelBio : list) {
 			this.populateDependencies(prelBio);
@@ -89,8 +132,10 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 	/** ================================================= */
 
 	private void populateDependencies(ChuPrelevementBiomarqueur prelBio) {
-		Hibernate.initialize(prelBio.getChuPrelevement());
-		Hibernate.initialize(prelBio.getChuBiomarqueur());
+		if (prelBio!=null) {
+			Hibernate.initialize(prelBio.getChuPrelevement());
+			Hibernate.initialize(prelBio.getChuBiomarqueur());
+		}
 	}
 
 	/** ================================================= */

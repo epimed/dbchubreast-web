@@ -53,5 +53,17 @@ public class ChuTumeurServiceImpl implements ChuTumeurService {
 	public List<ChuTumeur> findInAttributesWithDependencies(String text) {
 		return tumeurDao.findInAttributesWithDependencies(text);
 	}
+
+	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase) {
+		return tumeurDao.findByIdPhaseWithDependencies(idPhase);
+	}
+
+	public void save(ChuTumeur tumeur) {
+		tumeurDao.save(tumeur);	
+	}
+
+	public void update(ChuTumeur tumeur) {
+		tumeurDao.update(tumeur);
+	}
 	
 }

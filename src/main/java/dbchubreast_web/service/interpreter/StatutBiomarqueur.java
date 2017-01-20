@@ -11,13 +11,25 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service.form;
+package dbchubreast_web.service.interpreter;
 
-import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.form.FormPatient;
-
-public interface FormPatientService {
-
-	public void saveOrUpdateForm(FormPatient form);
-	public FormPatient getForm(ChuPatient patient);
+public enum StatutBiomarqueur {
+	TRUE,
+	FALSE,
+	POSITIVE,
+	NEGATIVE,
+	HIGH,
+	LOW,
+	BORDERLINE,
+	NULL;
+	
+	public String stringValue() {
+		
+		if (this==NULL) {
+			return null;
+		}
+		else {
+			return this.toString().toLowerCase();
+		}
+	}
 }

@@ -138,7 +138,7 @@ public class PatientController extends BaseController {
 			return "redirect:/patient";
 		}
 
-		model.addAttribute("formPatient", formPatientService.getFormPatient(patient));
+		model.addAttribute("formPatient", formPatientService.getForm(patient));
 
 		return "patient/form";
 	}

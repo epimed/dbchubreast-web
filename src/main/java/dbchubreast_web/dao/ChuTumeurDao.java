@@ -21,12 +21,16 @@ import dbchubreast_web.entity.ChuTumeur;
 
 
 public interface  ChuTumeurDao {
+	
 	public ChuTumeur find(Integer idTumeur);
 	public ChuTumeur findWithDependencies(Integer idTumeur);
+	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase);
+	
 	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur); 
 	public List<ChuTumeur> find(String idPatient);
 	public List<ChuTumeur> findWithDependencies(String idPatient);
 	public List<ChuTumeur>  findInAttributesWithDependencies(String text);
+	
 	public void save(ChuTumeur tumeur);
 	public void update(ChuTumeur tumeur);
 }

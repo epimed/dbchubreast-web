@@ -5,7 +5,7 @@
  * for EpiMed platform of the Institute for Advances Biosciences (IAB)
  *
  * Copyright University of Grenoble Alps (UGA)
- * GNU GENERAL PUBLIC LICENSE
+
  * Please check LICENSE file
  *
  * Author: Ekaterina Bourova-Flin 
@@ -39,6 +39,7 @@ import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.entity.ChuTypePhase;
 import dbchubreast_web.entity.ChuTypePrelevement;
 import dbchubreast_web.form.FormPrelevement;
+import dbchubreast_web.service.business.ChuBiomarqueurService;
 import dbchubreast_web.service.business.ChuMorphologieService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuPhaseTumeurService;
@@ -47,6 +48,8 @@ import dbchubreast_web.service.business.ChuPrelevementService;
 import dbchubreast_web.service.business.ChuTumeurService;
 import dbchubreast_web.service.business.ChuTypePhaseService;
 import dbchubreast_web.service.business.ChuTypePrelevementService;
+import dbchubreast_web.service.form.FormPrelevementService;
+import dbchubreast_web.validator.FormPrelevementValidator;
 
 
 @Controller
@@ -69,15 +72,22 @@ public class PrelevementController extends BaseController {
 
 	@Autowired
 	private ChuMorphologieService morphologieService;
-	
+
 	@Autowired
 	private ChuTypePrelevementService typePrelevementService;
 
 	@Autowired
 	private ChuPrelevementBiomarqueurService prelevementBiomarqueurService;
+
+	@Autowired
+	private ChuBiomarqueurService biomarqueurService;
 	
 	@Autowired
-	private FormPrelevement formPrelevement;
+	private FormPrelevementService formPrelevementService;
+	
+	@Autowired
+	private FormPrelevementValidator formPrelevementValidator;
+
 
 	/** ====================================================================================== */
 
@@ -154,6 +164,25 @@ public class PrelevementController extends BaseController {
 		return "prelevement/show";
 	}
 
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = {"/prelevement/{idPrelevement}/update"}, method = RequestMethod.GET)
+	public String showUpdateSampleForm(Model model,
+			@PathVariable Integer idPrelevement,
+			HttpServletRequest request
+			) {
+
+		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+
+		// Form prelevement
+		ChuPrelevement prelevement = prelevementService.find(idPrelevement);
+		FormPrelevement formPrelevement = formPrelevementService.getForm(prelevement);
+		this.populateAddSampleForm(formPrelevement, model);
+
+		return "prelevement/form";
+	}
+
 	/** ====================================================================================== */
 
 	@RequestMapping(value = {"/patient/{idPatient}/prelevement/add"}, method = RequestMethod.GET)
@@ -165,40 +194,13 @@ public class PrelevementController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		// Form prelevement
-		// FormPrelevement	formPrelevement = new FormPrelevement(idPatient);
-		formPrelevement.setIdPatient(idPatient);
-		
-		this.populateAddSampleForm(formPrelevement, model);
-		formPrelevement.populateBiomarqueurs();
-		
-		return "prelevement/form";
-	}
-
-	/** ====================================================================================== */
-
-	@RequestMapping(value = {"/patient/{idPatient}/prelevement/add/detail"}, method = RequestMethod.GET)
-	public String showDetailAddSampleForm(
-			@PathVariable String idPatient
-			) {
-		// POST/REDIRECT/GET
-		return "redirect:/patient/" + idPatient + "/prelevement/add";
-	}
-
-	/** ====================================================================================== */
-
-	@RequestMapping(value = {"/patient/{idPatient}/prelevement/add/detail"}, method = RequestMethod.POST)
-	public String showDetailAddSampleForm(Model model,
-			@PathVariable String idPatient,
-			@ModelAttribute("formPrelevement") FormPrelevement formPrelevement, 
-			HttpServletRequest request
-			) {
-
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
+		FormPrelevement formPrelevement = new FormPrelevement(idPatient);
+		formPrelevement.init(biomarqueurService.list());
 		this.populateAddSampleForm(formPrelevement, model);
 
 		return "prelevement/form";
 	}
+
 
 	/** ====================================================================================== */
 
@@ -211,7 +213,8 @@ public class PrelevementController extends BaseController {
 	/** ====================================================================================== */
 
 	@RequestMapping(value = {"/prelevement/update"}, method = RequestMethod.POST)
-	public String saveOrUpdateSampleForm(Model model,
+	public String showDetailAddSampleForm(Model model,
+			@RequestParam(value = "saveButton", required = false) String saveButton,
 			@ModelAttribute("formPrelevement") FormPrelevement formPrelevement, 
 			BindingResult result,
 			final RedirectAttributes redirectAttributes,
@@ -219,14 +222,45 @@ public class PrelevementController extends BaseController {
 			) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+		logger.debug("saveButton={}", saveButton);
 
-		logger.debug("List bio {}", formPrelevement.getListBiomarqueurs());
+		// === Mise a jour de la forme sans bouton "enregistrer" ===
 		
-		this.populateAddSampleForm(formPrelevement, model);
+		if (saveButton==null) {
+			this.populateAddSampleForm(formPrelevement, model);
+			return "prelevement/form";
+		}
 
-		return "prelevement/form";
+		// === Bouton "enregistrer" ===
+		
+		if (saveButton!=null) {
+		
+			formPrelevementValidator.validate(formPrelevement, result);
+			
+			if (result.hasErrors()) {
+				this.populateAddSampleForm(formPrelevement, model);
+				return "prelevement/form";
+			}
+			
+			else {
+				logger.debug("Validation OK");
+
+				redirectAttributes.addFlashAttribute("css", "success");
+				if(formPrelevement.isNew()) {
+					redirectAttributes.addFlashAttribute("msg", "Un nouveau prélèvement a été ajouté avec succès !");
+				}
+				else {
+					redirectAttributes.addFlashAttribute("msg", "La modification du prélèvement a été effectué avec succès !");
+				}
+				formPrelevementService.saveOrUpdateForm(formPrelevement);
+			}
+			
+		}
+
+		// POST/REDIRECT/GET
+		return "redirect:/prelevement/" + formPrelevement.getIdPrelevement();
+
 	}
-
 
 	/** ====================================================================================== */
 
@@ -254,7 +288,7 @@ public class PrelevementController extends BaseController {
 	/** ====================================================================================== */
 
 
-	public void populateAddSampleForm(FormPrelevement formPrelevement, Model model) {
+	private void populateAddSampleForm(FormPrelevement formPrelevement, Model model) {
 
 		// Patient
 		ChuPatient patient = patientService.find(formPrelevement.getIdPatient());
@@ -291,9 +325,9 @@ public class PrelevementController extends BaseController {
 				listTypePrelevements = typePrelevementService.listPhaseRechute();
 			}
 			model.addAttribute("listTypePrelevements", listTypePrelevements);
-			
+
 			// Type de prelevement pre-selectionne si unique
-			
+
 			if (formPrelevement.getIdTypePrelevement()==null && listTypePrelevements!=null && listTypePrelevements.size()==1) {
 				formPrelevement.setIdTypePrelevement(listTypePrelevements.get(0).getIdTypePrelevement());
 			}
@@ -302,14 +336,14 @@ public class PrelevementController extends BaseController {
 		// Prelevements
 		List<ChuPrelevement> listPrelevements = prelevementService.listByIdPatient(patient.getIdPatient());
 		model.addAttribute("listPrelevements", listPrelevements);
-		
+
 		// Morphologies
 		List<ChuMorphologie> listMorphologies = morphologieService.list();
 		model.addAttribute("listMorphologies", listMorphologies);
 
 		// Form
 		model.addAttribute("formPrelevement", formPrelevement);
-		
+
 		logger.debug("formPrelevement {}", formPrelevement);
 	}
 

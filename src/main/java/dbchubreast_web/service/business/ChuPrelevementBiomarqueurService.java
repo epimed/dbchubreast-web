@@ -19,6 +19,12 @@ import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 
 public interface ChuPrelevementBiomarqueurService {
 
+	public ChuPrelevementBiomarqueur find(Integer idPrelevement, String idBiomarqueur);
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement);
 	public List<ChuPrelevementBiomarqueur> list(List<Integer> listIdPrelevements);
+	
+	public void save(ChuPrelevementBiomarqueur prelBio);
+	public void update(ChuPrelevementBiomarqueur prelBio);
+	public void saveOrUpdate(ChuPrelevementBiomarqueur prelBio);
+	public void delete(ChuPrelevementBiomarqueur prelBio);
 }

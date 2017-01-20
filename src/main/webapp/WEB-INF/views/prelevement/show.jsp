@@ -52,6 +52,7 @@
 			<!-- Tumeur ID -->
 			<div class="row">
 				<label class="col-sm-2">ID tumeur</label>
+				
 				<div class="col-sm-10">${prelevement.chuPhaseTumeur.chuTumeur.idTumeur}</div>
 			</div>
 

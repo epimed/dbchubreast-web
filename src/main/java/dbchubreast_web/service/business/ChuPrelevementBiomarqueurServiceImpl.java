@@ -27,12 +27,32 @@ public class ChuPrelevementBiomarqueurServiceImpl  implements ChuPrelevementBiom
 	@Autowired
 	private ChuPrelevementBiomarqueurDao prelevementBiomarqueurDao;
 
+	public ChuPrelevementBiomarqueur find(Integer idPrelevement, String idBiomarqueur) {
+		return prelevementBiomarqueurDao.find(idPrelevement, idBiomarqueur);
+	}
+	
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement) {
 		return prelevementBiomarqueurDao.list(idPrelevement);
 	}
 	
 	public List<ChuPrelevementBiomarqueur> list(List<Integer> listIdPrelevements) {
 		return prelevementBiomarqueurDao.list(listIdPrelevements);
+	}
+	
+	public void save(ChuPrelevementBiomarqueur prelBio) {
+		prelevementBiomarqueurDao.save(prelBio);
+	}
+	
+	public void update(ChuPrelevementBiomarqueur prelBio) {
+		prelevementBiomarqueurDao.update(prelBio);
+	}
+	
+	public void saveOrUpdate(ChuPrelevementBiomarqueur prelBio) {
+		prelevementBiomarqueurDao.saveOrUpdate(prelBio);
+	}
+	
+	public void delete(ChuPrelevementBiomarqueur prelBio) {
+		prelevementBiomarqueurDao.delete(prelBio);
 	}
 	
 }

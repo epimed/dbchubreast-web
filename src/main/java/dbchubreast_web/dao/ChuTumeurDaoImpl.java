@@ -47,7 +47,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 				.createCriteria(ChuTumeur.class)	
 				.add(Restrictions.eq("idTumeur", idTumeur))
 				.uniqueResult();
-		
+
 		return tumeur;
 	}
 
@@ -63,9 +63,25 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		Hibernate.initialize(tumeur.getChuEvolution());
 		Hibernate.initialize(tumeur.getChuTopographie());
 		Hibernate.initialize(tumeur.getChuPatient());
-		
+
 		return tumeur;
 	}
+
+	/** =================================================*/
+
+	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase) {
+
+		ChuTumeur tumeur = (ChuTumeur) sessionFactory.getCurrentSession()
+				.createCriteria(ChuTumeur.class)	
+				.createAlias("chuPhaseTumeurs", "chuPhaseTumeurs")
+				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhase))
+				.uniqueResult();
+
+		this.populateDependencies(tumeur);
+
+		return tumeur;
+	}
+
 
 	/** =================================================*/
 
@@ -77,7 +93,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 				.list();
 
 		this.populateDependencies(list);
-		
+
 		return list;
 	}
 
@@ -120,8 +136,8 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 				.createAlias("chuEvolution", "chuEvolution")
 				.createAlias("chuTopographie", "chuTopographie")
 				.createAlias("chuPatient", "chuPatient");
-		
-		
+
+
 		Criterion criterion = Restrictions.or(
 				Restrictions.like( "chuTopographie.idTopographie", "%" + text + "%").ignoreCase(),
 				Restrictions.like( "chuEvolution.code", "%" + text + "%").ignoreCase(),
@@ -130,11 +146,11 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 				Restrictions.like( "chuPatient.nom", "%" + text + "%").ignoreCase(),
 				Restrictions.like( "chuPatient.rcp", "%" + text + "%").ignoreCase()
 				);
-		
+
 		criteria.add(criterion);
 
 		criteria.addOrder(Order.asc("idTumeur"));
-		
+
 		List<ChuTumeur> list = criteria.list();
 
 		this.populateDependencies(list);
@@ -144,27 +160,38 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 
 	/** =================================================*/
-	
+
 	public void save(ChuTumeur tumeur) {
 		sessionFactory.getCurrentSession().save(tumeur);
 	}
-	
-/** =================================================*/
-	
+
+	/** =================================================*/
+
 	public void update(ChuTumeur tumeur) {
 		sessionFactory.getCurrentSession().update(tumeur);
 	}
-	
+
+
 	/** =================================================*/
-	
-	
-	private void populateDependencies(List<ChuTumeur> list) {
-		for (ChuTumeur tumeur : list) {
+
+
+	private void populateDependencies(ChuTumeur tumeur) {
+		if (tumeur!=null) {
 			Hibernate.initialize(tumeur.getChuEvolution());
 			Hibernate.initialize(tumeur.getChuTopographie());
 			Hibernate.initialize(tumeur.getChuPatient());
 		}
 	}
-	
+
+
+	/** =================================================*/
+
+
+	private void populateDependencies(List<ChuTumeur> list) {
+		for (ChuTumeur tumeur : list) {
+			this.populateDependencies(tumeur);
+		}
+	}
+
 	/** =================================================*/
 }

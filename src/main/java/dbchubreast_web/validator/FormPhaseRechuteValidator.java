@@ -21,7 +21,6 @@ import org.springframework.validation.Validator;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.form.FormPhaseRechute;
-import dbchubreast_web.form.FormTumeurInitiale;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuTumeurService;
@@ -37,7 +36,7 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator{
 	private ChuTumeurService tumeurService;
 
 	public boolean supports(Class<?> clazz) {
-		return FormTumeurInitiale.class.isAssignableFrom(clazz);
+		return FormPhaseRechute.class.isAssignableFrom(clazz);
 	}
 
 

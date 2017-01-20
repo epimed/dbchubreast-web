@@ -107,7 +107,7 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 
 	/** =========================================================================================== */
 
-	public FormPatient getFormPatient(ChuPatient patient) {
+	public FormPatient getForm(ChuPatient patient) {
 		FormPatient form = new FormPatient();
 		form.setIdPatient(patient.getIdPatient());
 		form.setRcp(patient.getRcp());

@@ -105,25 +105,44 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	/** ================================================= */
 
+	public void save(ChuPrelevement prelevement) {
+		sessionFactory.getCurrentSession().save(prelevement);
+	}
+
+	/** ================================================= */
+
+	public void update(ChuPrelevement prelevement) {
+		sessionFactory.getCurrentSession().update(prelevement);
+	}
+
+	/** ================================================= */
+
+	public void saveOrUpdate(ChuPrelevement prelevement) {
+		sessionFactory.getCurrentSession().saveOrUpdate(prelevement);
+	}
+
+	/** ================================================= */
+
 	private void populateDependencies(List<ChuPrelevement> list) {
-		
-		
+
+
 		for (ChuPrelevement prel : list) {
 			this.populateDependencies(prel);
 		}
 	}
-	
+
 	/** ================================================= */
 
 	private void populateDependencies(ChuPrelevement prel) {
-		
-		Hibernate.initialize(prel.getChuMorphologie());
-		Hibernate.initialize(prel.getChuTypePrelevement());
-		Hibernate.initialize(prel.getChuPhaseTumeur());
-		Hibernate.initialize(prel.getChuPhaseTumeur().getChuTypePhase());
-		Hibernate.initialize(prel.getChuPhaseTumeur().getChuTumeur());
+		if (prel!=null) {
+			Hibernate.initialize(prel.getChuMorphologie());
+			Hibernate.initialize(prel.getChuTypePrelevement());
+			Hibernate.initialize(prel.getChuPhaseTumeur());
+			Hibernate.initialize(prel.getChuPhaseTumeur().getChuTypePhase());
+			Hibernate.initialize(prel.getChuPhaseTumeur().getChuTumeur());
+		}
 	}
-	
+
 	/** ================================================= */
-	
+
 }

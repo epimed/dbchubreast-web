@@ -13,11 +13,11 @@
  */
 package dbchubreast_web.service.form;
 
-import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.form.FormPatient;
+import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.form.FormPrelevement;
 
-public interface FormPatientService {
+public interface FormPrelevementService {
 
-	public void saveOrUpdateForm(FormPatient form);
-	public FormPatient getForm(ChuPatient patient);
+	public void saveOrUpdateForm(FormPrelevement form);
+	public FormPrelevement getForm(ChuPrelevement prelevement);
 }

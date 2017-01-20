@@ -43,4 +43,16 @@ public class ChuPrelevementServiceImpl  implements ChuPrelevementService {
 		return prelevementDao.listByIdPatient(idPatient);
 	}
 	
+	public void save(ChuPrelevement prelevement) {
+		prelevementDao.save(prelevement);
+	}
+	
+	public void update(ChuPrelevement prelevement) {
+		prelevementDao.update(prelevement);
+	}
+	
+	public void saveOrUpdate(ChuPrelevement prelevement) {
+		prelevementDao.saveOrUpdate(prelevement);
+	}
+	
 }

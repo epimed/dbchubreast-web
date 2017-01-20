@@ -1,72 +1,65 @@
 package dbchubreast_web.form;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import dbchubreast_web.entity.ChuBiomarqueur;
 import dbchubreast_web.service.BaseService;
-import dbchubreast_web.service.business.ChuBiomarqueurService;
 
-@Component
 public class FormPrelevement extends BaseService implements IForm {
 
-	@Autowired
-	ChuBiomarqueurService biomarqueurService;
-	
 	private Integer idPrelevement;
 	private String idPatient;
 	private Integer idTumeur;
 	private Integer idPhase;
 	private Integer idTypePrelevement;
-	
-	private String typeHistologique;
-	private String idMorphologie;
-	private Boolean associationCis;
 	private Date datePrelevement;
 	private String sitePrelevement;
+	private String idMorphologie;
+	private String typeHistologique;
+	private Boolean associationCis;
 	
-	private List<ChuBiomarqueur> listBiomarqueurs;
-	private String [] listValeurs;
+	private List<FormBiomarqueur> listFormBiomarqueurs;
 
 	/** ========================================================= */
-	
+
 	public FormPrelevement() {
 		super();
 	}
 	
+	public FormPrelevement(String idPatient) {
+		this.idPatient = idPatient;
+	}
+
 	/** ========================================================= */
-	
-	public void populateBiomarqueurs() {
-		this.listBiomarqueurs = biomarqueurService.list();
-		this.listValeurs = new String[this.listBiomarqueurs.size()];
-		logger.debug("Biomarqueurs {}", this.listBiomarqueurs);
-	}
-	
-	/** ========================================================= */
-	
-	
-	
-	public List<ChuBiomarqueur> getListBiomarqueurs() {
-		return listBiomarqueurs;
+
+
+	public void init(List<ChuBiomarqueur> listBiomarqueurs) {
+		
+		listFormBiomarqueurs = new ArrayList<FormBiomarqueur> ();
+		
+		for (ChuBiomarqueur biomarqueur :  listBiomarqueurs) {	
+			FormBiomarqueur formBio = new FormBiomarqueur();
+			formBio.setIdBiomarqueur(biomarqueur.getIdBiomarqueur());
+			formBio.setNom(biomarqueur.getNom());
+			listFormBiomarqueurs.add(formBio);
+		}
 	}
 
-	public String[] getListValeurs() {
-		return listValeurs;
-	}
-
-	public void setListValeurs(String[] listValeurs) {
-		this.listValeurs = listValeurs;
-	}
-
-	public void setListBiomarqueurs(List<ChuBiomarqueur> listBiomarqueurs) {
-		this.listBiomarqueurs = listBiomarqueurs;
-	}
 
 	public Boolean getAssociationCis() {
 		return associationCis;
+	}
+
+	
+
+	public List<FormBiomarqueur> getListFormBiomarqueurs() {
+		return listFormBiomarqueurs;
+	}
+
+	public void setListFormBiomarqueurs(List<FormBiomarqueur> listFormBiomarqueurs) {
+		this.listFormBiomarqueurs = listFormBiomarqueurs;
 	}
 
 	public void setAssociationCis(Boolean associationCis) {
@@ -145,21 +138,26 @@ public class FormPrelevement extends BaseService implements IForm {
 		this.idPatient = idPatient;
 	}
 
-
-	public String toString() {
-		return "FormPrelevement [idPrelevement=" + idPrelevement + ", idPatient=" + idPatient + ", idTumeur=" + idTumeur
-				+ ", idPhase=" + idPhase + ", idTypePrelevement=" + idTypePrelevement + ", typeHistologique="
-				+ typeHistologique + ", idMorphologie=" + idMorphologie + ", associationCis=" + associationCis
-				+ ", datePrelevement=" + datePrelevement + ", sitePrelevement=" + sitePrelevement + "]";
-	}
-
-
 	/** ====================================================================================== */
-	
+
+
 	public boolean isNew() {
 		return this.idPrelevement==null;
 	}
 	
 	/** ====================================================================================== */
+
+	@Override
+	public String toString() {
+		return "FormPrelevement [idPrelevement=" + idPrelevement + ", idPatient=" + idPatient + ", idTumeur=" + idTumeur
+				+ ", idPhase=" + idPhase + ", idTypePrelevement=" + idTypePrelevement + ", typeHistologique="
+				+ typeHistologique + ", idMorphologie=" + idMorphologie + ", associationCis=" + associationCis
+				+ ", datePrelevement=" + datePrelevement + ", sitePrelevement=" + sitePrelevement
+				+ ", listFormBiomarqueurs=" + listFormBiomarqueurs + "]";
+	}
+
+
+
+	
 
 }
