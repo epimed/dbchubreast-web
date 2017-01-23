@@ -26,6 +26,8 @@ public interface ChuTumeurService {
 	public List<ChuTumeur> findWithDependencies(String idPatient);
 	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur);
 	public List<ChuTumeur> findInAttributesWithDependencies(String text);
+	public List<ChuTumeur> list();
+	public List<ChuTumeur> listWithDependencies();
 	
 	public void save(ChuTumeur tumeur);
 	public void update(ChuTumeur tumeur);

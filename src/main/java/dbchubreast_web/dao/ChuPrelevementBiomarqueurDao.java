@@ -24,6 +24,7 @@ public interface ChuPrelevementBiomarqueurDao {
 	public ChuPrelevementBiomarqueur find(Integer idPrelevement, String idBiomarqueur);
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement);
 	public List<ChuPrelevementBiomarqueur> list(List<Integer> listIdPrelevements);
+	public List<ChuPrelevementBiomarqueur> list(Integer idPhaseTumeur, String idBiomarqueur);
 	
 	public void save(ChuPrelevementBiomarqueur prelBio);
 	public void update(ChuPrelevementBiomarqueur prelBio);

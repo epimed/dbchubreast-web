@@ -158,6 +158,22 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		return list;
 	}
 
+	/** =================================================*/
+	
+	public List<ChuTumeur> list() {
+		Criteria crit = sessionFactory.getCurrentSession()
+				.createCriteria(ChuTumeur.class)
+				.addOrder( Order.asc("idTumeur"));
+		return crit.list();
+	}
+
+/** =================================================*/
+	
+	public List<ChuTumeur> listWithDependencies() {
+		List<ChuTumeur> list = this.list();
+		this.populateDependencies(list);
+		return list;
+	}
 
 	/** =================================================*/
 

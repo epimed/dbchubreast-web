@@ -17,6 +17,7 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -60,5 +61,17 @@ public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao 
 		return result;
 	}
 
+	/** =================================================*/
+	
+	public List<ChuTopographie> list() {
+
+		Criteria crit = sessionFactory.getCurrentSession()
+				.createCriteria(ChuTopographie.class)
+				.addOrder(Order.asc("idTopographie"))
+				;
+
+		return crit.list();
+	}
+	
 	/** =================================================*/
 }

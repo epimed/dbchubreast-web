@@ -54,5 +54,9 @@ public class ChuPrelevementServiceImpl  implements ChuPrelevementService {
 	public void saveOrUpdate(ChuPrelevement prelevement) {
 		prelevementDao.saveOrUpdate(prelevement);
 	}
+
+	public List<ChuPrelevement> list() {
+		return prelevementDao.list();
+	}
 	
 }

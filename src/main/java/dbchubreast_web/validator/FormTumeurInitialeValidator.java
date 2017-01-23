@@ -47,7 +47,6 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 
 		FormTumeurInitiale form = (FormTumeurInitiale) target;
 
-
 		ChuPatient patient = patientService.find(form.getIdPatient());
 
 		// === Date diagnostic / age diagnostic not empty ===
@@ -71,22 +70,32 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 		}
 
 		// === Date de diagnostic ne peut pas être avant la date de naissance ===
-		
+
 		if (form.getDateDiagnostic()!=null && patient.getDateNaissance()!=null) {
 			if (form.getDateDiagnostic().before(patient.getDateNaissance())) {
 				String message = "La date du diagnostic ne peut pas être antérieure à la date de naissance !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formTumeurInitiale.dateDiagnostic", message);
 			}
 		}
-		
+
 		// === Date de diagnostic ne peut pas être apres la date de deces ===
-		
+
 		if (form.getDateDiagnostic()!=null && form.getDateDeces()!=null) {
 			if (form.getDateDiagnostic().after(form.getDateDeces())) {
 				String message = "La date du diagnostic ne peut pas être postéreure à la date de décès !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formTumeurInitiale.dateDiagnostic", message);
 			}
 		}
+
+		// === Date d'evolution ne peut etre avant la date du diagnostic ===
+
+		if (form.getDateDiagnostic()!=null && form.getDateEvolution()!=null) {
+			if (form.getDateEvolution().before(form.getDateDiagnostic())) {
+				String message = "La date de la dernière nouvelle ne peut pas être antérieure à la date du diagnostic !";
+				errors.rejectValue("dateEvolution", "Consistency.formTumeurInitiale.dateEvolution", message);
+			}
+		}
+
 
 	}
 

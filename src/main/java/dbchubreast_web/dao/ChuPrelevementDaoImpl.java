@@ -17,6 +17,7 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -48,6 +49,21 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 				.uniqueResult();
 		this.populateDependencies(result);
 		return result;
+	}
+	
+	/** ================================================= */
+
+	
+	public List<ChuPrelevement> list() {
+
+		List<ChuPrelevement> list = sessionFactory.getCurrentSession()
+				.createCriteria(ChuPrelevement.class)
+				.addOrder(Order.asc("idPrelevement"))
+				.list();
+
+		this.populateDependencies(list);
+		
+		return list;
 	}
 
 	/** ================================================= */

@@ -22,8 +22,6 @@ import dbchubreast_web.dao.ChuTumeurDao;
 import dbchubreast_web.entity.ChuTumeur;
 
 
-
-
 @Service
 public class ChuTumeurServiceImpl implements ChuTumeurService {
 
@@ -56,6 +54,14 @@ public class ChuTumeurServiceImpl implements ChuTumeurService {
 
 	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase) {
 		return tumeurDao.findByIdPhaseWithDependencies(idPhase);
+	}
+	
+	public List<ChuTumeur> list() {
+		return tumeurDao.list();
+	}
+	
+	public List<ChuTumeur> listWithDependencies() {
+		return tumeurDao.listWithDependencies();
 	}
 
 	public void save(ChuTumeur tumeur) {

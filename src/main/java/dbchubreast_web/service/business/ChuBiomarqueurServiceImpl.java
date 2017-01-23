@@ -33,5 +33,9 @@ public class ChuBiomarqueurServiceImpl  implements ChuBiomarqueurService {
 
 	public List<ChuBiomarqueur> list() {
 		return biomarqueurDao.list();
+	}
+
+	public List<ChuBiomarqueur> list(Object[] noms) {
+		return biomarqueurDao.list(noms);
 	}	
 }

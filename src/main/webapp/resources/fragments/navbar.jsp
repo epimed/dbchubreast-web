@@ -47,6 +47,8 @@
 					aria-expanded="false">Exports<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="${pageContext.request.contextPath}/download/patients">Exporter les patients</a></li>
+						<li><a href="${pageContext.request.contextPath}/download/prelevements">Exporter les prélèvements</a></li>
+						<li><a href="${pageContext.request.contextPath}/download/biomarqueurs">Exporter les biomarqueurs</a></li>
 					</ul></li>
 
 			</ul>

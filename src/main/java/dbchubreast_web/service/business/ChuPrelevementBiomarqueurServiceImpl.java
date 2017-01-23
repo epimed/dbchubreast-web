@@ -54,5 +54,9 @@ public class ChuPrelevementBiomarqueurServiceImpl  implements ChuPrelevementBiom
 	public void delete(ChuPrelevementBiomarqueur prelBio) {
 		prelevementBiomarqueurDao.delete(prelBio);
 	}
+
+	public List<ChuPrelevementBiomarqueur> list(Integer idPhaseTumeur, String idBiomarqueur) {
+		return prelevementBiomarqueurDao.list(idPhaseTumeur, idBiomarqueur);
+	}
 	
 }

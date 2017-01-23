@@ -43,15 +43,13 @@
 
 			<form:hidden path="idTumeur" />
 			<form:hidden path="idPatient" />
-			<form:hidden path="dateDeces" />
 			<form:hidden path="idPhase" />
-			<form:hidden path="idEvolution" />
-			<form:hidden path="dateEvolution" />
+			<form:hidden path="dateDeces" />
 
 			<!-- Date de diagnostic -->
 			<spring:bind path="dateDiagnostic">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-sm-2 control-label">Date du diagnostic</label>
+					<label class="col-sm-2 control-label">Date du diagnostic *</label>
 					<div class="col-sm-10">
 						<form:input class="form-control" path="dateDiagnostic" type="date" />
 						<form:errors path="dateDiagnostic" class="control-label" />
@@ -124,30 +122,41 @@
 			</div>
 
 			<!-- Date de la dernière nouvelle -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Dernière nouvelle</label>
-				<div class="col-sm-10">
+			<spring:bind path="dateEvolution">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-sm-2 control-label">Dernière nouvelle</label>
+					<div class="col-sm-10">
 
-					<c:choose>
-						<c:when test="${formTumeurInitiale.idEvolution==5  or not empty formTumeurInitiale.dateDeces}">
-							<form:input class="form-control" path="dateEvolution" type="date"
-								disabled="true" />
-						</c:when>
-						<c:otherwise>
-							<form:input class="form-control" path="dateEvolution" type="date" />
-						</c:otherwise>
-					</c:choose>
+						<c:choose>
+							
+							<c:when
+								test="${formTumeurInitiale.idEvolution==5  or not empty formTumeurInitiale.dateDeces}">
+								
+								<form:hidden path="idEvolution" />
+								<form:hidden path="dateEvolution" />
+								<form:input class="form-control" path="dateEvolution"
+									type="date" disabled="true" />
+							</c:when>
 
-					<form:errors path="dateEvolution" />
+							<c:otherwise>
+								<form:input class="form-control" path="dateEvolution"
+									type="date" />
+							</c:otherwise>
+							
+						</c:choose>
+
+						<form:errors path="dateEvolution" class="control-label" />
+					</div>
 				</div>
-			</div>
+			</spring:bind>
 
 			<!-- Statut -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Statut</label>
 				<div class="col-sm-10">
 					<c:choose>
-						<c:when test="${formTumeurInitiale.idEvolution==5 or not empty formTumeurInitiale.dateDeces}">
+						<c:when
+							test="${formTumeurInitiale.idEvolution==5 or not empty formTumeurInitiale.dateDeces}">
 							<form:select class="form-control" path="idEvolution"
 								disabled="true">
 								<form:option value="" label="--- Sélectionner ---" />

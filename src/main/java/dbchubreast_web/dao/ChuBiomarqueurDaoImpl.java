@@ -17,6 +17,7 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -56,4 +57,19 @@ public class ChuBiomarqueurDaoImpl extends BaseDao implements ChuBiomarqueurDao 
 	}
 
 	/** ================================================= */
+	
+
+	public List<ChuBiomarqueur> list(Object [] noms) {
+	
+		Criteria crit = sessionFactory.getCurrentSession()
+				.createCriteria(ChuBiomarqueur.class)
+				.add(Restrictions.in("idBiomarqueur", noms))
+				.addOrder(Order.asc("ordreAffichage"))
+				;
+
+		return crit.list();
+	}
+	
+	/** ================================================= */
+
 }

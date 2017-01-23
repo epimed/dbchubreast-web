@@ -102,5 +102,11 @@ public class ChuPhaseTumeurServiceImpl extends BaseService implements ChuPhaseTu
 	}
 
 	/** =================================================================== */
+	
+	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur) {
+		return phaseTumeurDao.findPhaseInitiale(idTumeur);
+	}
+
+	/** =================================================================== */
 
 }

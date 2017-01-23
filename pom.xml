@@ -12,6 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>4.3.1.RELEASE</spring.version>
+		<spring.security.version>4.2.1.RELEASE</spring.security.version>
 		<jstl.version>1.2</jstl.version>
 		<servletapi.version>4.0.0-b01</servletapi.version>
 		<slf4j.version>1.7.21</slf4j.version>
@@ -110,6 +111,19 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
 		</dependency>
 
 		<!-- Logging SLF4J -->

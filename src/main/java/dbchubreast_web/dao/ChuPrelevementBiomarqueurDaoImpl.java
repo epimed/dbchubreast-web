@@ -17,6 +17,7 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -77,6 +78,19 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 
 	/** ================================================= */
 
+	public List<ChuPrelevementBiomarqueur> list(Integer idPhaseTumeur, String idBiomarqueur) {
+
+		Criteria crit = sessionFactory.getCurrentSession()
+				.createCriteria(ChuPrelevementBiomarqueur.class)
+				.createAlias("chuPrelevement","chuPrelevement")
+				.createAlias("chuPrelevement.chuPhaseTumeur","chuPhaseTumeur")
+				.add(Restrictions.eq("id.idBiomarqueur", idBiomarqueur))
+				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhaseTumeur))
+				;
+		return  crit.list();
+	}
+
+	/** ================================================= */
 
 	public List<ChuPrelevementBiomarqueur> list(List<Integer> listIdPrelevements) {
 

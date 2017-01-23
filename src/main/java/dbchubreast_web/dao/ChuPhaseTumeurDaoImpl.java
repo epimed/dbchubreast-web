@@ -171,6 +171,23 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		return (ChuPhaseTumeur) crit.uniqueResult();
 
 	}
+	
+	
+	/** =================================================*/
+	
+	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur) {
+
+		Criteria crit =  sessionFactory.getCurrentSession()
+				.createCriteria(ChuPhaseTumeur.class)
+				.createAlias("chuTumeur", "chuTumeur") 
+				.createAlias("chuTypePhase", "chuTypePhase") 
+				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
+				.add(Restrictions.eq("chuTypePhase.idTypePhase", 1))
+				;
+		
+		return (ChuPhaseTumeur) crit.uniqueResult();
+
+	}
 
 	/** =================================================*/
 

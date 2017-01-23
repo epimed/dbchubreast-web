@@ -79,7 +79,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 	public void saveOrUpdateForm(FormTumeurInitiale form) {
 
-		logger.debug("=== " + this.getClass().getName() + " ===");
+		logger.debug("=== " + this.getClass().getName() + " saveOrUpdate()" + " ===");
 
 		ChuTumeur tumeur =  null;
 		ChuPhaseTumeur phaseTumeur = null;
@@ -183,12 +183,21 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		if (form.isNew()) {
 			// Save new
+			
+			logger.debug("Save new");
+			
 			tumeurDao.save(tumeur);
 			phaseTumeurDao.save(phaseTumeur);
+			
+			form.setIdTumeur(tumeur.getIdTumeur());
+			form.setIdPhase(phaseTumeur.getIdPhase());
+			
 			if (!this.isEmptyTnm(cTnm)) {
+				logger.debug("Saving cTnm {}",  cTnm);
 				tnmDao.save(cTnm);
 			}
 			if (!this.isEmptyTnm(pTnm)) {
+				logger.debug("Saving pTnm {}",  pTnm);
 				tnmDao.save(pTnm);
 			}
 		}
@@ -196,6 +205,8 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 			// update existing
 
+			logger.debug("Update existing");
+			
 			tumeurDao.update(tumeur);
 			phaseTumeurDao.saveOrUpdate(phaseTumeur);
 
@@ -213,6 +224,8 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 	/** =================================================================== */
 
 	public FormTumeurInitiale getFormTumeurInitiale(ChuTumeur tumeur) {
+		
+		logger.debug("=== " + this.getClass().getName() + " getFormTumeurInitiale()" + " ===");
 
 		ChuPatient patient = tumeur.getChuPatient();
 		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient(), patient.getDateDeces());
@@ -350,6 +363,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		if (form.isNew()) {
 			// Save new
 			phaseTumeurDao.save(phaseTumeur);
+			form.setIdPhase(phaseTumeur.getIdPhase());
 		}
 		else {
 			// update existing

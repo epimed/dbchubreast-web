@@ -46,7 +46,7 @@
 
 			<spring:bind path="prenom">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label required-field">Prénom</label>
+					<label class="col-2 control-label required-field">Prénom *</label>
 					<div class="col-10">
 						<form:input path="prenom" type="text" class="form-control "
 							id="prenom" placeholder="Prénom" />
@@ -57,7 +57,7 @@
 
 			<spring:bind path="nom">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label required-field">Nom</label>
+					<label class="col-2 control-label required-field">Nom *</label>
 					<div class="col-10">
 						<form:input path="nom" type="text" class="form-control " id="nom"
 							placeholder="Nom" />
@@ -68,7 +68,7 @@
 
 			<spring:bind path="sexe">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label required-field">Sexe</label>
+					<label class="col-2 control-label required-field">Sexe *</label>
 					<div class="col-10">
 						<label class="radio-inline"> <form:radiobutton path="sexe"
 								value="F" />Femme
@@ -82,7 +82,7 @@
 
 			<spring:bind path="dateNaissance">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label required-field">Date de naissance</label>
+					<label class="col-2 control-label required-field">Date de naissance *</label>
 					<div class="col-10">
 						<form:input path="dateNaissance" type="date" class="form-control "
 							id="dateNaissance" placeholder="Date de naissance" />

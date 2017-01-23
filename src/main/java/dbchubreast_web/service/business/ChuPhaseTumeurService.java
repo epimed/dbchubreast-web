@@ -22,6 +22,7 @@ public interface ChuPhaseTumeurService {
 	public ChuPhaseTumeur find(Integer idPhase);
 	public ChuPhaseTumeur findWithDependencies(Integer idPhase);
 	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur);
+	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur);
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement);
 	
 	

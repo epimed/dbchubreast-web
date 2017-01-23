@@ -35,5 +35,9 @@ public class ChuTopographieServiceImpl implements ChuTopographieService {
 	public List<ChuTopographie> list(String idGroupeTopo){
 		return topographieDao.list(idGroupeTopo);
 	}
+
+	public List<ChuTopographie> list() {
+		return topographieDao.list();
+	}
 	
 }

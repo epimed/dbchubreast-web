@@ -49,16 +49,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		configurer.enable();
 	}
 
-	// === Resources directory ===
-	/*
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**")
-		.addResourceLocations("/resources/");
-	}
-	 */
-
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		// registry.addResourceHandler("resources/").addResourceLocations("resources/");
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
