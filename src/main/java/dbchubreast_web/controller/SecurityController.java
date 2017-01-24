@@ -26,25 +26,22 @@ import dbchubreast_web.service.business.ChuPatientService;
 
 
 @Controller
-public class HomeController extends BaseController {
+public class SecurityController extends BaseController {
 
-	@Autowired
-	private ChuPatientService patientService;
+
 
 
 	/** ====================================================================================== */
 
-	@RequestMapping(value = {"/", "/dbchubreast-web"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/security"}, method = {RequestMethod.GET, RequestMethod.POST})
 	public String index(Model model,
 			HttpServletRequest request
 			) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		
-		Long nbPatients = patientService.count();
-		model.addAttribute("nbPatients", nbPatients);
 		
-		return "index";
+		return "security/index";
 	}
 
 	/** ====================================================================================== */
