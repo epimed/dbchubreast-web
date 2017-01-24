@@ -37,7 +37,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc //<mvc:annotation-driven />
 @Configuration
 @ComponentScan({"dbchubreast_web"})
-public class SpringWebConfig extends WebMvcConfigurerAdapter {
+public class AppConfig extends WebMvcConfigurerAdapter {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
 
