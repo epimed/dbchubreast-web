@@ -39,7 +39,6 @@ import dbchubreast_web.service.updater.UpdaterNodule;
 import dbchubreast_web.service.updater.UpdaterStatutBiomarqueur;
 import dbchubreast_web.service.updater.UpdaterTripleNegative;
 
-
 @Service
 public class FormPrelevementServiceImpl extends BaseService implements FormPrelevementService {
 
@@ -69,15 +68,13 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 	@Autowired
 	private UpdaterTripleNegative updaterTripleNegative;
-	
+
 	@Autowired
 	private UpdaterNodule updaterNodule;
-
 
 	/** ====================================================================== */
 
 	public void saveOrUpdateForm(FormPrelevement form) {
-
 
 		logger.debug("=== " + this.getClass().getName() + ": saveOrUpdateForm" + " ===");
 
@@ -87,8 +84,7 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 		if (form.isNew()) {
 			prelevement = new ChuPrelevement();
-		}
-		else {
+		} else {
 			prelevement = prelevementDao.find(form.getIdPrelevement());
 		}
 
@@ -100,7 +96,6 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 		prelevement.setTypeHistologique(form.getTypeHistologique());
 		prelevement.setAssociationCis(form.getAssociationCis());
 
-
 		prelevementDao.saveOrUpdate(prelevement);
 
 		form.setIdPrelevement(prelevement.getIdPrelevement());
@@ -109,14 +104,14 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 		for (FormBiomarqueur formBiomarqueur : form.getListFormBiomarqueurs()) {
 
-			if (formBiomarqueur.getIdBiomarqueur()!=null) {
+			if (formBiomarqueur.getIdBiomarqueur() != null) {
 
+				ChuPrelevementBiomarqueur prelBio = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(),
+						formBiomarqueur.getIdBiomarqueur());
 
-				ChuPrelevementBiomarqueur prelBio = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(), formBiomarqueur.getIdBiomarqueur());
+				if (formBiomarqueur.getValeur() != null && !formBiomarqueur.getValeur().isEmpty()) {
 
-				if (formBiomarqueur.getValeur()!=null && !formBiomarqueur.getValeur().isEmpty()) {
-
-					if (prelBio==null) {
+					if (prelBio == null) {
 						ChuPrelevementBiomarqueurId id = new ChuPrelevementBiomarqueurId();
 						id.setIdPrelevement(prelevement.getIdPrelevement());
 						id.setIdBiomarqueur(formBiomarqueur.getIdBiomarqueur());
@@ -127,9 +122,8 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 					prelevementBiomarqueurDao.saveOrUpdate(prelBio);
 
-				}
-				else {
-					if (prelBio!=null) {
+				} else {
+					if (prelBio != null) {
 
 						// Une valeur de biomarqueur a ete supprimee
 						// On supprime alors la table de liaison correspondante
@@ -143,8 +137,9 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 		// ====== UPDATE DEPENDENCIES =====
 
-		// === Update les statuts de biomarqueurs === 
-		List<ChuPrelevementBiomarqueur> listPrelevementBiomarqueurs = prelevementBiomarqueurDao.list(prelevement.getIdPrelevement());
+		// === Update les statuts de biomarqueurs ===
+		List<ChuPrelevementBiomarqueur> listPrelevementBiomarqueurs = prelevementBiomarqueurDao
+				.list(prelevement.getIdPrelevement());
 		updaterStatutBiomarqueur.update(listPrelevementBiomarqueurs);
 
 		// === Update triple negative ===
@@ -152,7 +147,7 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 		// === Update nodules ===
 		updaterNodule.update(prelevement);
-		
+
 	}
 
 	/** ====================================================================== */
@@ -186,8 +181,9 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 			FormBiomarqueur formBio = new FormBiomarqueur();
 			formBio.setIdBiomarqueur(biomarqueur.getIdBiomarqueur());
 			formBio.setNom(biomarqueur.getNom());
-			ChuPrelevementBiomarqueur prelBio = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(), biomarqueur.getIdBiomarqueur());
-			if (prelBio!=null) {
+			ChuPrelevementBiomarqueur prelBio = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(),
+					biomarqueur.getIdBiomarqueur());
+			if (prelBio != null) {
 				formBio.setValeur(prelBio.getValeur());
 				formBio.setStatut(prelBio.getStatut());
 			}

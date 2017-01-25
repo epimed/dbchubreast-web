@@ -19,5 +19,6 @@ import dbchubreast_web.entity.ChuPerformanceStatus;
 
 public interface ChuPerformanceStatusService {
 	public ChuPerformanceStatus find(Integer idPs);
+
 	public List<ChuPerformanceStatus> list();
 }

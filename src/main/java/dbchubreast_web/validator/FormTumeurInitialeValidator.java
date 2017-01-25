@@ -27,8 +27,7 @@ import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.util.FormatService;
 
 @Component
-public class FormTumeurInitialeValidator extends BaseService implements Validator{
-
+public class FormTumeurInitialeValidator extends BaseService implements Validator {
 
 	@Autowired
 	private ChuPatientService patientService;
@@ -40,7 +39,6 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 		return FormTumeurInitiale.class.isAssignableFrom(clazz);
 	}
 
-
 	public void validate(Object target, Errors errors) {
 
 		logger.debug("===== " + this.getClass().getName() + " =====");
@@ -51,7 +49,7 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 
 		// === Date diagnostic / age diagnostic not empty ===
 
-		if (form.getDateDiagnostic()==null && form.getAgeDiagnostic()==null) {
+		if (form.getDateDiagnostic() == null && form.getAgeDiagnostic() == null) {
 			String message = "Saisir soit la date du diagnostic soit l'age au diagnostic !";
 			errors.rejectValue("dateDiagnostic", "NotEmpty.formTumeurInitiale.dateDiagnostic", message);
 			errors.rejectValue("ageDiagnostic", "NotEmpty.formTumeurInitiale.ageDiagnostic", message);
@@ -59,19 +57,21 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 
 		// === Age diagnostic incoherent avec les dates ===
 
-		if (form.getDateDiagnostic()!=null && form.getAgeDiagnostic()!=null && patient.getDateNaissance()!=null) {
-			Date dateNaissance =  patient.getDateNaissance();
+		if (form.getDateDiagnostic() != null && form.getAgeDiagnostic() != null && patient.getDateNaissance() != null) {
+			Date dateNaissance = patient.getDateNaissance();
 			Double calculatedAge = formatService.calculateAge(dateNaissance, form.getDateDiagnostic());
-			if (calculatedAge!=null && Math.abs(calculatedAge-form.getAgeDiagnostic())>1) {
-				String message = "L'age saisi " + form.getAgeDiagnostic() 
-				+ " ne correspond pas aux dates de naissance et du diagnostic. L'age calculé pour ces dates est " + calculatedAge + ".";
+			if (calculatedAge != null && Math.abs(calculatedAge - form.getAgeDiagnostic()) > 1) {
+				String message = "L'age saisi " + form.getAgeDiagnostic()
+						+ " ne correspond pas aux dates de naissance et du diagnostic. L'age calculé pour ces dates est "
+						+ calculatedAge + ".";
 				errors.rejectValue("ageDiagnostic", "Consistency.formTumeurInitiale.ageDiagnostic", message);
 			}
 		}
 
-		// === Date de diagnostic ne peut pas être avant la date de naissance ===
+		// === Date de diagnostic ne peut pas être avant la date de naissance
+		// ===
 
-		if (form.getDateDiagnostic()!=null && patient.getDateNaissance()!=null) {
+		if (form.getDateDiagnostic() != null && patient.getDateNaissance() != null) {
 			if (form.getDateDiagnostic().before(patient.getDateNaissance())) {
 				String message = "La date du diagnostic ne peut pas être antérieure à la date de naissance !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formTumeurInitiale.dateDiagnostic", message);
@@ -80,7 +80,7 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 
 		// === Date de diagnostic ne peut pas être apres la date de deces ===
 
-		if (form.getDateDiagnostic()!=null && form.getDateDeces()!=null) {
+		if (form.getDateDiagnostic() != null && form.getDateDeces() != null) {
 			if (form.getDateDiagnostic().after(form.getDateDeces())) {
 				String message = "La date du diagnostic ne peut pas être postéreure à la date de décès !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formTumeurInitiale.dateDiagnostic", message);
@@ -89,13 +89,12 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 
 		// === Date d'evolution ne peut etre avant la date du diagnostic ===
 
-		if (form.getDateDiagnostic()!=null && form.getDateEvolution()!=null) {
+		if (form.getDateDiagnostic() != null && form.getDateEvolution() != null) {
 			if (form.getDateEvolution().before(form.getDateDiagnostic())) {
 				String message = "La date de la dernière nouvelle ne peut pas être antérieure à la date du diagnostic !";
 				errors.rejectValue("dateEvolution", "Consistency.formTumeurInitiale.dateEvolution", message);
 			}
 		}
-
 
 	}
 

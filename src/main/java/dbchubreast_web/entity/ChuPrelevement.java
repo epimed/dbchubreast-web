@@ -51,8 +51,7 @@ public class ChuPrelevement implements java.io.Serializable {
 
 	public ChuPrelevement(Integer idPrelevement, ChuMorphologie chuMorphologie, ChuPhaseTumeur chuPhaseTumeur,
 			ChuTypePrelevement chuTypePrelevement, String typeHistologique, Boolean associationCis,
-			Date datePrelevement, String sitePrelevement,
-			List<ChuPrelevementBiomarqueur> chuPrelevementBiomarqueurs,
+			Date datePrelevement, String sitePrelevement, List<ChuPrelevementBiomarqueur> chuPrelevementBiomarqueurs,
 			List<ChuRessourceBiologique> chuRessourceBiologiques) {
 		this.idPrelevement = idPrelevement;
 		this.chuMorphologie = chuMorphologie;
@@ -67,8 +66,8 @@ public class ChuPrelevement implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy = "increment")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "id_prelevement", unique = true, nullable = false)
 	public Integer getIdPrelevement() {
 		return this.idPrelevement;
@@ -196,5 +195,5 @@ public class ChuPrelevement implements java.io.Serializable {
 				+ datePrelevement + ", sitePrelevement=" + sitePrelevement + ", chuPrelevementBiomarqueurs="
 				+ chuPrelevementBiomarqueurs + ", chuRessourceBiologiques=" + chuRessourceBiologiques + "]";
 	}
-	
+
 }

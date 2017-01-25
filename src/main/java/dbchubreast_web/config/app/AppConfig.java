@@ -12,7 +12,7 @@
  *
  */
 
-package dbchubreast_web.config;
+package dbchubreast_web.config.app;
 
 import java.util.Locale;
 
@@ -33,14 +33,12 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-
-@EnableWebMvc //<mvc:annotation-driven />
+@EnableWebMvc // <mvc:annotation-driven />
 @Configuration
-@ComponentScan({"dbchubreast_web"})
+@ComponentScan({ "dbchubreast_web" })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
-
 
 	// === Servlet ===
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -52,7 +50,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	// === Enable file uploading ===
-	@Bean (name = "multipartResolver")
+	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multiPartResolver() {
 		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
 		resolver.setDefaultEncoding(DEFAULT_ENCODING);
@@ -71,7 +69,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		return messageSource;
 	}
 
-
 	// === Default locale ===
 	@Bean(name = "localeResolver")
 	public LocaleResolver localeResolver() {
@@ -81,8 +78,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	// === Validator ===
-	@Bean (name="validator")
-	public LocalValidatorFactoryBean validator () {
+	@Bean(name = "validator")
+	public LocalValidatorFactoryBean validator() {
 		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
 		validator.setValidationMessageSource(messageSource());
 		return validator;

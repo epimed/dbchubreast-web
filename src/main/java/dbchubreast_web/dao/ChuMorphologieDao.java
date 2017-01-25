@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import dbchubreast_web.entity.ChuMorphologie;
@@ -22,5 +21,6 @@ import dbchubreast_web.entity.ChuMorphologie;
 public interface ChuMorphologieDao {
 
 	public ChuMorphologie find(String idMorphologie);
+
 	public List<ChuMorphologie> list();
 }

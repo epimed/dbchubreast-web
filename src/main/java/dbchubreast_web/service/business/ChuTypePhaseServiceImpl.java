@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuTypePhaseDao;
 import dbchubreast_web.entity.ChuTypePhase;
 
-
 @Service
 public class ChuTypePhaseServiceImpl implements ChuTypePhaseService {
 
@@ -33,5 +32,5 @@ public class ChuTypePhaseServiceImpl implements ChuTypePhaseService {
 	public ChuTypePhase findByIdPhase(Integer idPhase) {
 		return typePhaseDao.findByIdPhase(idPhase);
 	}
-	
+
 }

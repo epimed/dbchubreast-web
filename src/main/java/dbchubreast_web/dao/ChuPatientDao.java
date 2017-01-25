@@ -14,23 +14,30 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.Date;
 import java.util.List;
 
 import dbchubreast_web.entity.ChuPatient;
 
-
 public interface ChuPatientDao {
 
-	public List<ChuPatient> list(); 
-	public String getLastIdPatient(); 
-	public ChuPatient find(String nom, String prenom, Date dateNaissance); 
-	public Long count(); 
-	public ChuPatient find(String idPatient); 
-	public ChuPatient find(Integer idTumeur); 
-	public ChuPatient findByIdPrelevement(Integer idPrelevement); 
-	public List<ChuPatient> findInAttributes(String text); 
-	public void update(ChuPatient patient);  
-	public void save(ChuPatient patient); 
+	public List<ChuPatient> list();
+
+	public String getLastIdPatient();
+
+	public ChuPatient find(String nom, String prenom, Date dateNaissance);
+
+	public Long count();
+
+	public ChuPatient find(String idPatient);
+
+	public ChuPatient find(Integer idTumeur);
+
+	public ChuPatient findByIdPrelevement(Integer idPrelevement);
+
+	public List<ChuPatient> findInAttributes(String text);
+
+	public void update(ChuPatient patient);
+
+	public void save(ChuPatient patient);
 }

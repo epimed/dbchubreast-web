@@ -19,7 +19,10 @@ import dbchubreast_web.entity.ChuMetastase;
 
 public interface ChuMetastaseService {
 	public ChuMetastase find(Integer idMetastase);
+
 	public List<ChuMetastase> list();
+
 	public List<ChuMetastase> list(List<Integer> listIdMetastases);
+
 	public List<ChuMetastase> list(Integer idPhaseTumeur);
 }

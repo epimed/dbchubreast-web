@@ -15,22 +15,29 @@ package dbchubreast_web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import dbchubreast_web.service.business.AppLogService;
+
 @ControllerAdvice
 public class GlobalExceptionController {
 
-
+	@Autowired
+	private AppLogService logService;
+	
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAllException(Exception ex, HttpServletRequest request) {
 
 		ModelAndView model = new ModelAndView("error");
 		model.addObject("errorMessage", ex.toString());
+
+		logService.saveLog(request, ex.toString());
 		
 		ex.printStackTrace();
-		
+
 		return model;
 
 	}

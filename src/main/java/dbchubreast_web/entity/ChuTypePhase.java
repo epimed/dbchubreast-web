@@ -97,7 +97,5 @@ public class ChuTypePhase implements java.io.Serializable {
 	public String toString() {
 		return "ChuTypePhase [idTypePhase=" + idTypePhase + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

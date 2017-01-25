@@ -27,18 +27,15 @@ public class ExporterTopographie extends AbstractExporter {
 	@Autowired
 	private ChuTopographieDao topographieDao;
 
-
 	@Override
 	public Table export() {
 
-		
 		List<ChuTopographie> list = topographieDao.list();
-		
 
 		Table table = new Table(list.size());
 
-		for (int i=0; i<list.size(); i++) {
-			
+		for (int i = 0; i < list.size(); i++) {
+
 			ChuTopographie topo = list.get(i);
 
 			// ===== Topographie =====
@@ -48,12 +45,14 @@ public class ExporterTopographie extends AbstractExporter {
 			table.addToTable(i, "nom_en", topo.getNomEn());
 
 			// ===== Groupe de topographie =====
-			
-			table.addToTable(i, "id_groupe_topo", topo.getChuGroupeTopographie()==null ? null : topo.getChuGroupeTopographie().getIdGroupeTopo());
-			table.addToTable(i, "nom_groupe_topo", topo.getChuGroupeTopographie()==null ? null : topo.getChuGroupeTopographie().getNom());
-			
+
+			table.addToTable(i, "id_groupe_topo",
+					topo.getChuGroupeTopographie() == null ? null : topo.getChuGroupeTopographie().getIdGroupeTopo());
+			table.addToTable(i, "nom_groupe_topo",
+					topo.getChuGroupeTopographie() == null ? null : topo.getChuGroupeTopographie().getNom());
+
 		}
-		
+
 		return table;
 
 	}

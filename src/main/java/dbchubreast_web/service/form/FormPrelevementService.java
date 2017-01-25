@@ -19,5 +19,6 @@ import dbchubreast_web.form.FormPrelevement;
 public interface FormPrelevementService {
 
 	public void saveOrUpdateForm(FormPrelevement form);
+
 	public FormPrelevement getForm(ChuPrelevement prelevement);
 }

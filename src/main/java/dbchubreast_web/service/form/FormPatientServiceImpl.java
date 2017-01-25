@@ -28,10 +28,8 @@ import dbchubreast_web.service.updater.UpdaterEvolution;
 import dbchubreast_web.service.updater.UpdaterSurvival;
 import dbchubreast_web.service.util.FormatService;
 
-
 @Service
 public class FormPatientServiceImpl extends BaseService implements FormPatientService {
-
 
 	@Autowired
 	private ChuPatientDao patientDao;
@@ -44,7 +42,7 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 
 	@Autowired
 	private UpdaterSurvival updaterSurvival;
-	
+
 	@Autowired
 	private UpdaterEvolution updaterEvolution;
 
@@ -56,20 +54,19 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 
 		if (form.isNew()) {
 			patient = new ChuPatient();
-		}
-		else {
+		} else {
 			patient = patientDao.find(form.getIdPatient());
 		}
 
 		// === Format nom prenom ===
 
 		String nom = form.getNom();
-		if (nom!=null) {
+		if (nom != null) {
 			patient.setNom(nom.toUpperCase());
 		}
 
 		String prenom = form.getPrenom();
-		if (prenom!=null) {
+		if (prenom != null) {
 			patient.setPrenom(formatService.formatFisrtName(prenom));
 		}
 
@@ -83,7 +80,7 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 		patient.setConsentement(form.getConsentement());
 
 		// New patient
-		if (patient.getIdPatient()==null) {
+		if (patient.getIdPatient() == null) {
 			patientDao.save(patient);
 			form.setIdPatient(patient.getIdPatient());
 		}
@@ -92,7 +89,6 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 		else {
 			patientDao.update(patient);
 		}
-
 
 		// === Linked actions ===
 		List<ChuTumeur> listTumeurs = tumeurDao.findWithDependencies(patient.getIdPatient());

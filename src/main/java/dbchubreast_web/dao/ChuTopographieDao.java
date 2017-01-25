@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import dbchubreast_web.entity.ChuTopographie;
@@ -22,6 +21,8 @@ import dbchubreast_web.entity.ChuTopographie;
 public interface ChuTopographieDao {
 
 	public ChuTopographie find(String idTopographie);
+
 	public List<ChuTopographie> list(String idGroupeTopo);
+
 	public List<ChuTopographie> list();
 }

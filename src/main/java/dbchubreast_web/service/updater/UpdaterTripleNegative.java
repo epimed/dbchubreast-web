@@ -29,21 +29,19 @@ import dbchubreast_web.entity.ChuPrelevement;
 import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 import dbchubreast_web.entity.ChuTumeur;
 
-
 @Service
 public class UpdaterTripleNegative extends AbstractUpdater {
 
 	@Autowired
 	private ChuTumeurDao tumeurDao;
-	
+
 	@Autowired
 	private ChuPhaseTumeurDao phaseTumeurDao;
 
 	@Autowired
 	private ChuPrelevementBiomarqueurDao prelevementBiomarqueurDao;
 
-
-	private String [] biomarqueurs = {"her2", "rp", "re"};
+	private String[] biomarqueurs = { "her2", "rp", "re" };
 	private List<String> listBiomarqueurs = new ArrayList<String>();
 	private Set<String> setBiomarqueurs = new HashSet<String>();
 
@@ -53,7 +51,7 @@ public class UpdaterTripleNegative extends AbstractUpdater {
 
 		logger.debug("=== " + this.getClass().getName() + " ===");
 
-		if (prelevement.getChuTypePrelevement().getIdTypePrelevement()==3) {
+		if (prelevement.getChuTypePrelevement().getIdTypePrelevement() == 3) {
 
 			listBiomarqueurs.clear();
 			setBiomarqueurs.clear();
@@ -61,9 +59,10 @@ public class UpdaterTripleNegative extends AbstractUpdater {
 			ChuPhaseTumeur phase = phaseTumeurDao.findByIdPrelevementWithDependencies(prelevement.getIdPrelevement());
 			ChuTumeur tumeur = tumeurDao.findByIdPhaseWithDependencies(phase.getIdPhase());
 
-			for (int i=0; i<biomarqueurs.length; i++) {
-				ChuPrelevementBiomarqueur biomarqueur = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(), biomarqueurs[i]);
-				listBiomarqueurs.add(biomarqueur==null ? null : biomarqueur.getStatut());
+			for (int i = 0; i < biomarqueurs.length; i++) {
+				ChuPrelevementBiomarqueur biomarqueur = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(),
+						biomarqueurs[i]);
+				listBiomarqueurs.add(biomarqueur == null ? null : biomarqueur.getStatut());
 			}
 
 			setBiomarqueurs.addAll(listBiomarqueurs);
@@ -78,10 +77,8 @@ public class UpdaterTripleNegative extends AbstractUpdater {
 			}
 
 			// ===== TN : all markers are negative =====
-			if (setBiomarqueurs.contains("negative") 
-					&& setBiomarqueurs.size()==1 
-					&& !listBiomarqueurs.contains(null) 
-					&& listBiomarqueurs.size()==biomarqueurs.length) {
+			if (setBiomarqueurs.contains("negative") && setBiomarqueurs.size() == 1 && !listBiomarqueurs.contains(null)
+					&& listBiomarqueurs.size() == biomarqueurs.length) {
 				tumeur.setTripleNegative(true);
 			}
 
@@ -90,8 +87,8 @@ public class UpdaterTripleNegative extends AbstractUpdater {
 				tumeur.setTripleNegative(null);
 			}
 
-			// System.out.println("TRIPLE NEGATIVE: " + "\t" + tumeur.getTripleNegative());
-
+			// System.out.println("TRIPLE NEGATIVE: " + "\t" +
+			// tumeur.getTripleNegative());
 
 			tumeurDao.update(tumeur);
 		}
@@ -102,10 +99,9 @@ public class UpdaterTripleNegative extends AbstractUpdater {
 
 	@Override
 	public void update(List<?> list) {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 	/** ================================================================================= */
-
 
 }

@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -37,20 +36,17 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/** ================================================= */
 
-	/** =================================================*/
+	public List<ChuPhaseTumeur> list() {
 
-	public List<ChuPhaseTumeur> list(){
-
-		List<ChuPhaseTumeur> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.addOrder(Order.asc("idPhase"))
-				.list();
+		List<ChuPhaseTumeur> result = sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.addOrder(Order.asc("idPhase")).list();
 
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public List<ChuPhaseTumeur> listWithDependencies() {
 		List<ChuPhaseTumeur> list = this.list();
@@ -58,22 +54,18 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		return list;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
-	public List<ChuPhaseTumeur> list(Integer idTumeur){
+	public List<ChuPhaseTumeur> list(Integer idTumeur) {
 
-		List<ChuPhaseTumeur> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.createAlias("chuTumeur", "chuTumeur")
-				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
-				.addOrder(Order.asc("dateDiagnostic"))
-				.addOrder(Order.asc("idPhase"))
-				.list();
+		List<ChuPhaseTumeur> result = sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.createAlias("chuTumeur", "chuTumeur").add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
+				.addOrder(Order.asc("dateDiagnostic")).addOrder(Order.asc("idPhase")).list();
 
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public List<ChuPhaseTumeur> listWithDependencies(Integer idTumeur) {
 		List<ChuPhaseTumeur> list = this.list(idTumeur);
@@ -81,115 +73,98 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		return list;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuPhaseTumeur find(Integer idPhase) {
-		ChuPhaseTumeur result = (ChuPhaseTumeur) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.add(Restrictions.eq("idPhase", idPhase))
-				.uniqueResult();
+		ChuPhaseTumeur result = (ChuPhaseTumeur) sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.add(Restrictions.eq("idPhase", idPhase)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement) {
 
-		ChuPhaseTumeur result = (ChuPhaseTumeur) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
+		ChuPhaseTumeur result = (ChuPhaseTumeur) sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
 				.createAlias("chuPrelevements", "chuPrelevements")
-				.add(Restrictions.eq("chuPrelevements.idPrelevement", idPrelevement))
-				.uniqueResult();
+				.add(Restrictions.eq("chuPrelevements.idPrelevement", idPrelevement)).uniqueResult();
 
 		this.populateDependencies(result);
 
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuPhaseTumeur findWithDependencies(Integer idPhase) {
-		ChuPhaseTumeur phase = (ChuPhaseTumeur) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.add(Restrictions.eq("idPhase", idPhase))
-				.uniqueResult();
+		ChuPhaseTumeur phase = (ChuPhaseTumeur) sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.add(Restrictions.eq("idPhase", idPhase)).uniqueResult();
 
 		this.populateDependencies(phase);
 
 		return phase;
 	}
-	/** =================================================*/
+
+	/** ================================================= */
 
 	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase) {
 
-		List<ChuPhaseTumeur> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.createAlias("chuTumeur", "chuTumeur")
-				.createAlias("chuTypePhase", "chuTypePhase")
+		List<ChuPhaseTumeur> result = sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.createAlias("chuTumeur", "chuTumeur").createAlias("chuTypePhase", "chuTypePhase")
 				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
-				.add(Restrictions.eq("chuTypePhase.idTypePhase", idTypePhase))
-				.addOrder(Order.asc("dateDiagnostic"))
-				.addOrder(Order.asc("idPhase"))
-				.list();
+				.add(Restrictions.eq("chuTypePhase.idTypePhase", idTypePhase)).addOrder(Order.asc("dateDiagnostic"))
+				.addOrder(Order.asc("idPhase")).list();
 
 		this.populateDependencies(result);
-		return result; 
+		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
-	public void save (ChuPhaseTumeur phaseTumeur) {
+	public void save(ChuPhaseTumeur phaseTumeur) {
 		sessionFactory.getCurrentSession().save(phaseTumeur);
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
-	public void update (ChuPhaseTumeur phaseTumeur) {
+	public void update(ChuPhaseTumeur phaseTumeur) {
 		sessionFactory.getCurrentSession().update(phaseTumeur);
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
-	public void saveOrUpdate (ChuPhaseTumeur phaseTumeur) {
+	public void saveOrUpdate(ChuPhaseTumeur phaseTumeur) {
 		sessionFactory.getCurrentSession().saveOrUpdate(phaseTumeur);
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur) {
 
-		Criteria crit =  sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.createAlias("chuTumeur", "chuTumeur") 
-				.createAlias("chuTypePhase", "chuTypePhase") 
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.createAlias("chuTumeur", "chuTumeur").createAlias("chuTypePhase", "chuTypePhase")
 				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
 				.add(Restrictions.eq("chuTypePhase.idTypePhase", 2)) // rechute
-				.addOrder(Order.asc("dateDiagnostic"))
-				.setMaxResults(1)
-				;
+				.addOrder(Order.asc("dateDiagnostic")).setMaxResults(1);
 
 		return (ChuPhaseTumeur) crit.uniqueResult();
 
 	}
-	
-	
-	/** =================================================*/
-	
+
+	/** ================================================= */
+
 	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur) {
 
-		Criteria crit =  sessionFactory.getCurrentSession()
-				.createCriteria(ChuPhaseTumeur.class)
-				.createAlias("chuTumeur", "chuTumeur") 
-				.createAlias("chuTypePhase", "chuTypePhase") 
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPhaseTumeur.class)
+				.createAlias("chuTumeur", "chuTumeur").createAlias("chuTypePhase", "chuTypePhase")
 				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
-				.add(Restrictions.eq("chuTypePhase.idTypePhase", 1))
-				;
-		
+				.add(Restrictions.eq("chuTypePhase.idTypePhase", 1));
+
 		return (ChuPhaseTumeur) crit.uniqueResult();
 
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	private void populateDependencies(List<ChuPhaseTumeur> list) {
 		for (ChuPhaseTumeur phase : list) {
@@ -197,10 +172,10 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		}
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	private void populateDependencies(ChuPhaseTumeur phase) {
-		if (phase!=null) {
+		if (phase != null) {
 			Hibernate.initialize(phase.getChuMetastases());
 			Hibernate.initialize(phase.getChuTnms());
 			Hibernate.initialize(phase.getChuTypePhase());
@@ -208,6 +183,6 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		}
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 }

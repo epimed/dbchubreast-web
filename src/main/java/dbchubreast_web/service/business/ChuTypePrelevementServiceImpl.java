@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuTypePrelevementDao;
 import dbchubreast_web.entity.ChuTypePrelevement;
 
-
 @Service
 public class ChuTypePrelevementServiceImpl implements ChuTypePrelevementService {
 
@@ -29,20 +28,19 @@ public class ChuTypePrelevementServiceImpl implements ChuTypePrelevementService 
 	private ChuTypePrelevementDao typePrelevementDao;
 
 	public ChuTypePrelevement find(Integer idTypePrelevement) {
-		return  typePrelevementDao.find(idTypePrelevement);
+		return typePrelevementDao.find(idTypePrelevement);
 	}
 
 	public List<ChuTypePrelevement> list(Integer[] listIdTypePrelevement) {
-		return  typePrelevementDao.list(listIdTypePrelevement);
+		return typePrelevementDao.list(listIdTypePrelevement);
 	}
 
 	public List<ChuTypePrelevement> listPhaseInitiale() {
-		return  typePrelevementDao.listPhaseInitiale();
+		return typePrelevementDao.listPhaseInitiale();
 	}
 
 	public List<ChuTypePrelevement> listPhaseRechute() {
-		return  typePrelevementDao.listPhaseRechute();
+		return typePrelevementDao.listPhaseRechute();
 	}
 
-	
 }

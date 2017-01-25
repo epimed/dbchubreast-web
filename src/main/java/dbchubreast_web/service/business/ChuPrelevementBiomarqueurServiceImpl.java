@@ -22,7 +22,7 @@ import dbchubreast_web.dao.ChuPrelevementBiomarqueurDao;
 import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 
 @Service
-public class ChuPrelevementBiomarqueurServiceImpl  implements ChuPrelevementBiomarqueurService {
+public class ChuPrelevementBiomarqueurServiceImpl implements ChuPrelevementBiomarqueurService {
 
 	@Autowired
 	private ChuPrelevementBiomarqueurDao prelevementBiomarqueurDao;
@@ -30,27 +30,27 @@ public class ChuPrelevementBiomarqueurServiceImpl  implements ChuPrelevementBiom
 	public ChuPrelevementBiomarqueur find(Integer idPrelevement, String idBiomarqueur) {
 		return prelevementBiomarqueurDao.find(idPrelevement, idBiomarqueur);
 	}
-	
+
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement) {
 		return prelevementBiomarqueurDao.list(idPrelevement);
 	}
-	
+
 	public List<ChuPrelevementBiomarqueur> list(List<Integer> listIdPrelevements) {
 		return prelevementBiomarqueurDao.list(listIdPrelevements);
 	}
-	
+
 	public void save(ChuPrelevementBiomarqueur prelBio) {
 		prelevementBiomarqueurDao.save(prelBio);
 	}
-	
+
 	public void update(ChuPrelevementBiomarqueur prelBio) {
 		prelevementBiomarqueurDao.update(prelBio);
 	}
-	
+
 	public void saveOrUpdate(ChuPrelevementBiomarqueur prelBio) {
 		prelevementBiomarqueurDao.saveOrUpdate(prelBio);
 	}
-	
+
 	public void delete(ChuPrelevementBiomarqueur prelBio) {
 		prelevementBiomarqueurDao.delete(prelBio);
 	}
@@ -58,5 +58,5 @@ public class ChuPrelevementBiomarqueurServiceImpl  implements ChuPrelevementBiom
 	public List<ChuPrelevementBiomarqueur> list(Integer idPhaseTumeur, String idBiomarqueur) {
 		return prelevementBiomarqueurDao.list(idPhaseTumeur, idBiomarqueur);
 	}
-	
+
 }

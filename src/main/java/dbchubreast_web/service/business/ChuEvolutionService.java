@@ -19,5 +19,6 @@ import dbchubreast_web.entity.ChuEvolution;
 
 public interface ChuEvolutionService {
 	public ChuEvolution find(Integer idEvolution);
-	public List<ChuEvolution> list();	
+
+	public List<ChuEvolution> list();
 }

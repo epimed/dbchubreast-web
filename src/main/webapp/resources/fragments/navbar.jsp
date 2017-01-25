@@ -23,35 +23,58 @@
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Patients<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="${pageContext.request.contextPath}/patient">Rechercher un patient</a></li>
-						<li><a href="${pageContext.request.contextPath}/patient/add">Ajouter un patient</a></li>
-						<li><a href="${pageContext.request.contextPath}/patients">Liste des patients</a></li>
+						<li><a href="${pageContext.request.contextPath}/patient">Rechercher
+								un patient</a></li>
+						<li><a href="${pageContext.request.contextPath}/patient/add">Ajouter
+								un patient</a></li>
+						<li><a href="${pageContext.request.contextPath}/patients">Liste
+								des patients</a></li>
 					</ul></li>
-					
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
+
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Tumeurs<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="${pageContext.request.contextPath}/tumeur">Rechercher une tumeur</a></li>
+						<li><a href="${pageContext.request.contextPath}/tumeur">Rechercher
+								une tumeur</a></li>
 					</ul></li>
-					
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
+
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Prélèvements<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="${pageContext.request.contextPath}/prelevement">Rechercher un prélèvement</a></li>
+						<li><a href="${pageContext.request.contextPath}/prelevement">Rechercher
+								un prélèvement</a></li>
 					</ul></li>
-					
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
+
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Exports<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="${pageContext.request.contextPath}/download/patients">Exporter les patients</a></li>
-						<li><a href="${pageContext.request.contextPath}/download/prelevements">Exporter les prélèvements</a></li>
-						<li><a href="${pageContext.request.contextPath}/download/biomarqueurs">Exporter les biomarqueurs</a></li>
+						<li><a
+							href="${pageContext.request.contextPath}/download/patients">Exporter
+								les patients</a></li>
+						<li><a
+							href="${pageContext.request.contextPath}/download/prelevements">Exporter
+								les prélèvements</a></li>
+						<li><a
+							href="${pageContext.request.contextPath}/download/biomarqueurs">Exporter
+								les biomarqueurs</a></li>
 					</ul></li>
 
 			</ul>
+
+			<sec:authentication var="user" property="principal" />
+			<sec:authorize access="isAuthenticated()">
+
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="${pageContext.request.contextPath}/logout" class="navbar-link">Déconnexion</a></li>
+				</ul>
+				
+				<p class="navbar-text navbar-right">${user.username}</p>
+
+			</sec:authorize>
 
 		</div>
 		<!--/.nav-collapse -->

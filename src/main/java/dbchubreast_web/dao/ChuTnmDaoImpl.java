@@ -30,35 +30,32 @@ public class ChuTnmDaoImpl extends BaseDao implements ChuTnmDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	/** =================================================*/
+	/** ================================================= */
 	public ChuTnm find(Integer idPhase, String type) {
-		ChuTnm result = (ChuTnm) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTnm.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
-				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
-				.add(Restrictions.eq("type", type))
-				.uniqueResult();
+		ChuTnm result = (ChuTnm) sessionFactory.getCurrentSession().createCriteria(ChuTnm.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
+				.add(Restrictions.eq("type", type)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public void save(ChuTnm tnm) {
 		sessionFactory.getCurrentSession().save(tnm);
 	}
-	
-	/** =================================================*/
+
+	/** ================================================= */
 
 	public void update(ChuTnm tnm) {
 		sessionFactory.getCurrentSession().update(tnm);
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public void saveOrUpdate(ChuTnm tnm) {
 		sessionFactory.getCurrentSession().saveOrUpdate(tnm);
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 }

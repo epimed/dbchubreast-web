@@ -35,24 +35,23 @@ public class ExporterPrelevement extends AbstractExporter {
 
 	@Autowired
 	private ChuPrelevementBiomarqueurDao prelevementBiomarqueurDao;
-	
+
 	@Autowired
 	private ChuTumeurDao tumeurDao;
-	
+
 	@Autowired
 	private ChuPhaseTumeurDao phaseTumeurDao;
-	
+
 	@Autowired
 	private ChuPrelevementDao prelevementDao;
-	
+
 	@Autowired
 	private ChuBiomarqueurDao biomarqueurDao;
 
 	public Table export() {
 
-		
 		logger.debug("=== " + this.getClass().getName() + ": export()" + " ===");
-		
+
 		// ====== SHEET PRELEVEMENTS =====
 
 		List<ChuBiomarqueur> biomarqueurs = biomarqueurDao.list();
@@ -60,7 +59,7 @@ public class ExporterPrelevement extends AbstractExporter {
 
 		Table table = new Table(listPrelevements.size());
 
-		for (int i=0; i<listPrelevements.size(); i++) {
+		for (int i = 0; i < listPrelevements.size(); i++) {
 			// for (int i=0; i<10; i++) {
 
 			ChuPrelevement prelevement = listPrelevements.get(i);
@@ -68,54 +67,58 @@ public class ExporterPrelevement extends AbstractExporter {
 			ChuTumeur tumeur = tumeurDao.findByIdPhaseWithDependencies(phase.getIdPhase());
 			ChuPatient patient = tumeur.getChuPatient();
 
-
 			// ===== Patient =====
 
 			table.addToTable(i, "id_patient", patient.getIdPatient());
 
-
-
 			// ===== Tumeur =====
 
 			table.addToTable(i, "id_tumeur", tumeur.getIdTumeur());
-			table.addToTable(i, "id_topographie", tumeur.getChuTopographie()==null ? null : tumeur.getChuTopographie().getIdTopographie());
+			table.addToTable(i, "id_topographie",
+					tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getIdTopographie());
 			table.addToTable(i, "cote", tumeur.getCote());
 			table.addToTable(i, "age_diagnostic", tumeur.getAgeDiagnostic());
-			table.addToTable(i, "date_evolution", tumeur.getDateEvolution()==null ? null : dateFormat.format(tumeur.getDateEvolution()));
-			table.addToTable(i, "code_evolution", tumeur.getChuEvolution()==null ? null : tumeur.getChuEvolution().getCode());
+			table.addToTable(i, "date_evolution",
+					tumeur.getDateEvolution() == null ? null : dateFormat.format(tumeur.getDateEvolution()));
+			table.addToTable(i, "code_evolution",
+					tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getCode());
 			table.addToTable(i, "cause_deces", patient.getCauseDeces());
-
 
 			// ===== Phase de tumeur =====
 
 			table.addToTable(i, "id_phase", phase.getIdPhase());
 			table.addToTable(i, "type_phase_tumeur", phase.getChuTypePhase().getNom());
-			table.addToTable(i, "date_diagnostic (initiale ou rechute)", phase.getDateDiagnostic()==null ? null : dateFormat.format(phase.getDateDiagnostic()));
+			table.addToTable(i, "date_diagnostic (initiale ou rechute)",
+					phase.getDateDiagnostic() == null ? null : dateFormat.format(phase.getDateDiagnostic()));
 			table.addToTable(i, "nature_diagnostic (initiale ou rechute)", phase.getNatureDiagnostic());
 			table.addToTable(i, "profondeur", phase.getProfondeur());
-			table.addToTable(i, "performance_status", phase.getChuPerformanceStatus()==null ? null : phase.getChuPerformanceStatus().getIdPs());
-
+			table.addToTable(i, "performance_status",
+					phase.getChuPerformanceStatus() == null ? null : phase.getChuPerformanceStatus().getIdPs());
 
 			// ===== Prelevement =====
 
 			table.addToTable(i, "id_prelevement", prelevement.getIdPrelevement());
 			table.addToTable(i, "type_prelevement", prelevement.getChuTypePrelevement().getNom());
-			table.addToTable(i, "date_prelevement", prelevement.getDatePrelevement()==null ? null : dateFormat.format(prelevement.getDatePrelevement()));
+			table.addToTable(i, "date_prelevement", prelevement.getDatePrelevement() == null ? null
+					: dateFormat.format(prelevement.getDatePrelevement()));
 			table.addToTable(i, "site_prelevement", prelevement.getSitePrelevement());
-			table.addToTable(i, "id_morphologie", prelevement.getChuMorphologie()==null ? null : prelevement.getChuMorphologie().getIdMorphologie());
+			table.addToTable(i, "id_morphologie", prelevement.getChuMorphologie() == null ? null
+					: prelevement.getChuMorphologie().getIdMorphologie());
 			table.addToTable(i, "type_histologique", prelevement.getTypeHistologique());
 
 			// ===== Biomarquers =====
 
-			for (int j=0; j<biomarqueurs.size(); j++) {
-				ChuPrelevementBiomarqueur b = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(), biomarqueurs.get(j).getIdBiomarqueur());
-				if (b!=null) {
-					// System.out.println(b.getChuBiomarqueur().getNom() + ":\t" + b);
+			for (int j = 0; j < biomarqueurs.size(); j++) {
+				ChuPrelevementBiomarqueur b = prelevementBiomarqueurDao.find(prelevement.getIdPrelevement(),
+						biomarqueurs.get(j).getIdBiomarqueur());
+				if (b != null) {
+					// System.out.println(b.getChuBiomarqueur().getNom() + ":\t"
+					// + b);
 					table.addToTable(i, b.getChuBiomarqueur().getNom(), b.getValeur());
 				}
 			}
 		}
-		
+
 		return table;
 
 	}

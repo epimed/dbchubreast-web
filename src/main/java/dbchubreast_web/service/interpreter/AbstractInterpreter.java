@@ -16,39 +16,35 @@ package dbchubreast_web.service.interpreter;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public abstract class AbstractInterpreter {
 
 	protected Set<StatutBiomarqueur> setStatutBiomarqueur = new HashSet<StatutBiomarqueur>();
 
 	/** ========================================================= */
 
-	public Set<String> populateSetValue (String value) {
+	public Set<String> populateSetValue(String value) {
 
 		Set<String> setValue = new HashSet<String>();
 
 		// ===== Put all values into a set =====
-		
+
 		value = value.replaceAll("%", "");
-		
+
 		if (value.contains("/") || value.contains("et") || value.contains("puis")) {
-			String [] parts = value.split("[et/puis]+");
-			for (int i =0; i< parts.length; i++) {
+			String[] parts = value.split("[et/puis]+");
+			for (int i = 0; i < parts.length; i++) {
 				setValue.add(parts[i].trim());
 			}
 			// System.out.println(value + " : " + setValue);
-		}
-		else {
+		} else {
 			setValue.add(value.trim());
 		}
 
 		return setValue;
 	}
-	
-	
+
 	/** ================= ABSTRACT METHODS ==================== */
 
-	public abstract StatutBiomarqueur getStatut (String value);
-
+	public abstract StatutBiomarqueur getStatut(String value);
 
 }

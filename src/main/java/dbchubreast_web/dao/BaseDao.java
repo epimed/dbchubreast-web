@@ -17,7 +17,6 @@ package dbchubreast_web.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class BaseDao {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

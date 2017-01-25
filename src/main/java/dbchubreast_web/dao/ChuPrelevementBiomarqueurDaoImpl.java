@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -28,10 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 
-
-
-
-
 @Transactional
 @Repository
 
@@ -41,35 +36,29 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 	@Autowired
 	private SessionFactory sessionFactory;
 
-
 	/** ================================================= */
 
 	public ChuPrelevementBiomarqueur find(Integer idPrelevement, String idBiomarqueur) {
-		if (idPrelevement==null || idBiomarqueur==null) {
+		if (idPrelevement == null || idBiomarqueur == null) {
 			return null;
 		}
 		ChuPrelevementBiomarqueur result = (ChuPrelevementBiomarqueur) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class)
-				.createAlias("chuPrelevement", "chuPrelevement")
+				.createCriteria(ChuPrelevementBiomarqueur.class).createAlias("chuPrelevement", "chuPrelevement")
 				.createAlias("chuBiomarqueur", "chuBiomarqueur")
 				.add(Restrictions.eq("chuPrelevement.idPrelevement", idPrelevement))
-				.add(Restrictions.eq("chuBiomarqueur.idBiomarqueur", idBiomarqueur))
-				.uniqueResult();
+				.add(Restrictions.eq("chuBiomarqueur.idBiomarqueur", idBiomarqueur)).uniqueResult();
 		this.populateDependencies(result);
 		return result;
 	}
-
 
 	/** ================================================= */
 
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement) {
 		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class)
-				.createAlias("chuPrelevement", "chuPrelevement")
+				.createCriteria(ChuPrelevementBiomarqueur.class).createAlias("chuPrelevement", "chuPrelevement")
 				.createAlias("chuBiomarqueur", "chuBiomarqueur")
 				.add(Restrictions.eq("chuPrelevement.idPrelevement", idPrelevement))
-				.addOrder(Order.asc("chuBiomarqueur.ordreAffichage"))
-				.list();
+				.addOrder(Order.asc("chuBiomarqueur.ordre")).list();
 
 		this.populateDependencies(list);
 
@@ -80,31 +69,27 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 
 	public List<ChuPrelevementBiomarqueur> list(Integer idPhaseTumeur, String idBiomarqueur) {
 
-		Criteria crit = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class)
-				.createAlias("chuPrelevement","chuPrelevement")
-				.createAlias("chuPrelevement.chuPhaseTumeur","chuPhaseTumeur")
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPrelevementBiomarqueur.class)
+				.createAlias("chuPrelevement", "chuPrelevement")
+				.createAlias("chuPrelevement.chuPhaseTumeur", "chuPhaseTumeur")
 				.add(Restrictions.eq("id.idBiomarqueur", idBiomarqueur))
-				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhaseTumeur))
-				;
-		return  crit.list();
+				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhaseTumeur));
+		return crit.list();
 	}
 
 	/** ================================================= */
 
 	public List<ChuPrelevementBiomarqueur> list(List<Integer> listIdPrelevements) {
 
-		if (listIdPrelevements==null || listIdPrelevements.isEmpty()) {
+		if (listIdPrelevements == null || listIdPrelevements.isEmpty()) {
 			return null;
 		}
 
 		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class)
-				.createAlias("chuPrelevement", "chuPrelevement")
+				.createCriteria(ChuPrelevementBiomarqueur.class).createAlias("chuPrelevement", "chuPrelevement")
 				.createAlias("chuBiomarqueur", "chuBiomarqueur")
 				.add(Restrictions.in("chuPrelevement.idPrelevement", listIdPrelevements))
-				.addOrder(Order.asc("chuBiomarqueur.ordreAffichage"))
-				.list();
+				.addOrder(Order.asc("chuBiomarqueur.ordre")).list();
 
 		this.populateDependencies(list);
 
@@ -146,7 +131,7 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 	/** ================================================= */
 
 	private void populateDependencies(ChuPrelevementBiomarqueur prelBio) {
-		if (prelBio!=null) {
+		if (prelBio != null) {
 			Hibernate.initialize(prelBio.getChuPrelevement());
 			Hibernate.initialize(prelBio.getChuBiomarqueur());
 		}

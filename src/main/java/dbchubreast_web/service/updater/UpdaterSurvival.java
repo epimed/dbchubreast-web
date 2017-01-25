@@ -26,7 +26,6 @@ import dbchubreast_web.dao.ChuTumeurDao;
 import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTumeur;
 
-
 @Service
 public class UpdaterSurvival extends AbstractUpdater {
 
@@ -36,38 +35,35 @@ public class UpdaterSurvival extends AbstractUpdater {
 	@Autowired
 	private ChuPhaseTumeurDao phaseTumeurDao;
 
-
 	/** ================================================================================= */
 
 	public void update(List<?> list) {
 
 		logger.debug("=== " + this.getClass().getName() + " ===");
-		
-		for (int i=0; i<list.size(); i++) {
-			
+
+		for (int i = 0; i < list.size(); i++) {
+
 			ChuTumeur tumeur = (ChuTumeur) list.get(i);
 
 			Date dateDiagnostic = tumeur.getDateDiagnostic();
 			Date dateEvolution = tumeur.getDateEvolution();
 			Date dateDeces = tumeur.getChuPatient().getDateDeces();
 			ChuPhaseTumeur phaseRechute = phaseTumeurDao.findFirstRelapse(tumeur.getIdTumeur());
-			
+
 			logger.debug("Phase rechute {}", phaseRechute);
-			
+
 			Date dateRechute = null;
-			if (phaseRechute!=null && phaseRechute.getDateDiagnostic()!=null) {
+			if (phaseRechute != null && phaseRechute.getDateDiagnostic() != null) {
 				dateRechute = phaseRechute.getDateDiagnostic();
 			}
 
-			boolean hasSurvival = dateDiagnostic!=null && (dateEvolution!=null || dateDeces!=null || dateRechute!=null);
-			boolean dead = (dateDeces!=null);
-			boolean relapsed = (phaseRechute!=null);
+			boolean hasSurvival = dateDiagnostic != null
+					&& (dateEvolution != null || dateDeces != null || dateRechute != null);
+			boolean dead = (dateDeces != null);
+			boolean relapsed = (phaseRechute != null);
 
-			logger.debug("dateDiagnostic=" + dateDiagnostic 
-					+ ", dateEvolution=" + dateEvolution
-					+ ", dateDeces=" + dateDeces
-					+ ", dateRechute=" + dateRechute
-					);
+			logger.debug("dateDiagnostic=" + dateDiagnostic + ", dateEvolution=" + dateEvolution + ", dateDeces="
+					+ dateDeces + ", dateRechute=" + dateRechute);
 
 			if (hasSurvival) {
 
@@ -82,12 +78,12 @@ public class UpdaterSurvival extends AbstractUpdater {
 				}
 
 				if (!relapsed) {
-					dfs=os;
+					dfs = os;
 				}
 
 				tumeur.setOsMonths(os);
 				tumeur.setDfsMonths(dfs);
-				
+
 				tumeurDao.update(tumeur);
 			}
 		}
@@ -97,23 +93,24 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 	public Double calculateSurvival(Date dateStart, Date dateEnd) {
 
-		if (dateStart==null || dateEnd==null) {
+		if (dateStart == null || dateEnd == null) {
 			return null;
 		}
 
-		Double daysInAMonth = 365.24/12;
+		Double daysInAMonth = 365.24 / 12;
 
-		DateTime startDate =  new DateTime(dateStart);
+		DateTime startDate = new DateTime(dateStart);
 		DateTime endDate = new DateTime(dateEnd);
 
 		int days = Days.daysBetween(startDate, endDate).getDays();
 		// int months = Months.monthsBetween(startDate, endDate).getMonths();
 		// int years = Years.yearsBetween(startDate, endDate).getYears();
 
-		Double survival = days/daysInAMonth;
-		survival = Math.round(survival*100d)/100d;
+		Double survival = days / daysInAMonth;
+		survival = Math.round(survival * 100d) / 100d;
 
-		// System.out.println("years=" + years + ", months=" + months + ", days=" + days + "\t" + "survival=" + survival);
+		// System.out.println("years=" + years + ", months=" + months + ",
+		// days=" + days + "\t" + "survival=" + survival);
 
 		return survival;
 	}

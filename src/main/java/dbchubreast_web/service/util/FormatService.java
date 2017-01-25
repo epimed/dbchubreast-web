@@ -25,19 +25,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class FormatService {
 
-
 	/** ================================================================================= */
 
-	public String [] convertStringToArray (String list) {
-		String [] array = null;
+	public String[] convertStringToArray(String list) {
+		String[] array = null;
 
-		if (list!=null && !list.isEmpty()) {
+		if (list != null && !list.isEmpty()) {
 			array = list.trim().replaceAll("['\"]", "").split("[,;:\\p{Space}][\\p{Space}]*");
 		}
 
 		return array;
 	}
-
 
 	/** ================================================================================= */
 
@@ -47,7 +45,8 @@ public class FormatService {
 		int j = 0;
 		for (int i = 0, n = string.length(); i < n; ++i) {
 			char c = string.charAt(i);
-			if (c <= '\u007F') out[j++] = c;
+			if (c <= '\u007F')
+				out[j++] = c;
 		}
 		return new String(out);
 	}
@@ -60,26 +59,25 @@ public class FormatService {
 
 	/** ================================================================================= */
 
-
 	public String formatFisrtName(String firstName) {
 
-		if (firstName==null) {
+		if (firstName == null) {
 			return null;
 		}
 
 		String result = "";
-		String [] parts = firstName.split("[-\\p{Space}]");
+		String[] parts = firstName.split("[-\\p{Space}]");
 
-		for (int i=0; i<parts.length; i++) {
+		for (int i = 0; i < parts.length; i++) {
 			String part = parts[i].trim();
-			if (part!=null && !part.isEmpty()) {
+			if (part != null && !part.isEmpty()) {
 				part = part.toLowerCase();
 				String formattedPart = Character.toUpperCase(part.charAt(0)) + "";
-				if (part.length()>1) {
+				if (part.length() > 1) {
 					formattedPart = formattedPart + part.substring(1);
 				}
 				result = result + formattedPart;
-				if (i<parts.length-1) {
+				if (i < parts.length - 1) {
 					result = result + "-";
 				}
 			}
@@ -90,13 +88,12 @@ public class FormatService {
 
 	/** ====================================================================================== */
 
-	public Date recognizeDate (Object object) {
+	public Date recognizeDate(Object object) {
 
 		Date date = null;
 		try {
 			date = (Date) object;
-		}
-		catch (ClassCastException e) {
+		} catch (ClassCastException e) {
 			// nothing to do
 		}
 
@@ -106,15 +103,16 @@ public class FormatService {
 
 	/** ====================================================================================== */
 
-	public Integer recognizeInteger (String text) {
+	public Integer recognizeInteger(String text) {
 
 		Integer result = null;
 		try {
 			Double resultDouble = Double.parseDouble(text);
 			result = resultDouble.intValue();
-		}
-		catch (ClassCastException | NumberFormatException e) {
-			// System.err.println("WARNING! Value " + text + " cannot be recongnized as an integer." + " Error message: " + e.getMessage());
+		} catch (ClassCastException | NumberFormatException e) {
+			// System.err.println("WARNING! Value " + text + " cannot be
+			// recongnized as an integer." + " Error message: " +
+			// e.getMessage());
 		}
 
 		return result;
@@ -123,15 +121,15 @@ public class FormatService {
 
 	/** ====================================================================================== */
 
-	public Double recognizeDouble (String text) {
+	public Double recognizeDouble(String text) {
 
 		Double result = null;
 		try {
 			text = text.replaceAll(",", ".");
 			result = Double.parseDouble(text);
-		}
-		catch (ClassCastException | NumberFormatException e) {
-			// System.err.println("WARNING! Value " + text + " cannot be recongnized as a double." + " Error message: " + e.getMessage());
+		} catch (ClassCastException | NumberFormatException e) {
+			// System.err.println("WARNING! Value " + text + " cannot be
+			// recongnized as a double." + " Error message: " + e.getMessage());
 		}
 
 		return result;
@@ -140,18 +138,16 @@ public class FormatService {
 
 	/** ====================================================================================== */
 
-	public Integer recognizeInteger (Object object) {
+	public Integer recognizeInteger(Object object) {
 		Integer result = null;
 		try {
 			String resultString = (String) object;
 			result = this.recognizeInteger(resultString);
-		}
-		catch (ClassCastException e1) {
+		} catch (ClassCastException e1) {
 			try {
 				Double resultDouble = (Double) object;
 				result = resultDouble.intValue();
-			}
-			catch (ClassCastException e2) {
+			} catch (ClassCastException e2) {
 				result = null;
 				System.err.println("WARNING! Value " + object + " cannot be recongnized as an integer.");
 				e2.printStackTrace();
@@ -162,42 +158,36 @@ public class FormatService {
 
 	/** ====================================================================================== */
 
-	public String recognizeString (Object object) {
+	public String recognizeString(Object object) {
 		String result = null;
 		try {
 			result = (String) object;
-		}
-		catch (ClassCastException e1) {
+		} catch (ClassCastException e1) {
 			try {
 				Double resultDouble = (Double) object;
 				Integer resultInteger = resultDouble.intValue();
 				Double difference = Math.abs(resultDouble - resultInteger);
-				if (difference>0) {
+				if (difference > 0) {
 					result = resultDouble.toString();
-				}
-				else {
+				} else {
 					result = resultInteger.toString();
 				}
 
-			}
-			catch (ClassCastException e2) {
+			} catch (ClassCastException e2) {
 
 				try {
 					Integer resultInteger = (Integer) object;
 					result = resultInteger.toString();
-				}
-				catch (ClassCastException e3) {
+				} catch (ClassCastException e3) {
 
 					try {
 						Date date = (Date) object;
 						result = date.toString();
-					}
-					catch (ClassCastException e4) {
+					} catch (ClassCastException e4) {
 						result = null;
 						System.err.println("WARNING! Value " + object + " cannot be recongnized as a string.");
 						e4.printStackTrace();
 					}
-
 
 				}
 			}
@@ -205,22 +195,21 @@ public class FormatService {
 		return result;
 	}
 
-
 	/** ====================================================================================== */
 
-	public List<Integer> getPow2Indexes (Double initialValue) {
+	public List<Integer> getPow2Indexes(Double initialValue) {
 
-		List<Integer> list = new ArrayList<Integer> ();
+		List<Integer> list = new ArrayList<Integer>();
 
 		Double currentValue = initialValue;
 
-		while (currentValue>0) {
+		while (currentValue > 0) {
 
 			Double log = this.log2(currentValue);
 			Double floor = Math.floor(log);
 			Double base = Math.pow(2, floor);
 			list.add(base.intValue());
-			currentValue = currentValue - base ;			
+			currentValue = currentValue - base;
 		}
 
 		return list;
@@ -237,17 +226,17 @@ public class FormatService {
 
 	public Double calculateAge(Date dateBegin, Date dateEnd) {
 
-		DateTime begin =  new DateTime(dateBegin);
+		DateTime begin = new DateTime(dateBegin);
 		DateTime end = new DateTime(dateEnd);
 
-		if (begin!=null && end!=null) {
+		if (begin != null && end != null) {
 
 			int months = Months.monthsBetween(begin, end).getMonths();
-			Double age = months/12.0;
-			Double roundedAge = Math.round(age*10d)/10d;
+			Double age = months / 12.0;
+			Double roundedAge = Math.round(age * 10d) / 10d;
 			return roundedAge;
 		}
-		
+
 		return null;
 
 	}

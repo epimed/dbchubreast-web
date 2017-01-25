@@ -17,10 +17,10 @@ import java.util.List;
 
 import dbchubreast_web.entity.ChuMorphologie;
 
-
 public interface ChuMorphologieService {
 
 	public ChuMorphologie find(String idMorphologie);
+
 	public List<ChuMorphologie> list();
 
 }

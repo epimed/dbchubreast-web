@@ -19,6 +19,8 @@ import dbchubreast_web.entity.ChuBiomarqueur;
 
 public interface ChuBiomarqueurService {
 	public ChuBiomarqueur find(String idBiomarqueur);
+
 	public List<ChuBiomarqueur> list();
-	public List<ChuBiomarqueur> list(Object [] noms);
+
+	public List<ChuBiomarqueur> list(Object[] noms);
 }

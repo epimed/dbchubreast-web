@@ -50,8 +50,8 @@ public class ChuProtocoleTraitement implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy = "increment")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "id_protocole", unique = true, nullable = false)
 	public Integer getIdProtocole() {
 		return this.idProtocole;

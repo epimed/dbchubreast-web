@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuTypePhase;
-
 
 @Transactional
 @Repository
@@ -32,27 +30,23 @@ public class ChuTypePhaseDaoImpl extends BaseDao implements ChuTypePhaseDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	/** =================================================*/
-	
+	/** ================================================= */
+
 	public ChuTypePhase find(Integer idTypePhase) {
-		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTypePhase.class)
-				.add(Restrictions.eq("idTypePhase", idTypePhase))
-				.uniqueResult();
+		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession().createCriteria(ChuTypePhase.class)
+				.add(Restrictions.eq("idTypePhase", idTypePhase)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
-	
+	/** ================================================= */
+
 	public ChuTypePhase findByIdPhase(Integer idPhase) {
-		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTypePhase.class)
+		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession().createCriteria(ChuTypePhase.class)
 				.createAlias("chuPhaseTumeurs", "chuPhaseTumeurs")
-				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhase))
-				.uniqueResult();
+				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhase)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 }

@@ -21,33 +21,32 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuTumeurDao;
 import dbchubreast_web.entity.ChuTumeur;
 
-
 @Service
 public class ChuTumeurServiceImpl implements ChuTumeurService {
 
 	@Autowired
 	private ChuTumeurDao tumeurDao;
-	
+
 	public ChuTumeur find(Integer idTumeur) {
 		return tumeurDao.find(idTumeur);
 	}
-	
+
 	public ChuTumeur findWithDependencies(Integer idTumeur) {
 		return tumeurDao.findWithDependencies(idTumeur);
 	}
-	
+
 	public List<ChuTumeur> find(String idPatient) {
 		return tumeurDao.find(idPatient);
 	}
-	
+
 	public List<ChuTumeur> findWithDependencies(String idPatient) {
 		return tumeurDao.findWithDependencies(idPatient);
 	}
-	
+
 	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur) {
 		return tumeurDao.findAsListWithDependencies(idTumeur);
 	}
-	
+
 	public List<ChuTumeur> findInAttributesWithDependencies(String text) {
 		return tumeurDao.findInAttributesWithDependencies(text);
 	}
@@ -55,21 +54,21 @@ public class ChuTumeurServiceImpl implements ChuTumeurService {
 	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase) {
 		return tumeurDao.findByIdPhaseWithDependencies(idPhase);
 	}
-	
+
 	public List<ChuTumeur> list() {
 		return tumeurDao.list();
 	}
-	
+
 	public List<ChuTumeur> listWithDependencies() {
 		return tumeurDao.listWithDependencies();
 	}
 
 	public void save(ChuTumeur tumeur) {
-		tumeurDao.save(tumeur);	
+		tumeurDao.save(tumeur);
 	}
 
 	public void update(ChuTumeur tumeur) {
 		tumeurDao.update(tumeur);
 	}
-	
+
 }

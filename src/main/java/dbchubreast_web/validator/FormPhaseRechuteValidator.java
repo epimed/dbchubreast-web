@@ -26,8 +26,7 @@ import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuTumeurService;
 
 @Component
-public class FormPhaseRechuteValidator extends BaseService implements Validator{
-
+public class FormPhaseRechuteValidator extends BaseService implements Validator {
 
 	@Autowired
 	private ChuPatientService patientService;
@@ -39,7 +38,6 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator{
 		return FormPhaseRechute.class.isAssignableFrom(clazz);
 	}
 
-
 	public void validate(Object target, Errors errors) {
 
 		logger.debug("===== " + this.getClass().getName() + " =====");
@@ -49,27 +47,27 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator{
 		ChuPatient patient = patientService.find(form.getIdPatient());
 		ChuTumeur tumeur = tumeurService.find(form.getIdTumeur());
 
-
 		// === Date diagnostic not empty ===
 
-		if (form.getDateDiagnostic()==null) {
+		if (form.getDateDiagnostic() == null) {
 			String message = "Ne peut pas être vide !";
 			errors.rejectValue("dateDiagnostic", "NotEmpty.formPhaseRechute.dateDiagnostic", message);
 		}
 
+		// === Date de diagnostic ne peut pas être avant la date de naissance
+		// ===
 
-		// === Date de diagnostic ne peut pas être avant la date de naissance ===
-
-		if (form.getDateDiagnostic()!=null && patient.getDateNaissance()!=null) {
+		if (form.getDateDiagnostic() != null && patient.getDateNaissance() != null) {
 			if (form.getDateDiagnostic().before(patient.getDateNaissance())) {
 				String message = "La date du diagnostic ne peut pas être antérieure à la date de naissance !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formPhaseRechute.dateDiagnostic", message);
 			}
 		}
 
-		// === Date de diagnostic de la rechute ne peut pas être avant la date du diagnostic de la tumeur ===
+		// === Date de diagnostic de la rechute ne peut pas être avant la date
+		// du diagnostic de la tumeur ===
 
-		if (form.getDateDiagnostic()!=null && tumeur.getDateDiagnostic()!=null) {
+		if (form.getDateDiagnostic() != null && tumeur.getDateDiagnostic() != null) {
 			if (form.getDateDiagnostic().before(tumeur.getDateDiagnostic())) {
 				String message = "La date du diagnostic de la rechute ne peut pas être antérieure à la date du diagnostic de la phase initiale "
 						+ tumeur.getDateDiagnostic() + " !";
@@ -79,9 +77,9 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator{
 
 		// === Date de diagnostic ne peut pas être apres la date de deces ===
 
-		if (form.getDateDiagnostic()!=null && patient.getDateDeces()!=null) {
+		if (form.getDateDiagnostic() != null && patient.getDateDeces() != null) {
 			if (form.getDateDiagnostic().after(patient.getDateDeces())) {
-				String message = "La date du diagnostic ne peut pas être postéreure à la date de décès " 
+				String message = "La date du diagnostic ne peut pas être postéreure à la date de décès "
 						+ patient.getDateDeces() + " !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formPhaseRechute.dateDiagnostic", message);
 			}

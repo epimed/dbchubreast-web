@@ -66,8 +66,8 @@ public class ChuTraitement implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy = "increment")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "id_traitement", unique = true, nullable = false)
 	public Integer getIdTraitement() {
 		return this.idTraitement;
@@ -208,6 +208,6 @@ public class ChuTraitement implements java.io.Serializable {
 	}
 
 	public boolean dataEmpty() {
-		return this.getChuProtocoleTraitement()==null && this.getDateDebut()==null;
+		return this.getChuProtocoleTraitement() == null && this.getDateDebut() == null;
 	}
 }

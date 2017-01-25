@@ -122,7 +122,5 @@ public class ChuTopographie implements java.io.Serializable {
 	public String toString() {
 		return "ChuTopographie [idTopographie=" + idTopographie + ", nomFr=" + nomFr + ", nomEn=" + nomEn + "]";
 	}
-	
-	
 
 }

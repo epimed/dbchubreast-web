@@ -30,7 +30,6 @@ import dbchubreast_web.service.business.ChuPhaseTumeurService;
 @Component
 public class FormPrelevementValidator extends BaseService implements Validator {
 
-	
 	@Autowired
 	private ChuPatientService patientService;
 
@@ -47,45 +46,45 @@ public class FormPrelevementValidator extends BaseService implements Validator {
 
 		FormPrelevement form = (FormPrelevement) target;
 
-
 		// === Champs obligatoires ===
 
 		String message = "Ne peut pas être vide !";
 
-		if (form.getIdTumeur()==null) {
+		if (form.getIdTumeur() == null) {
 			errors.rejectValue("idTumeur", "NotEmpty.formPrelevement.idTumeur", message);
 		}
 
-		if (form.getIdPhase()==null) {
+		if (form.getIdPhase() == null) {
 			errors.rejectValue("idPhase", "NotEmpty.formPrelevement.idPhase", message);
 		}
 
-		if (form.getIdTypePrelevement()==null) {
+		if (form.getIdTypePrelevement() == null) {
 			errors.rejectValue("idTypePrelevement", "NotEmpty.formPrelevement.idTypePrelevement", message);
 		}
 
-		if (form.getDatePrelevement()==null) {
+		if (form.getDatePrelevement() == null) {
 			errors.rejectValue("datePrelevement", "NotEmpty.formPrelevement.datePrelevement", message);
 		}
 
-
 		// === Date de prélèvement ===
-		
+
 		Date datePrelevement = form.getDatePrelevement();
-		
+
 		ChuPhaseTumeur phaseTumeur = phaseTumeurService.find(form.getIdPhase());
-		Date dateDiagnosticPhase = phaseTumeur==null ? null : phaseTumeur.getDateDiagnostic();
-		
-		if (datePrelevement!=null && dateDiagnosticPhase!=null && datePrelevement.before(dateDiagnosticPhase)) {
-			message = "La date de prélèvement ne peut pas être antérieure à la date du diagnostic de la phase de tumeur " + dateDiagnosticPhase + " !";
+		Date dateDiagnosticPhase = phaseTumeur == null ? null : phaseTumeur.getDateDiagnostic();
+
+		if (datePrelevement != null && dateDiagnosticPhase != null && datePrelevement.before(dateDiagnosticPhase)) {
+			message = "La date de prélèvement ne peut pas être antérieure à la date du diagnostic de la phase de tumeur "
+					+ dateDiagnosticPhase + " !";
 			errors.rejectValue("datePrelevement", "Consistensy.formPrelevement.datePrelevement", message);
 		}
-		
+
 		ChuPatient patient = patientService.find(form.getIdPatient());
 		Date dateDeces = patient == null ? null : patient.getDateDeces();
 
-		if (datePrelevement!=null && dateDeces!=null && datePrelevement.after(dateDeces)) {
-			message = "La date de prélèvement ne peut pas être postérieure à la date de décès du patient " + dateDeces + " !";
+		if (datePrelevement != null && dateDeces != null && datePrelevement.after(dateDeces)) {
+			message = "La date de prélèvement ne peut pas être postérieure à la date de décès du patient " + dateDeces
+					+ " !";
 			errors.rejectValue("datePrelevement", "Consistensy.formPrelevement.datePrelevement", message);
 		}
 	}

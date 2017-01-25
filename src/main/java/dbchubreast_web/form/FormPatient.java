@@ -8,34 +8,30 @@ import dbchubreast_web.service.BaseService;
 
 public class FormPatient extends BaseService implements IForm {
 
-	
 	private String idPatient;
-	
+
 	private String rcp;
-	
-	@NotNull (message="Ne peut pas être vide")
+
+	@NotNull(message = "Ne peut pas être vide")
 	private String prenom;
-	
-	@NotNull (message="Ne peut pas être vide")
+
+	@NotNull(message = "Ne peut pas être vide")
 	private String nom;
-	
-	@NotNull (message="Ne peut pas être vide")
+
+	@NotNull(message = "Ne peut pas être vide")
 	private Date dateNaissance;
-	
-	@NotNull (message="Ne peut pas être vide")
+
+	@NotNull(message = "Ne peut pas être vide")
 	private String sexe;
-	
+
 	private String statutBrca;
 	private Date dateDeces;
 	private String causeDeces;
 	private Boolean consentement;
-	
-	
+
 	public FormPatient() {
 		super();
 	}
-
-
 
 	/**
 	 * @param idPatient
@@ -45,129 +41,85 @@ public class FormPatient extends BaseService implements IForm {
 		this.idPatient = idPatient;
 	}
 
-
-
-	
 	public String getIdPatient() {
 		return idPatient;
 	}
-
-
 
 	public void setIdPatient(String idPatient) {
 		this.idPatient = idPatient;
 	}
 
-
-
 	public String getRcp() {
 		return rcp;
 	}
-
-
 
 	public void setRcp(String rcp) {
 		this.rcp = rcp;
 	}
 
-
-
 	public String getPrenom() {
 		return prenom;
 	}
-
-
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
 
-
-
 	public String getNom() {
 		return nom;
 	}
-
-
 
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-
-
 	public Date getDateNaissance() {
 		return dateNaissance;
 	}
-
-
 
 	public void setDateNaissance(Date dateNaissance) {
 		this.dateNaissance = dateNaissance;
 	}
 
-
-
 	public String getSexe() {
 		return sexe;
 	}
-
-
 
 	public void setSexe(String sexe) {
 		this.sexe = sexe;
 	}
 
-
-
 	public String getStatutBrca() {
 		return statutBrca;
 	}
-
-
 
 	public void setStatutBrca(String statutBrca) {
 		this.statutBrca = statutBrca;
 	}
 
-
-
 	public Date getDateDeces() {
 		return dateDeces;
 	}
-
-
 
 	public void setDateDeces(Date dateDeces) {
 		this.dateDeces = dateDeces;
 	}
 
-
-
 	public String getCauseDeces() {
 		return causeDeces;
 	}
-
-
 
 	public void setCauseDeces(String causeDeces) {
 		this.causeDeces = causeDeces;
 	}
 
-
-
 	public Boolean getConsentement() {
 		return consentement;
 	}
 
-
-
 	public void setConsentement(Boolean consentement) {
 		this.consentement = consentement;
 	}
-
-	
-
 
 	@Override
 	public String toString() {
@@ -176,14 +128,12 @@ public class FormPatient extends BaseService implements IForm {
 				+ dateDeces + ", causeDeces=" + causeDeces + ", consentement=" + consentement + "]";
 	}
 
-
-
 	/** ====================================================================================== */
-	
+
 	public boolean isNew() {
-		return this.idPatient==null;
+		return this.idPatient == null;
 	}
-	
+
 	/** ====================================================================================== */
 
 }

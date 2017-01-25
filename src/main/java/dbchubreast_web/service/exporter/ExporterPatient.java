@@ -21,22 +21,20 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuPatientDao;
 import dbchubreast_web.entity.ChuPatient;
 
-
 @Service
 public class ExporterPatient extends AbstractExporter {
-
 
 	@Autowired
 	private ChuPatientDao patientDao;
 
 	@Override
 	public Table export() {
-	
+
 		List<ChuPatient> list = patientDao.list();
 
 		Table table = new Table(list.size());
 
-		for (int i=0; i<list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 
 			ChuPatient patient = list.get(i);
 
@@ -48,13 +46,15 @@ public class ExporterPatient extends AbstractExporter {
 			table.addToTable(i, "nom", patient.getNom());
 			table.addToTable(i, "prenom", patient.getPrenom());
 			table.addToTable(i, "sexe", patient.getSexe());
-			table.addToTable(i, "date_naissance", patient.getDateNaissance()==null ? null : dateFormat.format(patient.getDateNaissance()));	
-			table.addToTable(i, "date_deces", patient.getDateDeces()==null ? null : dateFormat.format(patient.getDateDeces()));	
-			table.addToTable(i, "cause_deces", patient.getCauseDeces());	
+			table.addToTable(i, "date_naissance",
+					patient.getDateNaissance() == null ? null : dateFormat.format(patient.getDateNaissance()));
+			table.addToTable(i, "date_deces",
+					patient.getDateDeces() == null ? null : dateFormat.format(patient.getDateDeces()));
+			table.addToTable(i, "cause_deces", patient.getCauseDeces());
 			table.addToTable(i, "statut_brca", patient.getStatutBrca());
 			table.addToTable(i, "consentement", patient.getConsentement());
 		}
-		
+
 		return table;
 
 	}

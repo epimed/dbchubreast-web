@@ -14,12 +14,12 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import dbchubreast_web.entity.ChuEvolution;
 
-public interface ChuEvolutionDao  {
+public interface ChuEvolutionDao {
 	public ChuEvolution find(Integer idEvolution);
+
 	public List<ChuEvolution> list();
 }

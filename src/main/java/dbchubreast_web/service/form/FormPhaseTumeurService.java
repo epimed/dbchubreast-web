@@ -21,7 +21,10 @@ import dbchubreast_web.form.FormTumeurInitiale;
 public interface FormPhaseTumeurService {
 
 	public void saveOrUpdateForm(FormTumeurInitiale form);
+
 	public void saveOrUpdateForm(FormPhaseRechute form);
+
 	public FormTumeurInitiale getFormTumeurInitiale(ChuTumeur tumeur);
+
 	public FormPhaseRechute getFormPhaseRechute(ChuPhaseTumeur phase);
 }

@@ -21,14 +21,13 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuMetastaseDao;
 import dbchubreast_web.entity.ChuMetastase;
 
-
 @Service
 public class ChuMetastaseServiceImpl implements ChuMetastaseService {
 
 	@Autowired
 	private ChuMetastaseDao metastaseDao;
-	
-	public List<ChuMetastase> list(){
+
+	public List<ChuMetastase> list() {
 		return metastaseDao.list();
 	}
 
@@ -36,7 +35,6 @@ public class ChuMetastaseServiceImpl implements ChuMetastaseService {
 		return metastaseDao.find(idMetastase);
 	}
 
-	
 	public List<ChuMetastase> list(List<Integer> listIdMetastases) {
 		return metastaseDao.list(listIdMetastases);
 	}
@@ -44,5 +42,5 @@ public class ChuMetastaseServiceImpl implements ChuMetastaseService {
 	public List<ChuMetastase> list(Integer idPhaseTumeur) {
 		return metastaseDao.list(idPhaseTumeur);
 	}
-	
+
 }

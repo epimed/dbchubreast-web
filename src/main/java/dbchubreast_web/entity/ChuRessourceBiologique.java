@@ -155,7 +155,5 @@ public class ChuRessourceBiologique implements java.io.Serializable {
 				+ ", clinatec=" + clinatec + ", adnCirculant=" + adnCirculant + ", tempsCongelation=" + tempsCongelation
 				+ ", controleHe=" + controleHe + "]";
 	}
-	
-	
 
 }

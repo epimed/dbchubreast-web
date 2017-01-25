@@ -14,10 +14,10 @@
 
 package dbchubreast_web.dao;
 
-
 import dbchubreast_web.entity.ChuTypePhase;
 
-public interface ChuTypePhaseDao  {
+public interface ChuTypePhaseDao {
 	public ChuTypePhase find(Integer idTypePhase);
+
 	public ChuTypePhase findByIdPhase(Integer idPhase);
 }

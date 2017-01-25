@@ -97,7 +97,5 @@ public class ChuPerformanceStatus implements java.io.Serializable {
 	public String toString() {
 		return "ChuPerformanceStatus [idPs=" + idPs + ", description=" + description + "]";
 	}
-	
-	
 
 }

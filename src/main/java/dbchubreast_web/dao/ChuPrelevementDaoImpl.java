@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -28,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuPrelevement;
 
-
-
 @Transactional
 @Repository
 
@@ -39,30 +36,24 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-
 	/** ================================================= */
 
 	public ChuPrelevement find(Integer idPrelevement) {
-		ChuPrelevement result = (ChuPrelevement) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevement.class)
-				.add(Restrictions.eq("idPrelevement", idPrelevement))
-				.uniqueResult();
+		ChuPrelevement result = (ChuPrelevement) sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
+				.add(Restrictions.eq("idPrelevement", idPrelevement)).uniqueResult();
 		this.populateDependencies(result);
 		return result;
 	}
-	
+
 	/** ================================================= */
 
-	
 	public List<ChuPrelevement> list() {
 
-		List<ChuPrelevement> list = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevement.class)
-				.addOrder(Order.asc("idPrelevement"))
-				.list();
+		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
+				.addOrder(Order.asc("idPrelevement")).list();
 
 		this.populateDependencies(list);
-		
+
 		return list;
 	}
 
@@ -70,13 +61,9 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	public List<ChuPrelevement> listByIdPhase(Integer idPhase) {
 
-		List<ChuPrelevement> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevement.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
-				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
-				.addOrder(Order.asc("datePrelevement"))
-				.addOrder(Order.asc("idPrelevement"))
-				.list();
+		List<ChuPrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
+				.addOrder(Order.asc("datePrelevement")).addOrder(Order.asc("idPrelevement")).list();
 
 		this.populateDependencies(result);
 
@@ -87,14 +74,10 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur) {
 
-		List<ChuPrelevement> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevement.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
-				.createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
-				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur))
-				.addOrder(Order.asc("datePrelevement"))
-				.addOrder(Order.asc("idPrelevement"))
-				.list();
+		List<ChuPrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
+				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur)).addOrder(Order.asc("datePrelevement"))
+				.addOrder(Order.asc("idPrelevement")).list();
 
 		this.populateDependencies(result);
 
@@ -103,17 +86,12 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	/** ================================================= */
 
-
 	public List<ChuPrelevement> listByIdPatient(String idPatient) {
-		List<ChuPrelevement> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevement.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur")
-				.createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
+		List<ChuPrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
+				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
 				.createAlias("chuTumeur.chuPatient", "chuPatient")
-				.add(Restrictions.eq("chuPatient.idPatient", idPatient))
-				.addOrder(Order.asc("datePrelevement"))
-				.addOrder(Order.asc("idPrelevement"))
-				.list();
+				.add(Restrictions.eq("chuPatient.idPatient", idPatient)).addOrder(Order.asc("datePrelevement"))
+				.addOrder(Order.asc("idPrelevement")).list();
 		this.populateDependencies(result);
 
 		return result;
@@ -141,7 +119,6 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	private void populateDependencies(List<ChuPrelevement> list) {
 
-
 		for (ChuPrelevement prel : list) {
 			this.populateDependencies(prel);
 		}
@@ -150,7 +127,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 	/** ================================================= */
 
 	private void populateDependencies(ChuPrelevement prel) {
-		if (prel!=null) {
+		if (prel != null) {
 			Hibernate.initialize(prel.getChuMorphologie());
 			Hibernate.initialize(prel.getChuTypePrelevement());
 			Hibernate.initialize(prel.getChuPhaseTumeur());

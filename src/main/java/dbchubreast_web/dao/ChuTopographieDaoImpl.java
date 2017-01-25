@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuTopographie;
 
-
 @Transactional
 @Repository
 
@@ -37,41 +35,35 @@ public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuTopographie find(String idTopographie) {
-		ChuTopographie result = (ChuTopographie) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
-				.add(Restrictions.eq("idTopographie", idTopographie))
-				.uniqueResult();
+		ChuTopographie result = (ChuTopographie) sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
+				.add(Restrictions.eq("idTopographie", idTopographie)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
-	public List<ChuTopographie> list(String idGroupeTopo){
+	public List<ChuTopographie> list(String idGroupeTopo) {
 
-		List<ChuTopographie> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
+		List<ChuTopographie> result = sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
 				.createAlias("chuGroupeTopographie", "chuGroupeTopographie")
 				.add(Restrictions.eq("chuGroupeTopographie.idGroupeTopo", idGroupeTopo))
-				.addOrder(Order.asc("idTopographie"))
-				.list();
+				.addOrder(Order.asc("idTopographie")).list();
 
 		return result;
 	}
 
-	/** =================================================*/
-	
+	/** ================================================= */
+
 	public List<ChuTopographie> list() {
 
-		Criteria crit = sessionFactory.getCurrentSession()
-				.createCriteria(ChuTopographie.class)
-				.addOrder(Order.asc("idTopographie"))
-				;
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
+				.addOrder(Order.asc("idTopographie"));
 
 		return crit.list();
 	}
-	
-	/** =================================================*/
+
+	/** ================================================= */
 }

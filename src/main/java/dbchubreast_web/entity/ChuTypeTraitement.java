@@ -97,7 +97,5 @@ public class ChuTypeTraitement implements java.io.Serializable {
 	public String toString() {
 		return "ChuTypeTraitement [idTypeTraitement=" + idTypeTraitement + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuEvolution;
 
-
 @Transactional
 @Repository
 
@@ -36,28 +34,23 @@ public class ChuEvolutionDaoImpl extends BaseDao implements ChuEvolutionDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/** ================================================= */
 
-	/** =================================================*/
+	public List<ChuEvolution> list() {
 
-	public List<ChuEvolution> list(){
-
-		List<ChuEvolution> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuEvolution.class)
-				.addOrder(Order.asc("idEvolution"))
-				.list();
+		List<ChuEvolution> result = sessionFactory.getCurrentSession().createCriteria(ChuEvolution.class)
+				.addOrder(Order.asc("idEvolution")).list();
 
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuEvolution find(Integer idEvolution) {
-		ChuEvolution result = (ChuEvolution) sessionFactory.getCurrentSession()
-				.createCriteria(ChuEvolution.class)
-				.add(Restrictions.eq("idEvolution", idEvolution))
-				.uniqueResult();
+		ChuEvolution result = (ChuEvolution) sessionFactory.getCurrentSession().createCriteria(ChuEvolution.class)
+				.add(Restrictions.eq("idEvolution", idEvolution)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 }

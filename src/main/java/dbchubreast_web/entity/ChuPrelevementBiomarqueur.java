@@ -127,7 +127,5 @@ public class ChuPrelevementBiomarqueur implements java.io.Serializable {
 	public String toString() {
 		return "ChuPrelevementBiomarqueur [id=" + id + ", valeur=" + valeur + ", statut=" + statut + "]";
 	}
-	
-	
 
 }

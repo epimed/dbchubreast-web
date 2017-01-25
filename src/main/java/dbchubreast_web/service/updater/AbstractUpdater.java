@@ -23,5 +23,6 @@ public abstract class AbstractUpdater {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	protected static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
 	public abstract void update(List<?> list);
 }

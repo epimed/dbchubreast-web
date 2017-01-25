@@ -22,5 +22,6 @@ public abstract class AbstractExporter {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	protected static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
 	public abstract Table export();
 }

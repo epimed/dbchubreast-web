@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuTnmDao;
 import dbchubreast_web.entity.ChuTnm;
 
-
 @Service
 public class ChuTnmServiceImpl implements ChuTnmService {
 
@@ -29,5 +28,5 @@ public class ChuTnmServiceImpl implements ChuTnmService {
 	public ChuTnm find(Integer idPhase, String type) {
 		return tnmDao.find(idPhase, type);
 	}
-	
+
 }

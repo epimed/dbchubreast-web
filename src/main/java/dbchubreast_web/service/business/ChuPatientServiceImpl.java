@@ -23,9 +23,6 @@ import dbchubreast_web.dao.ChuPatientDao;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.service.util.FormatService;
 
-
-
-
 @Service
 public class ChuPatientServiceImpl implements ChuPatientService {
 
@@ -58,7 +55,7 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	public ChuPatient find(Integer idTumeur) {
 		return patientDao.find(idTumeur);
 	}
-	
+
 	public ChuPatient findByIdPrelevement(Integer idPrelevement) {
 		return patientDao.findByIdPrelevement(idPrelevement);
 	}
@@ -67,23 +64,22 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 		return patientDao.findInAttributes(text);
 	}
 
-
 	public void saveOrUpdate(ChuPatient patient) {
 
 		// === Format nom prenom ===
 
 		String nom = patient.getNom();
-		if (nom!=null) {
+		if (nom != null) {
 			patient.setNom(nom.toUpperCase());
 		}
 
 		String prenom = patient.getPrenom();
-		if (prenom!=null) {
+		if (prenom != null) {
 			patient.setPrenom(formatService.formatFisrtName(prenom));
 		}
 
 		// New patient
-		if (patient.getIdPatient()==null) {
+		if (patient.getIdPatient() == null) {
 			patientDao.save(patient);
 		}
 
@@ -94,6 +90,4 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 
 	}
 
-	
-	
 }

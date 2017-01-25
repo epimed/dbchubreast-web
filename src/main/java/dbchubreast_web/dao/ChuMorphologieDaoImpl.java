@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -35,24 +34,20 @@ public class ChuMorphologieDaoImpl extends BaseDao implements ChuMorphologieDao 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	/** =================================================*/
+	/** ================================================= */
 
 	public ChuMorphologie find(String idMorphologie) {
-		ChuMorphologie result = (ChuMorphologie) sessionFactory.getCurrentSession()
-				.createCriteria(ChuMorphologie.class)
-				.add(Restrictions.eq("idMorphologie", idMorphologie))
-				.uniqueResult();
+		ChuMorphologie result = (ChuMorphologie) sessionFactory.getCurrentSession().createCriteria(ChuMorphologie.class)
+				.add(Restrictions.eq("idMorphologie", idMorphologie)).uniqueResult();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 	public List<ChuMorphologie> list() {
-		List<ChuMorphologie> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuMorphologie.class)
-				.addOrder(Order.asc("idMorphologie"))
-				.list();
+		List<ChuMorphologie> result = sessionFactory.getCurrentSession().createCriteria(ChuMorphologie.class)
+				.addOrder(Order.asc("idMorphologie")).list();
 		return result;
 	}
 
-	/** =================================================*/
+	/** ================================================= */
 }

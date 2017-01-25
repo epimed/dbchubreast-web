@@ -16,9 +16,12 @@ package dbchubreast_web.dao;
 
 import dbchubreast_web.entity.ChuTnm;
 
-public interface ChuTnmDao  {
+public interface ChuTnmDao {
 	public ChuTnm find(Integer idPhase, String type);
-	public void save (ChuTnm tnm);
-	public void update (ChuTnm tnm);
-	public void saveOrUpdate (ChuTnm tnm);
+
+	public void save(ChuTnm tnm);
+
+	public void update(ChuTnm tnm);
+
+	public void saveOrUpdate(ChuTnm tnm);
 }

@@ -33,8 +33,6 @@ public class ChuEvolution implements java.io.Serializable {
 		this.idEvolution = idEvolution;
 		this.nom = nom;
 	}
-	
-	
 
 	/**
 	 * @param idEvolution
@@ -122,7 +120,5 @@ public class ChuEvolution implements java.io.Serializable {
 	public String toString() {
 		return "ChuEvolution [idEvolution=" + idEvolution + ", code=" + code + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

@@ -18,7 +18,8 @@ import java.util.List;
 
 import dbchubreast_web.entity.ChuPerformanceStatus;
 
-public interface ChuPerformanceStatusDao  {
+public interface ChuPerformanceStatusDao {
 	public ChuPerformanceStatus find(Integer idPs);
+
 	public List<ChuPerformanceStatus> list();
 }

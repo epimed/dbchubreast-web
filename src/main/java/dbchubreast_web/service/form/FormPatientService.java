@@ -19,5 +19,6 @@ import dbchubreast_web.form.FormPatient;
 public interface FormPatientService {
 
 	public void saveOrUpdateForm(FormPatient form);
+
 	public FormPatient getForm(ChuPatient patient);
 }

@@ -46,72 +46,79 @@ public class FileService {
 	private static String columnSeparator = ";";
 	private static String lineSeparator = "\n";
 
-
 	/** ====================================================================================== */
 
 	/**
 	 * Generate a file name depending on parameters
 	 * 
-	 * @param prefix - prefix of the filename
-	 * @param list - list of elements in the file which could appear in the filename
-	 * @param maxListNb - max number of elements in the list that can be displayed in the filename
-	 * @param suffix - suffux that appear if the list is longer than maxListNb
-	 * @param fileExtension - file extension
+	 * @param prefix
+	 *            - prefix of the filename
+	 * @param list
+	 *            - list of elements in the file which could appear in the
+	 *            filename
+	 * @param maxListNb
+	 *            - max number of elements in the list that can be displayed in
+	 *            the filename
+	 * @param suffix
+	 *            - suffux that appear if the list is longer than maxListNb
+	 * @param fileExtension
+	 *            - file extension
 	 * @return complete filename
 	 * 
-	 * Examples:
+	 *         Examples:
 	 * 
-	 *  fileService.generateFileName("experimental_grouping", listIdSeries, 3, "SEVERAL_STUDIES", "xlsx");
-	 *  
-	 *  listIdSeries = [GSE11092, GSE13309, GSE15431]
-	 *  Generated file name = experimental_grouping_2016.07.28_GSE11092_GSE13309_GSE15431.xlsx
-	 *  
-	 *  listIdSeries = [GSE11092, GSE12662, GSE13309, GSE15431]
-	 *  Generated file name = experimental_grouping_2016.07.28_SEVERAL_STUDIES.xlsx
-	 *  
+	 *         fileService.generateFileName("experimental_grouping",
+	 *         listIdSeries, 3, "SEVERAL_STUDIES", "xlsx");
+	 * 
+	 *         listIdSeries = [GSE11092, GSE13309, GSE15431] Generated file name
+	 *         =
+	 *         experimental_grouping_2016.07.28_GSE11092_GSE13309_GSE15431.xlsx
+	 * 
+	 *         listIdSeries = [GSE11092, GSE12662, GSE13309, GSE15431] Generated
+	 *         file name = experimental_grouping_2016.07.28_SEVERAL_STUDIES.xlsx
+	 * 
 	 */
-	
 
-	public String generateFileName(String prefix, String[] list, Integer maxListNb, String suffix, String fileExtension) {
+	public String generateFileName(String prefix, String[] list, Integer maxListNb, String suffix,
+			String fileExtension) {
 
-		String text="";
+		String text = "";
 
-		if (suffix!=null && ((list==null ) || 
-				(list!=null && list.length>maxListNb))){
+		if (suffix != null && ((list == null) || (list != null && list.length > maxListNb))) {
 			text = text + "_" + suffix;
 		}
 
-		if (list!=null && list.length<=maxListNb) {
+		if (list != null && list.length <= maxListNb) {
 			text = text + "_";
-			for (int i=0; i<list.length; i++) {
+			for (int i = 0; i < list.length; i++) {
 				text = text + list[i];
-				if (i<list.length-1) {
+				if (i < list.length - 1) {
 					text = text + "_";
 				}
 			}
 		}
 
-		String fileName =  prefix + "_" + dateFormat.format(new Date()) + text + "." + fileExtension;
+		String fileName = prefix + "_" + dateFormat.format(new Date()) + text + "." + fileExtension;
 		return fileName;
 	}
 
 	/** ================================================================================= */
-	
+
 	public String generateFileName(String prefix, String fileExtension) {
 
-		String fileName =  prefix + "_" + dateFormat.format(new Date()) + "." + fileExtension;
+		String fileName = prefix + "_" + dateFormat.format(new Date()) + "." + fileExtension;
 		return fileName;
 	}
-	
-	
+
 	/** ================================================================================= */
 
 	public File convertToFile(MultipartFile multipartFile) throws Exception {
 
 		String originalFileName = multipartFile.getOriginalFilename();
-		
-		// String processedFileName = dateFormat.format(new Date()) + "_" + flattenToAscii(originalFileName).toLowerCase().replaceAll("[\\p{Space}]","_");
-		
+
+		// String processedFileName = dateFormat.format(new Date()) + "_" +
+		// flattenToAscii(originalFileName).toLowerCase().replaceAll("[\\p{Space}]","_");
+
 		File file = new File(originalFileName);
 
 		if (file.exists()) {
@@ -120,29 +127,28 @@ public class FileService {
 		multipartFile.transferTo(file);
 
 		/*
-		String path = request.getServletContext().getRealPath("/");
-		logger.debug("Context path {}" , path);
-		logger.debug("File saved to {}", file.getAbsolutePath());
+		 * String path = request.getServletContext().getRealPath("/");
+		 * logger.debug("Context path {}" , path);
+		 * logger.debug("File saved to {}", file.getAbsolutePath());
 		 */
 
 		return file;
 	}
 
-
 	/** ================================================================================= */
 
-	public List<String> getCsvHeader (File file) throws IOException  {
+	public List<String> getCsvHeader(File file) throws IOException {
 
 		List<String> header = new ArrayList<String>();
 		CSVReader reader = new CSVReader(new FileReader(file), columnSeparator.toCharArray()[0]);
-		header.addAll(Arrays.asList(reader.readNext()));		
+		header.addAll(Arrays.asList(reader.readNext()));
 		reader.close();
 		return header;
 	}
 
 	/** ================================================================================= */
 
-	public List<Object> getCsvData (File file) throws IOException  {
+	public List<Object> getCsvData(File file) throws IOException {
 
 		List<Object> data = new ArrayList<Object>();
 
@@ -152,7 +158,7 @@ public class FileService {
 		reader.readNext();
 
 		// === Load data ===
-		String [] nextLine;
+		String[] nextLine;
 		while ((nextLine = reader.readNext()) != null) {
 			data.add(nextLine);
 		}
@@ -161,18 +167,18 @@ public class FileService {
 	}
 
 	/** ================================================================================= */
-	
-	public String [] extractColumnCsv (Integer columnIndex, List<Object> data) {
 
-		List<String> column = new ArrayList<String> ();
-		for (int i=0; i<data.size(); i++) {
-			String [] line = (String[]) data.get(i);
-			if (line.length>columnIndex && line[columnIndex]!=null) {
+	public String[] extractColumnCsv(Integer columnIndex, List<Object> data) {
+
+		List<String> column = new ArrayList<String>();
+		for (int i = 0; i < data.size(); i++) {
+			String[] line = (String[]) data.get(i);
+			if (line.length > columnIndex && line[columnIndex] != null) {
 				column.add(line[columnIndex].trim());
 			}
 		}
-		String [] array = new String [column.size()];
-		
+		String[] array = new String[column.size()];
+
 		return column.toArray(array);
 	}
 
@@ -180,16 +186,16 @@ public class FileService {
 
 	public void writeCsvFile(HttpServletResponse response, List<String> header, List<Object> listData) {
 
-
 		try {
 
 			PrintWriter writer = response.getWriter();
 
 			// === Header ===
-			if (header!=null) {
-				for (int i=0; i<header.size(); i++) {
-					writer.append(header.get(i)!=null ? header.get(i).replaceAll("[\\p{Punct}\\p{Space}*]", "_").toLowerCase() : "");
-					if (i<(header.size()-1)) {
+			if (header != null) {
+				for (int i = 0; i < header.size(); i++) {
+					writer.append(header.get(i) != null
+							? header.get(i).replaceAll("[\\p{Punct}\\p{Space}*]", "_").toLowerCase() : "");
+					if (i < (header.size() - 1)) {
 						writer.append(columnSeparator);
 					}
 				}
@@ -198,12 +204,12 @@ public class FileService {
 			}
 
 			// === Data ===
-			if (listData!=null) {
-				for ( Iterator<Object> iterator = listData.iterator(); iterator.hasNext(); ) {
+			if (listData != null) {
+				for (Iterator<Object> iterator = listData.iterator(); iterator.hasNext();) {
 					Object data[] = (Object[]) iterator.next();
-					for (int j=0; j<data.length; j++) {
-						writer.append(data[j]!=null ? data[j].toString().replaceAll(columnSeparator, "_") : "");
-						if (j<(data.length-1)) {
+					for (int j = 0; j < data.length; j++) {
+						writer.append(data[j] != null ? data[j].toString().replaceAll(columnSeparator, "_") : "");
+						if (j < (data.length - 1)) {
 							writer.append(columnSeparator);
 						}
 					}
@@ -214,42 +220,38 @@ public class FileService {
 
 			// ===== Close file =====
 			writer.close();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-
 
 	/** ====================================================================================== */
 
 	public void writeExcelFile(OutputStream outputStream, List<String> header, List<Object> listData) {
 
 		// === Blank workbook ===
-		XSSFWorkbook workbook = new XSSFWorkbook(); 
+		XSSFWorkbook workbook = new XSSFWorkbook();
 
 		// === Create a blank sheet ===
-		XSSFSheet sheet = workbook.createSheet("EpiMed data "  + dateFormat.format(new Date()));
+		XSSFSheet sheet = workbook.createSheet("EpiMed data " + dateFormat.format(new Date()));
 
 		// === Nb of rows and cells ===
 		int rownum = 0;
 
-
 		// === Header ===
-		if (header!=null && !header.isEmpty()) {
+		if (header != null && !header.isEmpty()) {
 			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
-			for (int i=0; i<header.size(); i++) {
+			for (int i = 0; i < header.size(); i++) {
 				Cell cell = row.createCell(cellnum++);
 				cell.setCellValue(header.get(i));
 			}
 		}
 
 		// === Data ===
-		if (listData!=null) {
-			for ( Iterator<Object> iterator = listData.iterator(); iterator.hasNext(); ) {
+		if (listData != null) {
+			for (Iterator<Object> iterator = listData.iterator(); iterator.hasNext();) {
 				Object data[] = (Object[]) iterator.next();
 
 				logger.trace(rownum + " " + Arrays.toString(data));
@@ -257,12 +259,12 @@ public class FileService {
 				Row row = sheet.createRow(rownum++);
 
 				int cellnum = 0;
-				for (int j=0; j<data.length; j++) {
+				for (int j = 0; j < data.length; j++) {
 
 					Cell cell = row.createCell(cellnum++);
 					cell.setCellType(Cell.CELL_TYPE_STRING);
 
-					boolean isNull = (data[j]==null);
+					boolean isNull = (data[j] == null);
 					if (!isNull) {
 						cell.setCellValue(data[j].toString());
 					}
@@ -279,13 +281,12 @@ public class FileService {
 		} catch (IOException e) {
 			logger.debug("XLS error");
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	/** ================================================================================= */
 
 	public void addSheet(XSSFWorkbook workbook, String sheetName, List<String> header, List<Object> listData) {
-
 
 		// === Create a blank sheet ===
 		XSSFSheet sheet = workbook.createSheet(sheetName);
@@ -293,31 +294,30 @@ public class FileService {
 		// === Nb of rows and cells ===
 		int rownum = 0;
 
-
 		// === Header ===
-		if (header!=null) {
+		if (header != null) {
 			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
-			for (int i=0; i<header.size(); i++) {
+			for (int i = 0; i < header.size(); i++) {
 				Cell cell = row.createCell(cellnum++);
 				cell.setCellValue(header.get(i));
 			}
 		}
 
 		// === Data ===
-		if (listData!=null) {
-			for ( Iterator<Object> iterator = listData.iterator(); iterator.hasNext(); ) {
+		if (listData != null) {
+			for (Iterator<Object> iterator = listData.iterator(); iterator.hasNext();) {
 				Object data[] = (Object[]) iterator.next();
 
 				Row row = sheet.createRow(rownum++);
 
 				int cellnum = 0;
-				for (int j=0; j<data.length; j++) {
+				for (int j = 0; j < data.length; j++) {
 
 					Cell cell = row.createCell(cellnum++);
 					cell.setCellType(Cell.CELL_TYPE_STRING);
 
-					boolean isNull = (data[j]==null);
+					boolean isNull = (data[j] == null);
 					if (!isNull) {
 						cell.setCellValue(data[j].toString());
 					}
@@ -329,10 +329,9 @@ public class FileService {
 
 	/** ================================================================================= */
 
-	public XSSFWorkbook createWorkbook(){
-		return new XSSFWorkbook(); 
+	public XSSFWorkbook createWorkbook() {
+		return new XSSFWorkbook();
 	}
-
 
 	/** ================================================================================= */
 
@@ -344,11 +343,10 @@ public class FileService {
 			outputStream.flush();
 			outputStream.close();
 
-		} 
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.debug("XLS error");
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	/** ================================================================================= */

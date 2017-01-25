@@ -14,21 +14,13 @@
 package dbchubreast_web.service.interpreter;
 
 public enum StatutBiomarqueur {
-	TRUE,
-	FALSE,
-	POSITIVE,
-	NEGATIVE,
-	HIGH,
-	LOW,
-	BORDERLINE,
-	NULL;
-	
+	TRUE, FALSE, POSITIVE, NEGATIVE, HIGH, LOW, BORDERLINE, NULL;
+
 	public String stringValue() {
-		
-		if (this==NULL) {
+
+		if (this == NULL) {
 			return null;
-		}
-		else {
+		} else {
 			return this.toString().toLowerCase();
 		}
 	}

@@ -21,13 +21,12 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.service.util.FormatService;
 
 @Service
-public class InterpreterMib1 extends AbstractInterpreter{
+public class InterpreterMib1 extends AbstractInterpreter {
 
-	@Autowired 
+	@Autowired
 	private FormatService formatService;
-	
-	public StatutBiomarqueur getStatut(String value) {
 
+	public StatutBiomarqueur getStatut(String value) {
 
 		if (value == null) {
 			return StatutBiomarqueur.NULL;
@@ -41,17 +40,16 @@ public class InterpreterMib1 extends AbstractInterpreter{
 			Integer valueInteger = this.formatService.recognizeInteger(valueString);
 
 			// === Integer value ===
-			if (valueString!=null && valueInteger!=null) {
-				if (valueInteger<35) {
+			if (valueString != null && valueInteger != null) {
+				if (valueInteger < 35) {
 					setStatutBiomarqueur.add(StatutBiomarqueur.LOW);
-				}
-				else {
+				} else {
 					setStatutBiomarqueur.add(StatutBiomarqueur.HIGH);
 				}
 			}
 
 			// === String value ===
-			if (valueString!=null && valueInteger==null) {
+			if (valueString != null && valueInteger == null) {
 
 				if (valueString.equals("<")) {
 					setStatutBiomarqueur.add(StatutBiomarqueur.LOW);
@@ -78,7 +76,7 @@ public class InterpreterMib1 extends AbstractInterpreter{
 
 		System.out.println(setStatutBiomarqueur);
 
-		if (setStatutBiomarqueur.size()==1) {
+		if (setStatutBiomarqueur.size() == 1) {
 			return setStatutBiomarqueur.iterator().next();
 		}
 

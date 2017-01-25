@@ -19,7 +19,7 @@ public class FormPrelevement extends BaseService implements IForm {
 	private String idMorphologie;
 	private String typeHistologique;
 	private Boolean associationCis;
-	
+
 	private List<FormBiomarqueur> listFormBiomarqueurs;
 
 	/** ========================================================= */
@@ -27,19 +27,18 @@ public class FormPrelevement extends BaseService implements IForm {
 	public FormPrelevement() {
 		super();
 	}
-	
+
 	public FormPrelevement(String idPatient) {
 		this.idPatient = idPatient;
 	}
 
 	/** ========================================================= */
 
-
 	public void init(List<ChuBiomarqueur> listBiomarqueurs) {
-		
-		listFormBiomarqueurs = new ArrayList<FormBiomarqueur> ();
-		
-		for (ChuBiomarqueur biomarqueur :  listBiomarqueurs) {	
+
+		listFormBiomarqueurs = new ArrayList<FormBiomarqueur>();
+
+		for (ChuBiomarqueur biomarqueur : listBiomarqueurs) {
 			FormBiomarqueur formBio = new FormBiomarqueur();
 			formBio.setIdBiomarqueur(biomarqueur.getIdBiomarqueur());
 			formBio.setNom(biomarqueur.getNom());
@@ -47,12 +46,9 @@ public class FormPrelevement extends BaseService implements IForm {
 		}
 	}
 
-
 	public Boolean getAssociationCis() {
 		return associationCis;
 	}
-
-	
 
 	public List<FormBiomarqueur> getListFormBiomarqueurs() {
 		return listFormBiomarqueurs;
@@ -140,11 +136,10 @@ public class FormPrelevement extends BaseService implements IForm {
 
 	/** ====================================================================================== */
 
-
 	public boolean isNew() {
-		return this.idPrelevement==null;
+		return this.idPrelevement == null;
 	}
-	
+
 	/** ====================================================================================== */
 
 	@Override
@@ -155,9 +150,5 @@ public class FormPrelevement extends BaseService implements IForm {
 				+ ", datePrelevement=" + datePrelevement + ", sitePrelevement=" + sitePrelevement
 				+ ", listFormBiomarqueurs=" + listFormBiomarqueurs + "]";
 	}
-
-
-
-	
 
 }

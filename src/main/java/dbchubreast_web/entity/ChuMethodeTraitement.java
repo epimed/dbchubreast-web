@@ -109,7 +109,5 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 	public String toString() {
 		return "ChuMethodeTraitement [idMethode=" + idMethode + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

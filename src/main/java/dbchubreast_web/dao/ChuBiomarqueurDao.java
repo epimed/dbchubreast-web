@@ -14,13 +14,14 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import dbchubreast_web.entity.ChuBiomarqueur;
 
 public interface ChuBiomarqueurDao {
 	public ChuBiomarqueur find(String idBiomarqueur);
+
 	public List<ChuBiomarqueur> list();
-	public List<ChuBiomarqueur> list(Object [] noms);
+
+	public List<ChuBiomarqueur> list(Object[] noms);
 }

@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import dbchubreast_web.entity.ChuPrelevement;
@@ -22,13 +21,19 @@ import dbchubreast_web.entity.ChuPrelevement;
 public interface ChuPrelevementDao {
 
 	public ChuPrelevement find(Integer idPrelevement);
+
 	public List<ChuPrelevement> list();
+
 	public List<ChuPrelevement> listByIdPhase(Integer idPhase);
+
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur);
+
 	public List<ChuPrelevement> listByIdPatient(String idPatient);
-	
+
 	public void save(ChuPrelevement prelevement);
+
 	public void update(ChuPrelevement prelevement);
+
 	public void saveOrUpdate(ChuPrelevement prelevement);
-	
+
 }

@@ -13,7 +13,6 @@
  */
 package dbchubreast_web.controller;
 
-
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +26,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import dbchubreast_web.service.business.AppLogService;
 import dbchubreast_web.service.exporter.ExporterBiomarqueur;
 import dbchubreast_web.service.exporter.ExporterPatient;
 import dbchubreast_web.service.exporter.ExporterPrelevement;
 import dbchubreast_web.service.exporter.Table;
 import dbchubreast_web.service.util.FileService;
-
 
 @Controller
 public class DownloadController extends BaseController {
@@ -42,48 +41,53 @@ public class DownloadController extends BaseController {
 
 	@Autowired
 	private ExporterPatient exporterPatient;
-	
+
 	@Autowired
 	private ExporterBiomarqueur exporterBiomarqueur;
-	
+
 	@Autowired
 	private ExporterPrelevement exporterPrelevement;
-
-
+	
+	@Autowired
+	private AppLogService logService;
+	
+	
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/download/{key}", method = RequestMethod.GET)
-	public void downloadAllPatients(Model model,
-			@PathVariable String key,
-			HttpServletRequest request, 
-			HttpServletResponse response
-			) throws IOException {
+	public void downloadAllPatients(Model model, @PathVariable String key, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		logger.debug("key {}", key);
 		
+		logService.saveLog(request, key);
+
 		Table table = null;
-		
-		if (key!=null && key.equals("biomarqueurs")) {
+
+		if (key != null && key.equals("biomarqueurs")) {
 			table = exporterBiomarqueur.export();
 		}
-		if (key!=null && key.equals("prelevements")) {
+		if (key != null && key.equals("prelevements")) {
 			table = exporterPrelevement.export();
-		}
-		else {
+		} else {
 			table = exporterPatient.export();
 		}
-		
+
 		String fileName = fileService.generateFileName("DB_CHU_BREAST_" + key, "xlsx");
-		
+
 		this.generateResponse(response, table, fileName, key);
 	}
 
-	/** ====================================================================================== 
-	 * @throws IOException */
+	/**
+	 * ======================================================================================
+	 * 
+	 * @throws IOException
+	 */
 
-	private void generateResponse(HttpServletResponse response, Table table, String fileName, String sheetName) throws IOException {
+	private void generateResponse(HttpServletResponse response, Table table, String fileName, String sheetName)
+			throws IOException {
 
 		// ====== Create workbook =====
 		XSSFWorkbook workbook = fileService.createWorkbook();

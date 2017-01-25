@@ -51,8 +51,8 @@ public class ChuTnm implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy = "increment")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "id_tnm", unique = true, nullable = false)
 	public Integer getIdTnm() {
 		return this.idTnm;
@@ -147,7 +147,5 @@ public class ChuTnm implements java.io.Serializable {
 		return "ChuTnm [idTnm=" + idTnm + ", t=" + t + ", n=" + n + ", m=" + m + ", type=" + type + ", taille=" + taille
 				+ "]";
 	}
-	
-	
 
 }

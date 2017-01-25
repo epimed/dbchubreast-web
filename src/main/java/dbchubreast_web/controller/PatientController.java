@@ -13,7 +13,6 @@
  */
 package dbchubreast_web.controller;
 
-
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,19 +31,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.form.FormPatient;
+import dbchubreast_web.service.business.AppLogService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.form.FormPatientService;
-
 
 @Controller
 public class PatientController extends BaseController {
 
 	@Autowired
 	private ChuPatientService patientService;
-	
+
 	@Autowired
 	private FormPatientService formPatientService;
 
+	@Autowired
+	private AppLogService logService;
+	
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/patients", method = RequestMethod.GET)
@@ -52,28 +54,29 @@ public class PatientController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		List<ChuPatient> listPatients = patientService.list();;
+		logService.saveLog(request, null);
+		
+		List<ChuPatient> listPatients = patientService.list();
 
 		logger.debug("listPatients {}", listPatients.size());
 		model.addAttribute("listPatients", listPatients);
-
 
 		return "patient/list";
 	}
 
 	/** ====================================================================================== */
 
-	@RequestMapping(value = "/patient", method = {RequestMethod.GET, RequestMethod.POST})
-	public String searchPatient(Model model,
-			@RequestParam(value = "text", required = false) String text,
-			HttpServletRequest request
-			) {
+	@RequestMapping(value = "/patient", method = { RequestMethod.GET, RequestMethod.POST })
+	public String searchPatient(Model model, @RequestParam(value = "text", required = false) String text,
+			HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
+		logService.saveLog(request, null);
+		
 		logger.debug("Text {}", text);
 
-		if (text!=null) {
+		if (text != null) {
 
 			List<ChuPatient> listPatients = patientService.findInAttributes(text);
 			model.addAttribute("listPatients", listPatients);
@@ -85,22 +88,21 @@ public class PatientController extends BaseController {
 
 	/** ====================================================================================== */
 
-	@RequestMapping(value ="/patient/{idPatient}", method = RequestMethod.GET)
-	public String showPatientGet(Model model,
-			@PathVariable String idPatient,
-			HttpServletRequest request
-			) {
+	@RequestMapping(value = "/patient/{idPatient}", method = RequestMethod.GET)
+	public String showPatientGet(Model model, @PathVariable String idPatient, HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		if (idPatient==null) {
+		logService.saveLog(request, null);
+		
+		if (idPatient == null) {
 			return "redirect:/patient";
 		}
 
 		ChuPatient patient = patientService.find(idPatient);
 		logger.debug("Patient {}", patient);
 
-		if (patient==null) {
+		if (patient == null) {
 			return "redirect:/patient";
 		}
 
@@ -112,11 +114,12 @@ public class PatientController extends BaseController {
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/patient/add", method = RequestMethod.GET)
-	public String showAddPatientForm(Model model, 
-			HttpServletRequest request) {
+	public String showAddPatientForm(Model model, HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
+		logService.saveLog(request, null);
+		
 		model.addAttribute("formPatient", new FormPatient());
 
 		return "patient/form";
@@ -125,16 +128,16 @@ public class PatientController extends BaseController {
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/patient/{idPatient}/update", method = RequestMethod.GET)
-	public String showUpdatePatientForm(Model model, 
-			@PathVariable String idPatient,
-			HttpServletRequest request) {
+	public String showUpdatePatientForm(Model model, @PathVariable String idPatient, HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		logger.debug("idPatient {}", idPatient);
 
+		logService.saveLog(request, null);
+		
 		ChuPatient patient = patientService.find(idPatient);
 
-		if (patient==null) {
+		if (patient == null) {
 			return "redirect:/patient";
 		}
 
@@ -145,25 +148,23 @@ public class PatientController extends BaseController {
 
 	/** ====================================================================================== */
 
-	@RequestMapping(value = {"/patient/update", "/patient/{idPatient}/update"}, method = RequestMethod.POST)
-	public String saveOrUpdatePatient(Model model, 
-			@ModelAttribute("formPatient") @Valid FormPatient formPatient, 
-			BindingResult result,
-			final RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+	@RequestMapping(value = { "/patient/update", "/patient/{idPatient}/update" }, method = RequestMethod.POST)
+	public String saveOrUpdatePatient(Model model, @ModelAttribute("formPatient") @Valid FormPatient formPatient,
+			BindingResult result, final RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		logger.debug("Form Patient {}", formPatient);
 
+		logService.saveLog(request, null);
+		
 		if (result.hasErrors()) {
 			return "patient/form";
 		}
 
 		redirectAttributes.addFlashAttribute("css", "success");
-		if(formPatient.isNew()) {
+		if (formPatient.isNew()) {
 			redirectAttributes.addFlashAttribute("msg", "Le nouveau patient a été ajouté avec succès !");
-		}
-		else {
+		} else {
 			redirectAttributes.addFlashAttribute("msg", "La modification a été effectuée avec succès !");
 		}
 

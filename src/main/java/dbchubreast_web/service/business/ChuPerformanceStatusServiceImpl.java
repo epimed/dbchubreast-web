@@ -21,23 +21,18 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuPerformanceStatusDao;
 import dbchubreast_web.entity.ChuPerformanceStatus;
 
-
 @Service
 public class ChuPerformanceStatusServiceImpl implements ChuPerformanceStatusService {
 
 	@Autowired
 	private ChuPerformanceStatusDao performanceStatusDao;
 
-
 	public ChuPerformanceStatus find(Integer idPs) {
 		return performanceStatusDao.find(idPs);
 	}
-
 
 	public List<ChuPerformanceStatus> list() {
 		return performanceStatusDao.list();
 	}
 
-	
-	
 }

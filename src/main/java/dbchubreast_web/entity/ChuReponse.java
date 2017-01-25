@@ -97,7 +97,5 @@ public class ChuReponse implements java.io.Serializable {
 	public String toString() {
 		return "ChuReponse [idReponse=" + idReponse + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuMorphologieDao;
 import dbchubreast_web.entity.ChuMorphologie;
 
-
 @Service
 public class ChuMorphologieServiceImpl implements ChuMorphologieService {
 
@@ -36,5 +35,5 @@ public class ChuMorphologieServiceImpl implements ChuMorphologieService {
 	public List<ChuMorphologie> list() {
 		return morphologieDao.list();
 	}
-	
+
 }

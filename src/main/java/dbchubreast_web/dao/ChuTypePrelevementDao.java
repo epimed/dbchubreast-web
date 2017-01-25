@@ -14,14 +14,16 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import dbchubreast_web.entity.ChuTypePrelevement;
 
-public interface ChuTypePrelevementDao  {
+public interface ChuTypePrelevementDao {
 	public ChuTypePrelevement find(Integer idTypePrelevement);
+
 	public List<ChuTypePrelevement> list(Integer[] listIdTypePrelevement);
+
 	public List<ChuTypePrelevement> listPhaseInitiale();
+
 	public List<ChuTypePrelevement> listPhaseRechute();
 }

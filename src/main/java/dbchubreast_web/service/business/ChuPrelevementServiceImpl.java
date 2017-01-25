@@ -22,35 +22,35 @@ import dbchubreast_web.dao.ChuPrelevementDao;
 import dbchubreast_web.entity.ChuPrelevement;
 
 @Service
-public class ChuPrelevementServiceImpl  implements ChuPrelevementService {
+public class ChuPrelevementServiceImpl implements ChuPrelevementService {
 
 	@Autowired
 	private ChuPrelevementDao prelevementDao;
-	
+
 	public ChuPrelevement find(Integer idPrelevement) {
 		return prelevementDao.find(idPrelevement);
 	}
-	
+
 	public List<ChuPrelevement> listByIdPhase(Integer idPhase) {
 		return prelevementDao.listByIdPhase(idPhase);
 	}
-	
+
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur) {
 		return prelevementDao.listByIdTumeur(idTumeur);
 	}
-	
+
 	public List<ChuPrelevement> listByIdPatient(String idPatient) {
 		return prelevementDao.listByIdPatient(idPatient);
 	}
-	
+
 	public void save(ChuPrelevement prelevement) {
 		prelevementDao.save(prelevement);
 	}
-	
+
 	public void update(ChuPrelevement prelevement) {
 		prelevementDao.update(prelevement);
 	}
-	
+
 	public void saveOrUpdate(ChuPrelevement prelevement) {
 		prelevementDao.saveOrUpdate(prelevement);
 	}
@@ -58,5 +58,5 @@ public class ChuPrelevementServiceImpl  implements ChuPrelevementService {
 	public List<ChuPrelevement> list() {
 		return prelevementDao.list();
 	}
-	
+
 }

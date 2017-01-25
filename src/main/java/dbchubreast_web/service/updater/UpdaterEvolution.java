@@ -24,16 +24,15 @@ import dbchubreast_web.dao.ChuTumeurDao;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuTumeur;
 
-
 @Service
 public class UpdaterEvolution extends AbstractUpdater {
 
 	@Autowired
 	private ChuPatientDao patientDao;
-	
+
 	@Autowired
 	private ChuTumeurDao tumeurDao;
-	
+
 	@Autowired
 	private ChuEvolutionDao evolutionDao;
 
@@ -42,9 +41,9 @@ public class UpdaterEvolution extends AbstractUpdater {
 	public void update(List<?> list) {
 
 		logger.debug("=== " + this.getClass().getName() + " ===");
-		
-		for (int i=0; i<list.size(); i++) {
-			
+
+		for (int i = 0; i < list.size(); i++) {
+
 			ChuTumeur tumeur = (ChuTumeur) list.get(i);
 			ChuPatient patient = patientDao.find(tumeur.getIdTumeur());
 
@@ -53,7 +52,6 @@ public class UpdaterEvolution extends AbstractUpdater {
 			tumeurDao.update(tumeur);
 		}
 	}
-
 
 	/** ================================================================================= */
 

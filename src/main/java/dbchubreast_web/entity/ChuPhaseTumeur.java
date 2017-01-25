@@ -83,8 +83,8 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(generator="increment")
-	@GenericGenerator(name="increment", strategy = "increment")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "id_phase", unique = true, nullable = false)
 	public Integer getIdPhase() {
 		return this.idPhase;
@@ -187,7 +187,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	public void setNodules(Boolean nodules) {
 		this.nodules = nodules;
 	}
-	
+
 	@Column(name = "remarque")
 	public String getRemarque() {
 		return this.remarque;
@@ -196,7 +196,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	public void setRemarque(String remarque) {
 		this.remarque = remarque;
 	}
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPhaseTumeur")
 	public List<ChuTnm> getChuTnms() {
 		return this.chuTnms;
@@ -267,7 +267,5 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 				+ dateDiagnostic + ", natureDiagnostic=" + natureDiagnostic + ", profondeur=" + profondeur + ", locale="
 				+ locale + ", metastases=" + metastases + ", nodules=" + nodules + ", remarque=" + remarque + "]";
 	}
-
-
 
 }

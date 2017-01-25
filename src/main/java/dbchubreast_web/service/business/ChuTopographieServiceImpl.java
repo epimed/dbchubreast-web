@@ -21,23 +21,22 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.dao.ChuTopographieDao;
 import dbchubreast_web.entity.ChuTopographie;
 
-
 @Service
 public class ChuTopographieServiceImpl implements ChuTopographieService {
 
 	@Autowired
 	private ChuTopographieDao topographieDao;
-	
+
 	public ChuTopographie find(String idTopographie) {
 		return topographieDao.find(idTopographie);
 	}
-	
-	public List<ChuTopographie> list(String idGroupeTopo){
+
+	public List<ChuTopographie> list(String idGroupeTopo) {
 		return topographieDao.list(idGroupeTopo);
 	}
 
 	public List<ChuTopographie> list() {
 		return topographieDao.list();
 	}
-	
+
 }

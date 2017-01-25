@@ -22,7 +22,7 @@ import dbchubreast_web.dao.ChuBiomarqueurDao;
 import dbchubreast_web.entity.ChuBiomarqueur;
 
 @Service
-public class ChuBiomarqueurServiceImpl  implements ChuBiomarqueurService {
+public class ChuBiomarqueurServiceImpl implements ChuBiomarqueurService {
 
 	@Autowired
 	private ChuBiomarqueurDao biomarqueurDao;
@@ -37,5 +37,5 @@ public class ChuBiomarqueurServiceImpl  implements ChuBiomarqueurService {
 
 	public List<ChuBiomarqueur> list(Object[] noms) {
 		return biomarqueurDao.list(noms);
-	}	
+	}
 }

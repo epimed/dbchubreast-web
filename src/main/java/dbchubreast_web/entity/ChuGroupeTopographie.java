@@ -97,7 +97,5 @@ public class ChuGroupeTopographie implements java.io.Serializable {
 	public String toString() {
 		return "ChuGroupeTopographie [idGroupeTopo=" + idGroupeTopo + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

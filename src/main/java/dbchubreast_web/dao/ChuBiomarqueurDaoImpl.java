@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -39,37 +38,29 @@ public class ChuBiomarqueurDaoImpl extends BaseDao implements ChuBiomarqueurDao 
 	/** ================================================= */
 
 	public ChuBiomarqueur find(String idBiomarqueur) {
-		ChuBiomarqueur result = (ChuBiomarqueur) sessionFactory.getCurrentSession()
-				.createCriteria(ChuBiomarqueur.class)
-				.add(Restrictions.eq("idBiomarqueur", idBiomarqueur))
-				.uniqueResult();
+		ChuBiomarqueur result = (ChuBiomarqueur) sessionFactory.getCurrentSession().createCriteria(ChuBiomarqueur.class)
+				.add(Restrictions.eq("idBiomarqueur", idBiomarqueur)).uniqueResult();
 		return result;
 	}
 
 	/** ================================================= */
 
 	public List<ChuBiomarqueur> list() {
-		List<ChuBiomarqueur> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuBiomarqueur.class)
-				.addOrder(Order.asc("ordreAffichage"))
-				.list();	
+		List<ChuBiomarqueur> result = sessionFactory.getCurrentSession().createCriteria(ChuBiomarqueur.class)
+				.addOrder(Order.asc("ordre")).list();
 		return result;
 	}
 
 	/** ================================================= */
-	
 
-	public List<ChuBiomarqueur> list(Object [] noms) {
-	
-		Criteria crit = sessionFactory.getCurrentSession()
-				.createCriteria(ChuBiomarqueur.class)
-				.add(Restrictions.in("idBiomarqueur", noms))
-				.addOrder(Order.asc("ordreAffichage"))
-				;
+	public List<ChuBiomarqueur> list(Object[] noms) {
+
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuBiomarqueur.class)
+				.add(Restrictions.in("idBiomarqueur", noms)).addOrder(Order.asc("ordre"));
 
 		return crit.list();
 	}
-	
+
 	/** ================================================= */
 
 }

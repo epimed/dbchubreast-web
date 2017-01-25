@@ -97,7 +97,5 @@ public class ChuMetastase implements java.io.Serializable {
 	public String toString() {
 		return "ChuMetastase [idMetastase=" + idMetastase + ", nom=" + nom + "]";
 	}
-	
-	
 
 }

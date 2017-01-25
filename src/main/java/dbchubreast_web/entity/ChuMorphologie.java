@@ -82,7 +82,5 @@ public class ChuMorphologie implements java.io.Serializable {
 	public String toString() {
 		return "ChuMorphologie [idMorphologie=" + idMorphologie + ", nomFr=" + nomFr + ", nomEn=" + nomEn + "]";
 	}
-	
-	
 
 }

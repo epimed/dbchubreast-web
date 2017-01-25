@@ -12,15 +12,14 @@ public abstract class AbstractFormPhaseTumeur extends BaseService implements IFo
 	protected Integer idTumeur;
 	protected String idPatient;
 	protected Date dateDiagnostic;
-	
+
 	protected Integer idPhase;
 	protected Integer idTypePhase;
 
 	protected String remarque;
 
 	protected List<Integer> listIdMetastases = new ArrayList<Integer>(0);
-	
-	
+
 	public Integer getIdTumeur() {
 		return idTumeur;
 	}

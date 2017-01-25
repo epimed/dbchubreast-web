@@ -20,19 +20,28 @@ import dbchubreast_web.entity.ChuPhaseTumeur;
 public interface ChuPhaseTumeurService {
 
 	public ChuPhaseTumeur find(Integer idPhase);
+
 	public ChuPhaseTumeur findWithDependencies(Integer idPhase);
+
 	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur);
+
 	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur);
+
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement);
-	
-	
+
 	public List<ChuPhaseTumeur> list();
+
 	public List<ChuPhaseTumeur> listWithDependencies();
+
 	public List<ChuPhaseTumeur> list(Integer idTumeur);
+
 	public List<ChuPhaseTumeur> listWithDependencies(Integer idTumeur);
+
 	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase);
-	
-	public void save (ChuPhaseTumeur phaseTumeur);
-	public void update (ChuPhaseTumeur phaseTumeur);
-	public void saveOrUpdate (ChuPhaseTumeur phaseTumeur);
+
+	public void save(ChuPhaseTumeur phaseTumeur);
+
+	public void update(ChuPhaseTumeur phaseTumeur);
+
+	public void saveOrUpdate(ChuPhaseTumeur phaseTumeur);
 }

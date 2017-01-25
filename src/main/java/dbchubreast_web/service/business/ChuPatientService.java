@@ -18,20 +18,23 @@ import java.util.List;
 
 import dbchubreast_web.entity.ChuPatient;
 
-public interface  ChuPatientService {
+public interface ChuPatientService {
 
-	public List<ChuPatient> list(); 
-	
-	public String getLastIdPatient(); 
+	public List<ChuPatient> list();
 
-	public Long count(); 
+	public String getLastIdPatient();
 
-	public ChuPatient find(String idPatient); 
-	public ChuPatient find(String nom, String prenom, Date dateNaissance); 
-	public ChuPatient find(Integer idTumeur); 
-	public ChuPatient findByIdPrelevement(Integer idPrelevement); 
+	public Long count();
 
-	public List<ChuPatient> findInAttributes(String text); 
+	public ChuPatient find(String idPatient);
+
+	public ChuPatient find(String nom, String prenom, Date dateNaissance);
+
+	public ChuPatient find(Integer idTumeur);
+
+	public ChuPatient findByIdPrelevement(Integer idPrelevement);
+
+	public List<ChuPatient> findInAttributes(String text);
 
 	public void saveOrUpdate(ChuPatient patient);
 

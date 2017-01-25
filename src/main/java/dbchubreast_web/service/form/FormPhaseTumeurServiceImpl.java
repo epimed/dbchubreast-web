@@ -41,7 +41,6 @@ import dbchubreast_web.form.FormTumeurInitiale;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.util.FormatService;
 
-
 @Service
 public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhaseTumeurService {
 
@@ -81,7 +80,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		logger.debug("=== " + this.getClass().getName() + " saveOrUpdate()" + " ===");
 
-		ChuTumeur tumeur =  null;
+		ChuTumeur tumeur = null;
 		ChuPhaseTumeur phaseTumeur = null;
 
 		if (form.isNew()) {
@@ -89,8 +88,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 			phaseTumeur = new ChuPhaseTumeur();
 			tumeur.getChuPhaseTumeurs().add(phaseTumeur);
 			phaseTumeur.setChuTumeur(tumeur);
-		}
-		else {
+		} else {
 			tumeur = tumeurDao.findWithDependencies(form.getIdTumeur());
 			phaseTumeur = phaseTumeurDao.find(form.getIdPhase());
 		}
@@ -105,23 +103,20 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		tumeur.setIdTumeur(form.getIdTumeur());
 		tumeur.setDateDiagnostic(form.getDateDiagnostic());
 
-
 		// Age diagnostic
 
-
-		Date dateNaissance =  patient.getDateNaissance();
+		Date dateNaissance = patient.getDateNaissance();
 		Date dateDiagnostic = tumeur.getDateDiagnostic();
 
-		if (dateDiagnostic!=null && dateNaissance!=null) {
-			tumeur.setAgeDiagnostic(formatService.calculateAge(dateNaissance, dateDiagnostic));			
-		}
-		else {
+		if (dateDiagnostic != null && dateNaissance != null) {
+			tumeur.setAgeDiagnostic(formatService.calculateAge(dateNaissance, dateDiagnostic));
+		} else {
 			tumeur.setAgeDiagnostic(form.getAgeDiagnostic());
 		}
 
 		tumeur.setCote(form.getCote());
 
-		ChuTopographie topographie = topographieDao.find(form.getIdTopographie());	
+		ChuTopographie topographie = topographieDao.find(form.getIdTopographie());
 		tumeur.setChuTopographie(topographie);
 
 		tumeur.setDateEvolution(form.getDateEvolution());
@@ -141,7 +136,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		// === cTNM ===
 
 		ChuTnm cTnm = tnmDao.find(phaseTumeur.getIdPhase(), "c");
-		if (cTnm==null) {
+		if (cTnm == null) {
 			cTnm = new ChuTnm();
 			cTnm.setType("c");
 			cTnm.setChuPhaseTumeur(phaseTumeur);
@@ -155,7 +150,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		// === pTNM ===
 
 		ChuTnm pTnm = tnmDao.find(phaseTumeur.getIdPhase(), "p");
-		if (pTnm==null) {
+		if (pTnm == null) {
 			pTnm = new ChuTnm();
 			pTnm.setType("p");
 			pTnm.setChuPhaseTumeur(phaseTumeur);
@@ -174,39 +169,36 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		phaseTumeur.setRemarque(form.getRemarque());
 
-
 		logger.debug("Tumeur {}", tumeur);
 		logger.debug("Phase tumeur {}", phaseTumeur);
-
 
 		// ====== Save or Update =======
 
 		if (form.isNew()) {
 			// Save new
-			
+
 			logger.debug("Save new");
-			
+
 			tumeurDao.save(tumeur);
 			phaseTumeurDao.save(phaseTumeur);
-			
+
 			form.setIdTumeur(tumeur.getIdTumeur());
 			form.setIdPhase(phaseTumeur.getIdPhase());
-			
+
 			if (!this.isEmptyTnm(cTnm)) {
-				logger.debug("Saving cTnm {}",  cTnm);
+				logger.debug("Saving cTnm {}", cTnm);
 				tnmDao.save(cTnm);
 			}
 			if (!this.isEmptyTnm(pTnm)) {
-				logger.debug("Saving pTnm {}",  pTnm);
+				logger.debug("Saving pTnm {}", pTnm);
 				tnmDao.save(pTnm);
 			}
-		}
-		else {
+		} else {
 
 			// update existing
 
 			logger.debug("Update existing");
-			
+
 			tumeurDao.update(tumeur);
 			phaseTumeurDao.saveOrUpdate(phaseTumeur);
 
@@ -224,24 +216,25 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 	/** =================================================================== */
 
 	public FormTumeurInitiale getFormTumeurInitiale(ChuTumeur tumeur) {
-		
+
 		logger.debug("=== " + this.getClass().getName() + " getFormTumeurInitiale()" + " ===");
 
 		ChuPatient patient = tumeur.getChuPatient();
 		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient(), patient.getDateDeces());
-
 
 		// === Tumeur ===
 
 		formTumeurInitiale.setIdTumeur(tumeur.getIdTumeur());
 		formTumeurInitiale.setDateDiagnostic(tumeur.getDateDiagnostic());
 		formTumeurInitiale.setAgeDiagnostic(tumeur.getAgeDiagnostic());
-		formTumeurInitiale.setIdTopographie(tumeur.getChuTopographie()==null ? null : tumeur.getChuTopographie().getIdTopographie());
+		formTumeurInitiale.setIdTopographie(
+				tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getIdTopographie());
 		formTumeurInitiale.setCote(tumeur.getCote());
 
 		// === Evolution ===
 		formTumeurInitiale.setDateEvolution(tumeur.getDateEvolution());
-		formTumeurInitiale.setIdEvolution(tumeur.getChuEvolution()==null ? null : tumeur.getChuEvolution().getIdEvolution());
+		formTumeurInitiale
+				.setIdEvolution(tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getIdEvolution());
 
 		logger.debug("Date deces {}", formTumeurInitiale.getDateDeces());
 
@@ -256,7 +249,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		// === cTNM ===
 
 		ChuTnm cTnm = tnmDao.find(phase.getIdPhase(), "c");
-		if (cTnm==null) {
+		if (cTnm == null) {
 			cTnm = new ChuTnm();
 		}
 		formTumeurInitiale.setcT(cTnm.getT());
@@ -267,7 +260,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		// === pTNM ===
 
 		ChuTnm pTnm = tnmDao.find(phase.getIdPhase(), "p");
-		if (pTnm==null) {
+		if (pTnm == null) {
 			pTnm = new ChuTnm();
 		}
 		formTumeurInitiale.setpT(pTnm.getT());
@@ -287,9 +280,6 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		return formTumeurInitiale;
 	}
 
-
-
-
 	/** =================================================================== */
 
 	@Override
@@ -306,35 +296,32 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		form.setDateDiagnostic(phase.getDateDiagnostic());
 		form.setLocale(phase.getLocale());
 		form.setIdPs(phase.getChuPerformanceStatus().getIdPs());
-		
+
 		// === Metastases ===
 
 		List<ChuMetastase> listMetastases = metastaseDao.list(phase.getIdPhase());
 		for (ChuMetastase metastase : listMetastases) {
 			form.getListIdMetastases().add(metastase.getIdMetastase());
 		}
-		
-		form.setRemarque(phase.getRemarque());
 
+		form.setRemarque(phase.getRemarque());
 
 		return form;
 	}
 
 	/** =================================================================== */
 
-
 	public void saveOrUpdateForm(FormPhaseRechute form) {
 
 		logger.debug("=== " + this.getClass().getName() + " ===");
 
-		ChuTumeur tumeur =  tumeurDao.findWithDependencies(form.getIdTumeur());
+		ChuTumeur tumeur = tumeurDao.findWithDependencies(form.getIdTumeur());
 		ChuPhaseTumeur phaseTumeur = null;
 
 		if (form.isNew()) {
 			phaseTumeur = new ChuPhaseTumeur();
 			phaseTumeur.setChuTumeur(tumeur);
-		}
-		else {
+		} else {
 			phaseTumeur = phaseTumeurDao.find(form.getIdPhase());
 		}
 
@@ -357,15 +344,13 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		this.addMetastases(phaseTumeur, form.getListIdMetastases());
 
-
 		// ====== Save or Update =======
 
 		if (form.isNew()) {
 			// Save new
 			phaseTumeurDao.save(phaseTumeur);
 			form.setIdPhase(phaseTumeur.getIdPhase());
-		}
-		else {
+		} else {
 			// update existing
 			phaseTumeurDao.saveOrUpdate(phaseTumeur);
 		}
@@ -375,24 +360,23 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 	/** =================================================================== */
 
 	private boolean isEmptyTnm(ChuTnm tnm) {
-		return tnm.getIdTnm()==null && tnm.getT()==null && tnm.getN()==null && tnm.getM()==null && tnm.getTaille()==null;
+		return tnm.getIdTnm() == null && tnm.getT() == null && tnm.getN() == null && tnm.getM() == null
+				&& tnm.getTaille() == null;
 	}
 
 	/** =================================================================== */
 
 	private void addMetastases(ChuPhaseTumeur phaseTumeur, List<Integer> listIdMetastases) {
 
-		if (listIdMetastases!=null && !listIdMetastases.isEmpty()) {
+		if (listIdMetastases != null && !listIdMetastases.isEmpty()) {
 			List<ChuMetastase> metastases = metastaseDao.list(listIdMetastases);
 			phaseTumeur.setChuMetastases(metastases);
 			phaseTumeur.setMetastases(true);
-		}
-		else {
+		} else {
 			phaseTumeur.setMetastases(false);
 		}
 
 	}
-
 
 	/** =================================================================== */
 

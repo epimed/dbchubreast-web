@@ -3,27 +3,23 @@ package dbchubreast_web.form;
 
 public class FormPhaseRechute extends AbstractFormPhaseTumeur {
 
-
 	private Integer idPs;
 	private Boolean locale;
-	
+
 	/** ========================================================================== */
-	
+
 	public FormPhaseRechute(String idPatient, Integer idTumeur) {
 		super();
-		this.idPatient=idPatient;
-		this.idTumeur=idTumeur;
+		this.idPatient = idPatient;
+		this.idTumeur = idTumeur;
 		this.idTypePhase = 2; // phase rechute
 	}
 
-
 	/** ========================================================================== */
 
-	
 	public Integer getIdPs() {
 		return idPs;
 	}
-
 
 	public void setIdPs(Integer idPs) {
 		this.idPs = idPs;
@@ -33,27 +29,22 @@ public class FormPhaseRechute extends AbstractFormPhaseTumeur {
 		return locale;
 	}
 
-
 	public void setLocale(Boolean locale) {
 		this.locale = locale;
 	}
-
 
 	public FormPhaseRechute() {
 		super();
 		this.idTypePhase = 2; // phase rechute
 	}
 
-
-
 	/** ====================================================================================== */
 
 	public boolean isNew() {
-		return this.idPhase==null;
+		return this.idPhase == null;
 	}
 
 	/** ====================================================================================== */
-
 
 	@Override
 	public String toString() {
@@ -61,7 +52,7 @@ public class FormPhaseRechute extends AbstractFormPhaseTumeur {
 				+ idPatient + ", dateDiagnostic=" + dateDiagnostic + ", idPhase=" + idPhase + ", idTypePhase="
 				+ idTypePhase + ", remarque=" + remarque + ", listIdMetastases=" + listIdMetastases + "]";
 	}
-	
+
 	/** ====================================================================================== */
 
 }

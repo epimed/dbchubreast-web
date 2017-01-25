@@ -21,20 +21,18 @@ import org.springframework.stereotype.Service;
 import dbchubreast_web.service.util.FormatService;
 
 @Service
-public class InterpreterRecepteurHormonal extends AbstractInterpreter{
+public class InterpreterRecepteurHormonal extends AbstractInterpreter {
 
-	@Autowired 
+	@Autowired
 	private FormatService formatService;
 
 	public StatutBiomarqueur getStatut(String value) {
-
 
 		if (value == null) {
 			return StatutBiomarqueur.NULL;
 		}
 
 		Set<String> setValue = this.populateSetValue(value);
-		
 
 		// ===== Evaluate each value =====
 		for (String valueString : setValue) {
@@ -42,17 +40,16 @@ public class InterpreterRecepteurHormonal extends AbstractInterpreter{
 			Integer valueInteger = this.formatService.recognizeInteger(valueString);
 
 			// === Integer value ===
-			if (valueString!=null && valueInteger!=null) {
-				if (valueInteger<10) {
+			if (valueString != null && valueInteger != null) {
+				if (valueInteger < 10) {
 					setStatutBiomarqueur.add(StatutBiomarqueur.NEGATIVE);
-				}
-				else {
+				} else {
 					setStatutBiomarqueur.add(StatutBiomarqueur.POSITIVE);
 				}
 			}
 
 			// === String value ===
-			if (valueString!=null && valueInteger==null) {
+			if (valueString != null && valueInteger == null) {
 
 				if (valueString.equals("<")) {
 					setStatutBiomarqueur.add(StatutBiomarqueur.NEGATIVE);
@@ -74,8 +71,7 @@ public class InterpreterRecepteurHormonal extends AbstractInterpreter{
 
 		}
 
-
-		if (setStatutBiomarqueur.size()==1) {
+		if (setStatutBiomarqueur.size() == 1) {
 			return setStatutBiomarqueur.iterator().next();
 		}
 

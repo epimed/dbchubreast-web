@@ -72,7 +72,5 @@ public class ChuPrelevementBiomarqueurId implements java.io.Serializable {
 	public String toString() {
 		return "ChuPrelevementBiomarqueurId [idPrelevement=" + idPrelevement + ", idBiomarqueur=" + idBiomarqueur + "]";
 	}
-	
-	
 
 }
