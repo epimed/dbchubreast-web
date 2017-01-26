@@ -1,5 +1,5 @@
 /**
- * EpiMed - Information system for bioinformatics developments in the field of epigenetics
+* EpiMed - Information system for bioinformatics developments in the field of epigenetics
  * 
  * This software is a computer program which performs the data management 
  * for EpiMed platform of the Institute for Advances Biosciences (IAB)

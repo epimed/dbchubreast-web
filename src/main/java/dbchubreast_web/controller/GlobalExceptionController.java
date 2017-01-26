@@ -34,7 +34,7 @@ public class GlobalExceptionController {
 		ModelAndView model = new ModelAndView("error");
 		model.addObject("errorMessage", ex.toString());
 
-		logService.saveLog(request, ex.toString());
+		logService.saveLog(ex.toString());
 		
 		ex.printStackTrace();
 

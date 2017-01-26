@@ -62,21 +62,29 @@ public class DownloadController extends BaseController {
 
 		logger.debug("key {}", key);
 		
-		logService.saveLog(request, key);
-
 		Table table = null;
 
 		if (key != null && key.equals("biomarqueurs")) {
+			
 			table = exporterBiomarqueur.export();
 		}
+		
 		if (key != null && key.equals("prelevements")) {
 			table = exporterPrelevement.export();
-		} else {
+		} 
+		
+		if (key != null && key.equals("patients")) {
 			table = exporterPatient.export();
 		}
 
+		if (table==null) {
+			table = new Table(1);
+		}
+		
 		String fileName = fileService.generateFileName("DB_CHU_BREAST_" + key, "xlsx");
 
+		logService.saveLog("Téléchargement de " + key + ", fichier généré " + fileName);
+		
 		this.generateResponse(response, table, fileName, key);
 	}
 

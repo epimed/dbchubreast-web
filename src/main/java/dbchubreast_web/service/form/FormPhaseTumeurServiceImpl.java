@@ -39,6 +39,7 @@ import dbchubreast_web.entity.ChuTypePhase;
 import dbchubreast_web.form.FormPhaseRechute;
 import dbchubreast_web.form.FormTumeurInitiale;
 import dbchubreast_web.service.BaseService;
+import dbchubreast_web.service.updater.UpdaterNodule;
 import dbchubreast_web.service.util.FormatService;
 
 @Service
@@ -73,6 +74,9 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 	@Autowired
 	private FormatService formatService;
+	
+	@Autowired
+	private UpdaterNodule updaterNodule;
 
 	/** =================================================================== */
 
@@ -127,6 +131,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		phaseTumeur.setDateDiagnostic(form.getDateDiagnostic());
 		phaseTumeur.setNatureDiagnostic(form.getNatureDiagnostic());
+		phaseTumeur.setProfondeur(form.getProfondeur());
 
 		// === Type phase ===
 
@@ -211,6 +216,11 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 			}
 
 		}
+
+		// ====== UPDATE DEPENDENCIES =====
+
+		// === Update nodules ===
+		updaterNodule.update(phaseTumeur);
 	}
 
 	/** =================================================================== */
@@ -234,7 +244,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		// === Evolution ===
 		formTumeurInitiale.setDateEvolution(tumeur.getDateEvolution());
 		formTumeurInitiale
-				.setIdEvolution(tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getIdEvolution());
+		.setIdEvolution(tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getIdEvolution());
 
 		logger.debug("Date deces {}", formTumeurInitiale.getDateDeces());
 

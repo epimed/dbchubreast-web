@@ -119,7 +119,7 @@
 				</div>
 				<div class="col-sm-7">
 					<span id="helpBlock" class="help-block">Laisser vide par
-						défaut si le site de prélèvement correspond à la tumeur elle-même</span>
+						défaut si le site de prélèvement correspond à la tumeur principale</span>
 				</div>
 			</div>
 
@@ -165,6 +165,15 @@
 
 			<h3>Biomarqueurs :</h3>
 
+			<div class="form-group">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-10">
+					<span id="helpBlock" class="help-block">En cas de nodules,
+						noter plusieurs valeurs séparées par le caractère <code>/</code>,
+						par exemple <code>95/100</code> ou <code>1/<</code> ou <code>I/II</code>.
+					</span>
+				</div>
+			</div>
 
 			<div class="form-group">
 				<c:forEach var="formBio"

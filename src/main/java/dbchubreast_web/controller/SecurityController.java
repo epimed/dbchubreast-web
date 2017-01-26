@@ -32,10 +32,9 @@ import dbchubreast_web.service.business.AppLogService;
 @Controller
 public class SecurityController extends BaseController {
 
-
 	@Autowired
 	AppLogService logService;
-	
+
 	/** ====================================================================================== */
 
 	@RequestMapping(value = { "/login" }, method = {RequestMethod.GET, RequestMethod.POST })
@@ -47,7 +46,7 @@ public class SecurityController extends BaseController {
 			) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-		
+
 		return "security/login";
 	}
 
@@ -78,4 +77,5 @@ public class SecurityController extends BaseController {
 	}
 
 	/** ====================================================================================== */
+	
 }

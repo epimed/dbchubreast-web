@@ -98,7 +98,7 @@ public class PrelevementController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		logger.debug("idPatient {}", idPatient);
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'une liste de prélèvement du patient " + idPatient);
 		
 		ChuPatient patient = patientService.find(idPatient);
 		model.addAttribute("patient", patient);
@@ -118,7 +118,7 @@ public class PrelevementController extends BaseController {
 
 		logger.debug("idPatient {}", idPatient);
 		
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'une liste de prélèvement du patient " + idPatient);
 
 		if (idPatient != null) {
 			ChuPatient patient = patientService.find(idPatient);
@@ -144,8 +144,7 @@ public class PrelevementController extends BaseController {
 
 		logger.debug("idPrelevement {}", idPrelevement);
 
-		
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage du prélèvement " + idPrelevement);
 		
 		// Patient
 		ChuPatient patient = patientService.findByIdPrelevement(idPrelevement);
@@ -170,8 +169,7 @@ public class PrelevementController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour modifier le prélèvement " + idPrelevement);
 		
 		// Form prelevement
 		ChuPrelevement prelevement = prelevementService.find(idPrelevement);
@@ -188,7 +186,7 @@ public class PrelevementController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour ajouter un prélèvement au patient " + idPatient);
 		
 		// Form prelevement
 		FormPrelevement formPrelevement = new FormPrelevement(idPatient);
@@ -217,8 +215,6 @@ public class PrelevementController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		logger.debug("saveButton={}", saveButton);
-
-		logService.saveLog(request, "saveButton="+saveButton);
 		
 		// === Mise a jour de la forme sans bouton "enregistrer" ===
 
@@ -234,13 +230,14 @@ public class PrelevementController extends BaseController {
 			formPrelevementValidator.validate(formPrelevement, result);
 
 			if (result.hasErrors()) {
+				logService.saveLog("Modification échouée d'un prélèvement " + formPrelevement);
 				this.populateAddSampleForm(formPrelevement, model);
 				return "prelevement/form";
 			}
 
 			else {
 				logger.debug("Validation OK");
-
+				logService.saveLog("Modification validée d'un prélèvement " + formPrelevement);
 				redirectAttributes.addFlashAttribute("css", "success");
 				if (formPrelevement.isNew()) {
 					redirectAttributes.addFlashAttribute("msg", "Un nouveau prélèvement a été ajouté avec succès !");

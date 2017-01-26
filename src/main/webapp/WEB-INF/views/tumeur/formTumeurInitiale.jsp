@@ -128,10 +128,10 @@
 					<div class="col-sm-10">
 
 						<c:choose>
-							
+
 							<c:when
 								test="${formTumeurInitiale.idEvolution==5  or not empty formTumeurInitiale.dateDeces}">
-								
+
 								<form:hidden path="idEvolution" />
 								<form:hidden path="dateEvolution" />
 								<form:input class="form-control" path="dateEvolution"
@@ -142,7 +142,7 @@
 								<form:input class="form-control" path="dateEvolution"
 									type="date" />
 							</c:otherwise>
-							
+
 						</c:choose>
 
 						<form:errors path="dateEvolution" class="control-label" />
@@ -212,6 +212,11 @@
 					<form:input class="form-control" path="cTaille" type="text" />
 					<form:errors path="cTaille" />
 				</div>
+				<div class="col-sm-5">
+					<span id="helpBlock" class="help-block">En cas de nodules,
+						noter plusieurs tailles séparées par le caractère <code>/</code>, par exemple <code>10/5</code>.
+					</span>
+				</div>
 			</div>
 
 			<!-- pTNM -->
@@ -236,6 +241,11 @@
 					p Taille (mm)
 					<form:input class="form-control" path="pTaille" type="text" />
 					<form:errors path="pTaille" />
+				</div>
+				<div class="col-sm-5">
+					<span id="helpBlock" class="help-block">En cas de nodules,
+						noter plusieurs tailles séparées par le caractère <code>/</code>, par exemple <code>10/5</code>.
+					</span>
 				</div>
 			</div>
 

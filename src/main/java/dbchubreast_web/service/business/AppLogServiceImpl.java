@@ -33,49 +33,57 @@ public class AppLogServiceImpl implements AppLogService {
 	@Autowired
 	AppLogDao logDao;
 
-	
-	public void saveLog(HttpServletRequest request, String comment) {
+	@Autowired
+	private HttpServletRequest request;
+
+	public void saveLog(String comment) {
 
 		String parameterText = "";
-		for (Map.Entry<String,String[]> entry : request.getParameterMap().entrySet()) {
-			String key = entry.getKey();
-			String[] value = entry.getValue();
-			parameterText = parameterText + key + ": " + Arrays.toString(value) + " ";
-		}
+		String ipAddress = null;
 
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();
-		}	
+		if (request!=null) {
 
-		if (parameterText.isEmpty()) {
-			parameterText = null;
+			for (Map.Entry<String,String[]> entry : request.getParameterMap().entrySet()) {
+				String key = entry.getKey();
+				String[] value = entry.getValue();
+				parameterText = parameterText + key + ": " + Arrays.toString(value) + " ";
+			}
+
+
+			ipAddress = request.getHeader("X-FORWARDED-FOR");
+			if (ipAddress == null) {
+				ipAddress = request.getRemoteAddr();
+			}	
+
+			if (parameterText.isEmpty()) {
+				parameterText = null;
+			}
+
 		}
-		
 		// === Logged user ===
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = null;
 		String role = null;
-		
+
 		if (principal!=null) {
-			
+
 			if (principal instanceof UserDetails) {
 				username = ((UserDetails)principal).getUsername();
 				role = ((UserDetails) principal).getAuthorities().toString();
 			} else {
 				username = principal.toString();
 			}
-			
+
 		}
-		
+
 		this.saveLog(
 				username,
 				role,
 				ipAddress,  // ip
-				request.getMethod(),  // method
-				request.getContextPath(),  // route
-				request.getRequestURI(), // url
+				request==null ? null : request.getMethod(),  // method
+				request==null ? null : request.getContextPath(),  // route
+				request==null ? null : request.getRequestURI(), // url
 				parameterText,  // parameter
 				comment // comment
 				); 
@@ -93,11 +101,11 @@ public class AppLogServiceImpl implements AppLogService {
 		if (username!=null) {
 			appLog.setUsername(username);
 		}
-		
+
 		if (role!=null) {
 			appLog.setRole(role);
 		}
-		
+
 		if (ip!=null) {
 			appLog.setIp(ip);
 		}
@@ -125,6 +133,27 @@ public class AppLogServiceImpl implements AppLogService {
 
 	}
 
+	
+	/** =======================================================================*/
+
+	public void saveComment(String username, String comment) {
+
+		AppLog appLog = new AppLog();
+		appLog.setLastActivity(new Date());
+
+		if (username!=null) {
+			appLog.setUsername(username);
+		}
+		
+		if (comment!=null) {
+			appLog.setComment(comment);
+		}
+
+		logDao.save(appLog);
+
+	}
+
+	
 
 	/** =======================================================================*/
 

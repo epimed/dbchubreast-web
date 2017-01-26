@@ -53,12 +53,12 @@ public class PatientController extends BaseController {
 	public String showAllPatients(Model model, HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logService.saveLog(request, null);
 		
 		List<ChuPatient> listPatients = patientService.list();
 
 		logger.debug("listPatients {}", listPatients.size());
+		logService.saveLog("Affichage d'une liste de patients " + listPatients.size());
+		
 		model.addAttribute("listPatients", listPatients);
 
 		return "patient/list";
@@ -71,13 +71,11 @@ public class PatientController extends BaseController {
 			HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logService.saveLog(request, null);
 		
 		logger.debug("Text {}", text);
 
 		if (text != null) {
-
+			logService.saveLog("Recherche de patients par texte " + text);
 			List<ChuPatient> listPatients = patientService.findInAttributes(text);
 			model.addAttribute("listPatients", listPatients);
 		}
@@ -92,12 +90,12 @@ public class PatientController extends BaseController {
 	public String showPatientGet(Model model, @PathVariable String idPatient, HttpServletRequest request) {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logService.saveLog(request, null);
 		
 		if (idPatient == null) {
 			return "redirect:/patient";
 		}
+		
+		logService.saveLog("Affichage du patient " + idPatient);
 
 		ChuPatient patient = patientService.find(idPatient);
 		logger.debug("Patient {}", patient);
@@ -118,7 +116,7 @@ public class PatientController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour ajouter un patient");
 		
 		model.addAttribute("formPatient", new FormPatient());
 
@@ -133,7 +131,7 @@ public class PatientController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		logger.debug("idPatient {}", idPatient);
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour modifier le patient " + idPatient);
 		
 		ChuPatient patient = patientService.find(idPatient);
 
@@ -155,12 +153,13 @@ public class PatientController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 		logger.debug("Form Patient {}", formPatient);
 
-		logService.saveLog(request, null);
 		
 		if (result.hasErrors()) {
 			return "patient/form";
 		}
 
+		logService.saveLog("Mise à jour du patient " + formPatient);
+		
 		redirectAttributes.addFlashAttribute("css", "success");
 		if (formPatient.isNew()) {
 			redirectAttributes.addFlashAttribute("msg", "Le nouveau patient a été ajouté avec succès !");

@@ -156,6 +156,9 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	/** ================================================= */
 
 	public void save(ChuTumeur tumeur) {
+		
+		logger.debug("DAO save {}", tumeur);
+		
 		sessionFactory.getCurrentSession().save(tumeur);
 	}
 

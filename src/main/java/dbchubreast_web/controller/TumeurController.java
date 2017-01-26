@@ -92,7 +92,7 @@ public class TumeurController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'une liste de tumeurs du patient " + idPatient);
 		
 		ChuPatient patient = patientService.find(idPatient);
 		List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
@@ -112,10 +112,9 @@ public class TumeurController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		logger.debug("idPatient {}", idPatient);
-
-		logService.saveLog(request, null);
 		
 		if (idPatient != null) {
+			logService.saveLog("Recherche des tumeurs pour le patient " + idPatient);
 			ChuPatient patient = patientService.find(idPatient);
 			List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
 			model.addAttribute("patient", patient);
@@ -139,7 +138,7 @@ public class TumeurController extends BaseController {
 
 		logger.debug("Parameter idTumeur {}", idTumeur);
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage de la tumeur " + idTumeur);
 		
 		ChuPatient patient = patientService.find(idTumeur);
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
@@ -165,7 +164,7 @@ public class TumeurController extends BaseController {
 
 		ChuPatient patient = patientService.find(idPatient);
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour ajouter une tumeur en phase initiale au patient " + idPatient);
 		
 		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient(), patient.getDateDeces());
 
@@ -185,7 +184,7 @@ public class TumeurController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour modifier la tumeur en phase initiale " + idTumeur);
 		
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
 		ChuPatient patient = tumeur.getChuPatient();
@@ -219,19 +218,21 @@ public class TumeurController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
-
-		logService.saveLog(request, null);
 		
 		formTumeurInitialeValidator.validate(formTumeurInitiale, result);
 
 		if (result.hasErrors()) {
+			logService.saveLog("Modification échouée de la phase initiale " + formTumeurInitiale);
 			ChuPatient patient = patientService.find(formTumeurInitiale.getIdPatient());
 			this.populateAddTumorForm(patient, model);
 			model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 			return "tumeur/formTumeurInitiale";
 		} else {
+			
 			logger.debug("Validation OK");
 
+			logService.saveLog("Modification validée de la phase initiale " + formTumeurInitiale);
+			
 			redirectAttributes.addFlashAttribute("css", "success");
 			if (formTumeurInitiale.isNew()) {
 				redirectAttributes.addFlashAttribute("msg", "Une nouvelle tumeur a été ajoutée avec succès !");
@@ -254,7 +255,7 @@ public class TumeurController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour ajouter une phase de rechute à la tumeur " + idTumeur);
 		
 		ChuPatient patient = patientService.find(idTumeur);
 		ChuTumeur tumeur = tumeurService.find(idTumeur);
@@ -284,7 +285,7 @@ public class TumeurController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog("Affichage d'un formulaire pour modifier la phase de rechute " + idPhase);
 		
 		ChuPhaseTumeur phase = phaseTumeurService.findWithDependencies(idPhase);
 		ChuTumeur tumeur = tumeurService.findWithDependencies(phase.getChuTumeur().getIdTumeur());
@@ -320,12 +321,11 @@ public class TumeurController extends BaseController {
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		logger.debug("FormPhaseRechute {}", formPhaseRechute);
-
-		logService.saveLog(request, null);
 		
 		formPhaseRechuteValidator.validate(formPhaseRechute, result);
 
 		if (result.hasErrors()) {
+			logService.saveLog("Modification échouée de la phase rechute " + formPhaseRechute);
 			ChuPatient patient = patientService.find(formPhaseRechute.getIdPatient());
 			ChuTumeur tumeur = tumeurService.find(formPhaseRechute.getIdTumeur());
 			model.addAttribute("formPhaseRechute", formPhaseRechute);
@@ -335,6 +335,8 @@ public class TumeurController extends BaseController {
 		} else {
 			logger.debug("Validation OK");
 
+			logService.saveLog("Modification validée de la phase rechute " + formPhaseRechute);
+			
 			redirectAttributes.addFlashAttribute("css", "success");
 			if (formPhaseRechute.isNew()) {
 				redirectAttributes.addFlashAttribute("msg", "Une nouvelle rechute a été ajoutée avec succès !");

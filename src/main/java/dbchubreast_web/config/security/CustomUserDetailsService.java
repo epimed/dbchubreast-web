@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import dbchubreast_web.entity.AppRole;
 import dbchubreast_web.entity.AppUser;
+import dbchubreast_web.service.business.AppLogService;
+import dbchubreast_web.service.business.AppMenuService;
 import dbchubreast_web.service.business.AppUserService;
 
 
@@ -26,19 +28,30 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private AppUserService userService;
 	
+	@Autowired
+	private AppMenuService menuService;
+	
+	@Autowired
+	AppLogService logService;
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		AppUser user = userService.findByUsername(username);
-		
-		logger.info("User : {}", user);
+
+		logService.saveComment(username, "Login " + user);
 		
 		if (user==null) {
 			logger.debug("User with username {} not found", username);
 			throw new UsernameNotFoundException("Username not found");
 		}
-			return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), 
-				 user.isEnabled(), true, true, true, getGrantedAuthorities(user));
+		
+		CustomUserDetails userDetails = new CustomUserDetails(user.getLogin(), user.getPassword(), 
+				user.isEnabled(), user.getFirstName(), user.getLastName(), user.getEmail());
+		userDetails.setAuthorities(getGrantedAuthorities(user));
+		userDetails.setListRoles(user.getAppRoles());
+		userDetails.setListMenus(menuService.loadMenuForUser(user));
+		
+		return userDetails;
 	}
 
 	
@@ -47,7 +60,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		for(AppRole role : user.getAppRoles()){
 			logger.info("User role : {}", role);
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
+			authorities.add(new SimpleGrantedAuthority(role.getIdRole()));
 		}
 		logger.info("authorities : {}", authorities);
 		return authorities;

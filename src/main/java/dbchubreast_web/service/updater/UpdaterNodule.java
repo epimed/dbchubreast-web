@@ -23,6 +23,7 @@ import dbchubreast_web.dao.ChuPrelevementBiomarqueurDao;
 import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuPrelevement;
 import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
+import dbchubreast_web.entity.ChuTnm;
 
 @Service
 public class UpdaterNodule extends AbstractUpdater {
@@ -37,7 +38,7 @@ public class UpdaterNodule extends AbstractUpdater {
 
 	public void update(ChuPrelevement prelevement) {
 
-		logger.debug("=== " + this.getClass().getName() + " ===");
+		logger.debug("=== " + this.getClass().getName() + " update(ChuPrelevement prelevement) ===");
 
 		ChuPhaseTumeur phase = phaseTumeurDao.findByIdPrelevementWithDependencies(prelevement.getIdPrelevement());
 
@@ -66,6 +67,35 @@ public class UpdaterNodule extends AbstractUpdater {
 	}
 
 	/** ================================================================================= */
+
+
+	public void update(ChuPhaseTumeur phase) {
+
+		logger.debug("=== " + this.getClass().getName() + " update(ChuPhaseTumeur phase) ===");
+
+		ChuPhaseTumeur phaseWithDependencies = phaseTumeurDao.findWithDependencies(phase.getIdPhase());
+
+		boolean isFound = false;
+		int i = 0;
+		while (!isFound && i < phaseWithDependencies.getChuTnms().size()) {
+			ChuTnm tnm = phaseWithDependencies.getChuTnms().get(i);
+			if (tnm!=null && tnm.getTaille()!=null && tnm.getTaille().contains("/")) {
+				isFound = true;
+			}
+			i++;
+		}
+
+		if (isFound) {
+			phase.setNodules(true);
+		} else {
+			phase.setNodules(false);
+		}
+
+		phaseTumeurDao.update(phase);
+	}
+
+	/** ================================================================================= */
+
 
 	public void update(List<?> list) {
 

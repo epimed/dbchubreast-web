@@ -13,7 +13,11 @@
  */
 package dbchubreast_web.service.business;
 
-public interface AppLogService {
-	public void saveLog(String comment);
-	public void saveComment(String username, String comment);
+import java.util.List;
+
+import dbchubreast_web.entity.AppMenu;
+import dbchubreast_web.entity.AppUser;
+
+public interface AppMenuService {
+	public List<AppMenu> loadMenuForUser(AppUser user);
 }

@@ -41,7 +41,7 @@ public class HomeController extends BaseController {
 
 		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
-		logService.saveLog(request, null);
+		logService.saveLog(null);
 		
 		Long nbPatients = patientService.count();
 		model.addAttribute("nbPatients", nbPatients);
