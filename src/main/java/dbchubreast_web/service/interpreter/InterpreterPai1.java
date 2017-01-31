@@ -28,6 +28,8 @@ public class InterpreterPai1 extends AbstractInterpreter {
 
 	public StatutBiomarqueur getStatut(String value) {
 
+		setStatutBiomarqueur.clear();
+		
 		if (value == null) {
 			return StatutBiomarqueur.NULL;
 		}
@@ -41,7 +43,7 @@ public class InterpreterPai1 extends AbstractInterpreter {
 
 			// === Integer value ===
 			if (valueString != null && valueDouble != null) {
-				if (valueDouble < 14) {
+				if (valueDouble < 14.0) {
 					setStatutBiomarqueur.add(StatutBiomarqueur.LOW);
 				} else {
 					setStatutBiomarqueur.add(StatutBiomarqueur.HIGH);
@@ -64,7 +66,7 @@ public class InterpreterPai1 extends AbstractInterpreter {
 			}
 
 		}
-
+		
 		if (setStatutBiomarqueur.size() == 1) {
 			return setStatutBiomarqueur.iterator().next();
 		}

@@ -13,7 +13,7 @@
  */
 package dbchubreast_web.service.business;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -23,11 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import dbchubreast_web.dao.AppLogDao;
 import dbchubreast_web.entity.AppLog;
 
 @Service
+@SuppressWarnings("rawtypes")
 public class AppLogServiceImpl implements AppLogService {
 
 	@Autowired
@@ -36,62 +38,82 @@ public class AppLogServiceImpl implements AppLogService {
 	@Autowired
 	private HttpServletRequest request;
 
-	public void saveLog(String comment) {
+	/** ============================================================================================ */
+	public void logComment(String username, String comment) {
 
-		String parameterText = "";
-		String ipAddress = null;
+		AppLog appLog = new AppLog();
+		appLog.setLastActivity(new Date());
 
-		if (request!=null) {
-
-			for (Map.Entry<String,String[]> entry : request.getParameterMap().entrySet()) {
-				String key = entry.getKey();
-				String[] value = entry.getValue();
-				parameterText = parameterText + key + ": " + Arrays.toString(value) + " ";
-			}
-
-
-			ipAddress = request.getHeader("X-FORWARDED-FOR");
-			if (ipAddress == null) {
-				ipAddress = request.getRemoteAddr();
-			}	
-
-			if (parameterText.isEmpty()) {
-				parameterText = null;
-			}
-
+		if (username!=null) {
+			appLog.setUsername(username);
 		}
-		// === Logged user ===
 
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username = null;
-		String role = null;
-
-		if (principal!=null) {
-
-			if (principal instanceof UserDetails) {
-				username = ((UserDetails)principal).getUsername();
-				role = ((UserDetails) principal).getAuthorities().toString();
-			} else {
-				username = principal.toString();
-			}
-
+		if (comment!=null) {
+			appLog.setComment(comment);
 		}
+
+		logDao.save(appLog);
+
+	}
+
+	/** ============================================================================================ */
+
+	public void log(ModelAndView modelAndView) {
+
+		String comment = null;
+		this.log(modelAndView, comment);
+	}
+
+
+	/** ============================================================================================ */
+
+	public void log(ModelAndView modelAndView, String comment) {
+
+
+		String parameter = this.mapToString(modelAndView.getModelMap());
 
 		this.saveLog(
-				username,
-				role,
-				ipAddress,  // ip
+				this.getUsername(),
+				this.getRole(),
+				this.getIpAddress(),  // ip
 				request==null ? null : request.getMethod(),  // method
-				request==null ? null : request.getContextPath(),  // route
-				request==null ? null : request.getRequestURI(), // url
-				parameterText,  // parameter
-				comment // comment
+						request==null ? null : request.getContextPath(),  // route
+								request==null ? null : request.getRequestURI(), // url
+										parameter,  // parameter
+										comment // comment
+				); 
+
+
+	}
+
+	/** ============================================================================================ */
+
+	public void log() {
+		String comment = null;
+		this.log(comment);
+	}
+
+	/** ============================================================================================ */
+
+	public void log(String comment) {
+
+		String parameter = this.mapToString(request.getParameterMap());
+
+		this.saveLog(
+				this.getUsername(),
+				this.getRole(),
+				this.getIpAddress(),  // ip
+				request==null ? null : request.getMethod(),  // method
+						request==null ? null : request.getContextPath(),  // route
+								request==null ? null : request.getRequestURI(), // url
+										parameter,  // parameter
+										comment // comment
 				); 
 
 	}
 
 
-	/** =======================================================================*/
+	/** ============================================================================================ */
 
 	public void saveLog(String username, String role, String ip, String method, String route, String url, String parameter, String comment) {
 
@@ -133,27 +155,7 @@ public class AppLogServiceImpl implements AppLogService {
 
 	}
 
-	
-	/** =======================================================================*/
 
-	public void saveComment(String username, String comment) {
-
-		AppLog appLog = new AppLog();
-		appLog.setLastActivity(new Date());
-
-		if (username!=null) {
-			appLog.setUsername(username);
-		}
-		
-		if (comment!=null) {
-			appLog.setComment(comment);
-		}
-
-		logDao.save(appLog);
-
-	}
-
-	
 
 	/** =======================================================================*/
 
@@ -163,5 +165,84 @@ public class AppLogServiceImpl implements AppLogService {
 
 	/** =======================================================================*/
 
+	private String getUsername() {
 
+		String username = null;
+
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
+			if (principal!=null) {
+
+				if (principal instanceof UserDetails) {
+					username = ((UserDetails)principal).getUsername();
+				} 
+				else {
+					username = principal.toString();
+				}
+			}
+		}
+		catch (Exception ex) {
+			username = "UNKNOWN";
+		}
+
+		return username;
+	}
+
+
+	/** =======================================================================*/
+
+	private String getRole() {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String role = null;
+
+		if (principal!=null) {
+
+			if (principal instanceof UserDetails) {
+				role = ((UserDetails) principal).getAuthorities().toString();
+			}
+		}
+
+		return role;
+	}
+
+	/** =======================================================================*/
+
+
+	private String getIpAddress() {
+		String ipAddress = null;
+		ipAddress = request.getHeader("X-FORWARDED-FOR");
+		if (ipAddress == null) {
+			ipAddress = request.getRemoteAddr();
+		}
+		return ipAddress;
+	}
+
+	/** =======================================================================*/
+
+
+	private String mapToString(Map<String, ?> map) {
+
+		String text = "";
+
+		if (map!=null) {
+			for (Map.Entry<String, ?> entry : map.entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (value instanceof Collection) {
+					value = "list of " + ((Collection) value).size() + " values";
+				}
+				if (value instanceof String[]) {
+					value = "array of " + ((String []) value).length + " values";
+				}
+				text = text + key + ": " + value + " ";
+			}
+		}
+		return text;
+	}
+
+	/** =======================================================================*/
 }
+

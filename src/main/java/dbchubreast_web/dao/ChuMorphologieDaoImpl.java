@@ -44,7 +44,10 @@ public class ChuMorphologieDaoImpl extends BaseDao implements ChuMorphologieDao 
 
 	/** ================================================= */
 	public List<ChuMorphologie> list() {
-		List<ChuMorphologie> result = sessionFactory.getCurrentSession().createCriteria(ChuMorphologie.class)
+		List<ChuMorphologie> result = sessionFactory.getCurrentSession()
+				.createCriteria(ChuMorphologie.class)
+				.createAlias("chuGroupeMorphologie", "chuGroupeMorphologie")
+				.add(Restrictions.eq("chuGroupeMorphologie.idGroupeMorpho", "MG1"))
 				.addOrder(Order.asc("idMorphologie")).list();
 		return result;
 	}

@@ -60,6 +60,10 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 		if (form.getDateDiagnostic() != null && form.getAgeDiagnostic() != null && patient.getDateNaissance() != null) {
 			Date dateNaissance = patient.getDateNaissance();
 			Double calculatedAge = formatService.calculateAge(dateNaissance, form.getDateDiagnostic());
+			
+			logger.debug("Calculated age " + calculatedAge);
+			logger.debug("Form age " + form.getAgeDiagnostic());
+			
 			if (calculatedAge != null && Math.abs(calculatedAge - form.getAgeDiagnostic()) > 1) {
 				String message = "L'age saisi " + form.getAgeDiagnostic()
 						+ " ne correspond pas aux dates de naissance et du diagnostic. L'age calculé pour ces dates est "

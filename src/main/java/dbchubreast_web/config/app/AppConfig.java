@@ -16,6 +16,7 @@ package dbchubreast_web.config.app;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,11 +28,14 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import dbchubreast_web.interceptor.LogInterceptor;
 
 @EnableWebMvc // <mvc:annotation-driven />
 @Configuration
@@ -39,6 +43,9 @@ import org.springframework.web.servlet.view.JstlView;
 public class AppConfig extends WebMvcConfigurerAdapter {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
+	
+	@Autowired
+	LogInterceptor logInterceptor;
 
 	// === Servlet ===
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -96,6 +103,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		viewResolver.setPrefix("/WEB-INF/views/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
+	}
+	
+	// === Interceptors ===
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+	    registry.addInterceptor(logInterceptor);
 	}
 
 }

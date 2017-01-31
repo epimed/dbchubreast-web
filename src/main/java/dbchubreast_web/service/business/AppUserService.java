@@ -13,8 +13,15 @@
  */
 package dbchubreast_web.service.business;
 
+import java.util.List;
+
 import dbchubreast_web.entity.AppUser;
 
 public interface AppUserService {
 	public AppUser findByUsername(String username);
+	public AppUser findById(Integer idUser);
+	public List<AppUser> list();
+	public void save(AppUser user);
+	public void update(AppUser user);
+	public void delete(AppUser user);
 }

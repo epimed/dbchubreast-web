@@ -4,18 +4,23 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
+
 import dbchubreast_web.service.BaseService;
 
 public class FormPatient extends BaseService implements IForm {
 
 	private String idPatient;
 
+	@Length(max = 100, message = "100 caractères au maximum")
 	private String rcp;
 
 	@NotNull(message = "Ne peut pas être vide")
+	@Length(max = 255, message = "255 caractères au maximum")
 	private String prenom;
 
 	@NotNull(message = "Ne peut pas être vide")
+	@Length(max = 255, message = "255 caractères au maximum")
 	private String nom;
 
 	@NotNull(message = "Ne peut pas être vide")
@@ -24,8 +29,12 @@ public class FormPatient extends BaseService implements IForm {
 	@NotNull(message = "Ne peut pas être vide")
 	private String sexe;
 
+	@Length(max = 100, message = "100 caractères au maximum")
 	private String statutBrca;
+	
 	private Date dateDeces;
+	
+	@Length(max = 255, message = "255 caractères au maximum")
 	private String causeDeces;
 	private Boolean consentement;
 

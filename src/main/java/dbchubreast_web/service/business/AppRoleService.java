@@ -13,12 +13,11 @@
  */
 package dbchubreast_web.service.business;
 
-import org.springframework.web.servlet.ModelAndView;
+import java.util.List;
 
-public interface AppLogService {
-	public void log();
-	public void log(String comment);
-	public void log(ModelAndView modelAndView);
-	public void log(ModelAndView modelAndView, String comment);
-	public void logComment(String username, String comment);
+import dbchubreast_web.entity.AppRole;
+
+public interface AppRoleService {
+	public AppRole findById(String idRole);
+	public List<AppRole> list();
 }

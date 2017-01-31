@@ -25,7 +25,7 @@
 				<td>${prel.chuTypePrelevement.nom}</td>
 				<td>${prel.datePrelevement}</td>
 				<td>${prel.sitePrelevement}</td>
-				<td><abbr title="${prel.chuMorphologie.nomEn}">${prel.chuMorphologie.idMorphologie}</abbr></td>
+				<td><abbr title="${prel.chuMorphologie.nomFr} / ${prel.chuMorphologie.nomEn}">${prel.chuMorphologie.idMorphologie}</abbr></td>
 				<td>${prel.typeHistologique}</td>
 				<td>${prel.associationCis}</td>
 				<td><spring:url
@@ -38,7 +38,8 @@
 						items="${listPrelevementBiomarqueurs}">
 						<c:if
 							test="${prelBio.chuPrelevement.idPrelevement == prel.idPrelevement }">
-								${prelBio.chuBiomarqueur.nom}=${prelBio.valeur} <c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if> &nbsp;
+								${prelBio.chuBiomarqueur.nom}=<c:out value="${prelBio.valeur}" /> 
+								<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if> &nbsp;
 						</c:if>
 					</c:forEach></td>
 			</tr>

@@ -28,6 +28,8 @@ public class InterpreterMib1 extends AbstractInterpreter {
 
 	public StatutBiomarqueur getStatut(String value) {
 
+		setStatutBiomarqueur.clear();
+		
 		if (value == null) {
 			return StatutBiomarqueur.NULL;
 		}

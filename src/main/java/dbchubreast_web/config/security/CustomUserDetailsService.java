@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		AppUser user = userService.findByUsername(username);
 
-		logService.saveComment(username, "Login " + user);
+		logService.logComment(username, "Login " + user);
 		
 		if (user==null) {
 			logger.debug("User with username {} not found", username);

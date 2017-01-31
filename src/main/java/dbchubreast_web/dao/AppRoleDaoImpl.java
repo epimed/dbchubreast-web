@@ -16,7 +16,6 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -24,45 +23,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import dbchubreast_web.entity.ChuTopographie;
+import dbchubreast_web.entity.AppRole;
+
 
 @Transactional
 @Repository
-
 @SuppressWarnings("unchecked")
-public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao {
+public class AppRoleDaoImpl extends BaseDao implements AppRoleDao {
+
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+
 	/** ================================================= */
 
-	public ChuTopographie find(String idTopographie) {
-		ChuTopographie result = (ChuTopographie) sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
-				.add(Restrictions.eq("idTopographie", idTopographie)).uniqueResult();
-		return result;
+	public AppRole findById(String idRole) {
+		AppRole role = (AppRole) sessionFactory.getCurrentSession()
+				.createCriteria(AppRole.class)
+				.add(Restrictions.eq("idRole", idRole))
+				.uniqueResult();
+
+		return role;
+
 	}
 
 	/** ================================================= */
 
-	public List<ChuTopographie> list(List<String> listIdGroupeTopo) {
+	public List<AppRole> list(){
 
-		List<ChuTopographie> result = sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
-				.createAlias("chuGroupeTopographie", "chuGroupeTopographie")
-				.add(Restrictions.in("chuGroupeTopographie.idGroupeTopo", listIdGroupeTopo))
-				.addOrder(Order.asc("idTopographie")).list();
+		List<AppRole> list = sessionFactory.getCurrentSession()
+				.createCriteria(AppRole.class)
+				.addOrder(Order.asc("idRole"))
+				.list();
 
-		return result;
-	}
-
-	/** ================================================= */
-
-	public List<ChuTopographie> list() {
-
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
-				.addOrder(Order.asc("idTopographie"));
-
-		return crit.list();
+		return list;
 	}
 
 	/** ================================================= */

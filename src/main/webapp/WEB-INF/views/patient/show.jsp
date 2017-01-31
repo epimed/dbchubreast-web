@@ -90,21 +90,29 @@
 		<p></p>
 
 		<div>
-			<spring:url
-				value="/patient/${patient.idPatient}/tumeurs"
-				var="url" />
-			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher les tumeurs de ce patient</button>
+			<spring:url value="/patient/${patient.idPatient}/update" var="url" />
+			<button class="btn btn-danger" onclick="location.href='${url}'">Modifier</button>
 		</div>
-		
-		
+
 		<p></p>
 
 		<div>
-			<spring:url
-				value="/patient/${patient.idPatient}/prelevements"
-				var="url" />
-			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher les prélèvements de ce patient</button>
+			<spring:url value="/patient/${patient.idPatient}/tumeurs" var="url" />
+			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher
+				les tumeurs de ce patient</button>
 		</div>
+
+
+		<p></p>
+
+		<div>
+			<spring:url value="/patient/${patient.idPatient}/prelevements"
+				var="url" />
+			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher
+				les prélèvements de ce patient</button>
+		</div>
+
+
 
 	</div>
 

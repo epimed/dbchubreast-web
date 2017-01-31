@@ -58,6 +58,7 @@ public class UpdaterStatutBiomarqueur extends AbstractUpdater {
 
 			if (idBiomarqueur != null && valeur != null) {
 				StatutBiomarqueur statut = this.getStatut(idBiomarqueur, valeur);
+
 				if (statut != null) {
 					prelBio.setStatut(statut.stringValue());
 					prelevementBiomarqueurDao.update(prelBio);

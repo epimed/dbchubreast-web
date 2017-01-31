@@ -57,10 +57,6 @@ public class DownloadController extends BaseController {
 	@RequestMapping(value = "/download/{key}", method = RequestMethod.GET)
 	public void downloadAllPatients(Model model, @PathVariable String key, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logger.debug("key {}", key);
 		
 		Table table = null;
 
@@ -83,7 +79,7 @@ public class DownloadController extends BaseController {
 		
 		String fileName = fileService.generateFileName("DB_CHU_BREAST_" + key, "xlsx");
 
-		logService.saveLog("Téléchargement de " + key + ", fichier généré " + fileName);
+		logService.log("Téléchargement de " + key + ", fichier généré " + fileName);
 		
 		this.generateResponse(response, table, fileName, key);
 	}
@@ -104,7 +100,7 @@ public class DownloadController extends BaseController {
 		fileService.addSheet(workbook, sheetName, table.getHeader(), table.getData());
 
 		// ===== File generation =====
-		logger.debug("Generated file name {}", fileName);
+
 		response.setContentType("application/msexcel");
 		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 

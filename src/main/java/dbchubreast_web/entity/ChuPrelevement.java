@@ -189,11 +189,10 @@ public class ChuPrelevement implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "ChuPrelevement [idPrelevement=" + idPrelevement + ", chuMorphologie=" + chuMorphologie
-				+ ", chuPhaseTumeur=" + chuPhaseTumeur + ", chuTypePrelevement=" + chuTypePrelevement
-				+ ", typeHistologique=" + typeHistologique + ", associationCis=" + associationCis + ", datePrelevement="
-				+ datePrelevement + ", sitePrelevement=" + sitePrelevement + ", chuPrelevementBiomarqueurs="
-				+ chuPrelevementBiomarqueurs + ", chuRessourceBiologiques=" + chuRessourceBiologiques + "]";
+		return "ChuPrelevement [idPrelevement=" + idPrelevement + ", typeHistologique=" + typeHistologique
+				+ ", associationCis=" + associationCis + ", datePrelevement=" + datePrelevement + ", sitePrelevement="
+				+ sitePrelevement + "]";
 	}
+
 
 }

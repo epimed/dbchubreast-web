@@ -21,7 +21,6 @@
 		<!-- Fil d'Ariane -->
 		<%@ include file="../inc/filAriane.jsp"%>
 
-
 		<c:if test="${not empty msg}">
 			<p></p>
 			<div class="alert alert-${css} alert-dismissible" role="alert">
@@ -84,7 +83,7 @@
 			<div class="row">
 				<label class="col-sm-2">Morphologie ICD-O</label>
 				<div class="col-sm-10">${prelevement.chuMorphologie.idMorphologie}
-					- ${prelevement.chuMorphologie.nomEn}</div>
+					- ${prelevement.chuMorphologie.nomFr} / ${prelevement.chuMorphologie.nomEn}</div>
 			</div>
 
 			<!-- Histologie -->
@@ -107,18 +106,21 @@
 
 				<div class="row">
 					<label class="col-sm-2">${prelBio.chuBiomarqueur.nom}</label>
-					<div class="col-sm-10">${prelBio.valeur}
+					<div class="col-sm-10"><c:out value="${prelBio.valeur}" />
 						<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if>
 					</div>
 				</div>
 
 			</c:forEach>
-
-
-
-
-
 		</div>
+		
+		<p></p>
+		<div>
+			<spring:url value="/prelevement/${prelevement.idPrelevement}/update" var="url" />
+			<button class="btn btn-primary" onclick="location.href='${url}'">Modifier</button>
+		</div>
+		
+		
 	</div>
 
 	<!-- Footer -->

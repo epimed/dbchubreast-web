@@ -74,7 +74,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 	@Autowired
 	private FormatService formatService;
-	
+
 	@Autowired
 	private UpdaterNodule updaterNodule;
 
@@ -305,8 +305,12 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		form.setIdPatient(patient.getIdPatient());
 		form.setDateDiagnostic(phase.getDateDiagnostic());
 		form.setLocale(phase.getLocale());
-		form.setIdPs(phase.getChuPerformanceStatus().getIdPs());
 
+		if (phase.getChuPerformanceStatus()!=null) {
+			form.setIdPs(phase.getChuPerformanceStatus().getIdPs());
+		}
+		
+		
 		// === Metastases ===
 
 		List<ChuMetastase> listMetastases = metastaseDao.list(phase.getIdPhase());

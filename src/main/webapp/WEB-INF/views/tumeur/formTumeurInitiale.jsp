@@ -192,25 +192,27 @@
 			<!-- cTNM -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">cTNM</label>
+				
 				<div class="col-sm-1">
 					cT
 					<form:input class="form-control" path="cT" type="text" />
-					<form:errors path="cT" />
+					<form:errors path="cT" class="text-danger"/>
 				</div>
+				
 				<div class="col-sm-1">
 					cN
 					<form:input class="form-control" path="cN" type="text" />
-					<form:errors path="cN" />
+					<form:errors path="cN" class="text-danger" />
 				</div>
 				<div class="col-sm-1">
 					cM
 					<form:input class="form-control" path="cM" type="text" />
-					<form:errors path="cM" />
+					<form:errors path="cM" class="text-danger" />
 				</div>
 				<div class="col-sm-2">
 					c Taille (mm)
 					<form:input class="form-control" path="cTaille" type="text" />
-					<form:errors path="cTaille" />
+					<form:errors path="cTaille" class="text-danger" />
 				</div>
 				<div class="col-sm-5">
 					<span id="helpBlock" class="help-block">En cas de nodules,
@@ -222,25 +224,27 @@
 			<!-- pTNM -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">pTNM</label>
+				
 				<div class="col-sm-1">
 					pT
 					<form:input class="form-control" path="pT" type="text" />
-					<form:errors path="pT" />
+					<form:errors path="pT" class="text-danger" />
 				</div>
+				
 				<div class="col-sm-1">
 					pN
 					<form:input class="form-control" path="pN" type="text" />
-					<form:errors path="pN" />
+					<form:errors path="pN" class="text-danger" />
 				</div>
 				<div class="col-sm-1">
 					pM
 					<form:input class="form-control" path="pM" type="text" />
-					<form:errors path="pM" />
+					<form:errors path="pM" class="text-danger" />
 				</div>
 				<div class="col-sm-2">
 					p Taille (mm)
 					<form:input class="form-control" path="pTaille" type="text" />
-					<form:errors path="pTaille" />
+					<form:errors path="pTaille" class="text-danger" />
 				</div>
 				<div class="col-sm-5">
 					<span id="helpBlock" class="help-block">En cas de nodules,

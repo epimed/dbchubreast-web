@@ -45,8 +45,6 @@ public class SecurityController extends BaseController {
 			HttpServletRequest request
 			) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
 		return "security/login";
 	}
 

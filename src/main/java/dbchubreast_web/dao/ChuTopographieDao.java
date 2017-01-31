@@ -22,7 +22,7 @@ public interface ChuTopographieDao {
 
 	public ChuTopographie find(String idTopographie);
 
-	public List<ChuTopographie> list(String idGroupeTopo);
+	public List<ChuTopographie> list(List<String> listIdGroupeTopo);
 
 	public List<ChuTopographie> list();
 }

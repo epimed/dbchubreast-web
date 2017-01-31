@@ -21,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import dbchubreast_web.service.business.AppLogService;
 import dbchubreast_web.service.business.ChuPatientService;
 
 @Controller
@@ -30,18 +29,10 @@ public class HomeController extends BaseController {
 	@Autowired
 	private ChuPatientService patientService;
 
-	
-	@Autowired
-	private AppLogService logService;
-	
 	/** ====================================================================================== */
 
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String index(Model model, HttpServletRequest request) {
-
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logService.saveLog(null);
 		
 		Long nbPatients = patientService.count();
 		model.addAttribute("nbPatients", nbPatients);

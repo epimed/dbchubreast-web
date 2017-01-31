@@ -27,6 +27,8 @@ public class InterpreterUpa extends AbstractInterpreter {
 	private FormatService formatService;
 
 	public StatutBiomarqueur getStatut(String value) {
+		
+		setStatutBiomarqueur.clear();
 
 		if (value == null) {
 			return StatutBiomarqueur.NULL;

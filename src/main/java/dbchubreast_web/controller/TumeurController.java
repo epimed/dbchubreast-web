@@ -13,9 +13,11 @@
  */
 package dbchubreast_web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,19 +83,20 @@ public class TumeurController extends BaseController {
 
 	@Autowired
 	private FormPhaseRechuteValidator formPhaseRechuteValidator;
-	
+
 	@Autowired
 	private AppLogService logService;
+
+	/** ====================================================================================== */
+
 
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/patient/{idPatient}/tumeurs", method = RequestMethod.GET)
 	public String listPatientTumors(Model model, @PathVariable String idPatient, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+		logService.log("Affichage de tumeurs du patient " + idPatient);
 
-		logService.saveLog("Affichage d'une liste de tumeurs du patient " + idPatient);
-		
 		ChuPatient patient = patientService.find(idPatient);
 		List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
 
@@ -109,12 +112,8 @@ public class TumeurController extends BaseController {
 	public String searchTumor(Model model, @RequestParam(value = "idPatient", required = false) String idPatient,
 			HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logger.debug("idPatient {}", idPatient);
-		
 		if (idPatient != null) {
-			logService.saveLog("Recherche des tumeurs pour le patient " + idPatient);
+			logService.log("Recherche de tumeurs pour le patient " + idPatient);
 			ChuPatient patient = patientService.find(idPatient);
 			List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
 			model.addAttribute("patient", patient);
@@ -134,12 +133,8 @@ public class TumeurController extends BaseController {
 	@RequestMapping(value = "/tumeur/{idTumeur}", method = RequestMethod.GET)
 	public String showTumor(Model model, @PathVariable Integer idTumeur, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+		logService.log("Affichage de la tumeur " + idTumeur);
 
-		logger.debug("Parameter idTumeur {}", idTumeur);
-
-		logService.saveLog("Affichage de la tumeur " + idTumeur);
-		
 		ChuPatient patient = patientService.find(idTumeur);
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
 		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
@@ -160,16 +155,12 @@ public class TumeurController extends BaseController {
 	@RequestMapping(value = "/patient/{idPatient}/tumeur/add", method = RequestMethod.GET)
 	public String showAddTumorForm(Model model, @PathVariable String idPatient, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
 
 		ChuPatient patient = patientService.find(idPatient);
 
-		logService.saveLog("Affichage d'un formulaire pour ajouter une tumeur en phase initiale au patient " + idPatient);
-		
-		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient(), patient.getDateDeces());
+		logService.log("Affichage d'un formulaire pour ajouter une tumeur en phase initiale au patient " + idPatient);
 
-		logger.debug("Patient {}", patient);
-		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
+		FormTumeurInitiale formTumeurInitiale = new FormTumeurInitiale(patient.getIdPatient(), patient.getDateDeces());
 
 		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 		this.populateAddTumorForm(patient, model);
@@ -182,16 +173,11 @@ public class TumeurController extends BaseController {
 	@RequestMapping(value = "/tumeur/{idTumeur}/update", method = RequestMethod.GET)
 	public String showUpdateTumorForm(Model model, @PathVariable Integer idTumeur, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+		logService.log("Affichage d'un formulaire pour modifier la tumeur en phase initiale " + idTumeur);
 
-		logService.saveLog("Affichage d'un formulaire pour modifier la tumeur en phase initiale " + idTumeur);
-		
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
 		ChuPatient patient = tumeur.getChuPatient();
 		FormTumeurInitiale formTumeurInitiale = formPhaseTumeurService.getFormTumeurInitiale(tumeur);
-
-		logger.debug("Patient {}", patient);
-		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
 
 		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 
@@ -212,27 +198,25 @@ public class TumeurController extends BaseController {
 
 	@RequestMapping(value = "/tumeur/update", method = RequestMethod.POST)
 	public String saveOrUpdateTumorForm(Model model,
-			@ModelAttribute("formTumeurInitiale") FormTumeurInitiale formTumeurInitiale, BindingResult result,
-			final RedirectAttributes redirectAttributes, HttpServletRequest request) {
+			@ModelAttribute("formTumeurInitiale") @Valid FormTumeurInitiale formTumeurInitiale, 
+			BindingResult result,
+			final RedirectAttributes redirectAttributes, 
+			HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logger.debug("formTumeurInitiale {}", formTumeurInitiale);
-		
 		formTumeurInitialeValidator.validate(formTumeurInitiale, result);
 
 		if (result.hasErrors()) {
-			logService.saveLog("Modification échouée de la phase initiale " + formTumeurInitiale);
+			logService.log("Modification échouée de la phase initiale");
 			ChuPatient patient = patientService.find(formTumeurInitiale.getIdPatient());
 			this.populateAddTumorForm(patient, model);
 			model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 			return "tumeur/formTumeurInitiale";
-		} else {
-			
-			logger.debug("Validation OK");
+		} 
 
-			logService.saveLog("Modification validée de la phase initiale " + formTumeurInitiale);
-			
+		else {
+
+			logService.log("Modification validée de la phase initiale");
+
 			redirectAttributes.addFlashAttribute("css", "success");
 			if (formTumeurInitiale.isNew()) {
 				redirectAttributes.addFlashAttribute("msg", "Une nouvelle tumeur a été ajoutée avec succès !");
@@ -253,18 +237,13 @@ public class TumeurController extends BaseController {
 	@RequestMapping(value = "/tumeur/{idTumeur}/rechute/add", method = RequestMethod.GET)
 	public String showAddRelapseForm(Model model, @PathVariable Integer idTumeur, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+		logService.log("Affichage d'un formulaire pour ajouter une phase de rechute à la tumeur " + idTumeur);
 
-		logService.saveLog("Affichage d'un formulaire pour ajouter une phase de rechute à la tumeur " + idTumeur);
-		
 		ChuPatient patient = patientService.find(idTumeur);
 		ChuTumeur tumeur = tumeurService.find(idTumeur);
 
 		if (tumeur != null) {
 			FormPhaseRechute formPhaseRechute = new FormPhaseRechute(patient.getIdPatient(), tumeur.getIdTumeur());
-
-			logger.debug("Patient {}", patient);
-			logger.debug("formPhaseRechute {}", formPhaseRechute);
 
 			model.addAttribute("formPhaseRechute", formPhaseRechute);
 			model.addAttribute("tumeur", tumeur);
@@ -283,20 +262,15 @@ public class TumeurController extends BaseController {
 	@RequestMapping(value = "/rechute/{idPhase}/update", method = RequestMethod.GET)
 	public String showUpdateRelapseForm(Model model, @PathVariable Integer idPhase, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
+		logService.log("Affichage d'un formulaire pour modifier la phase de rechute " + idPhase);
 
-		logService.saveLog("Affichage d'un formulaire pour modifier la phase de rechute " + idPhase);
-		
 		ChuPhaseTumeur phase = phaseTumeurService.findWithDependencies(idPhase);
-		ChuTumeur tumeur = tumeurService.findWithDependencies(phase.getChuTumeur().getIdTumeur());
-		ChuPatient patient = tumeur.getChuPatient();
-
+		ChuTumeur tumeur = tumeurService.findByIdPhaseWithDependencies(idPhase);
+		ChuPatient patient = patientService.find(tumeur.getIdTumeur());
 		FormPhaseRechute formPhaseRechute = formPhaseTumeurService.getFormPhaseRechute(phase);
 
 		model.addAttribute("tumeur", tumeur);
 		model.addAttribute("formPhaseRechute", formPhaseRechute);
-
-		logger.debug("formPhaseRechute {}", formPhaseRechute);
 
 		this.populateAddTumorForm(patient, model);
 
@@ -315,28 +289,25 @@ public class TumeurController extends BaseController {
 
 	@RequestMapping(value = "/rechute/update", method = RequestMethod.POST)
 	public String saveOrUpdateRelapseForm(Model model,
-			@ModelAttribute("formPhaseRechute") FormPhaseRechute formPhaseRechute, BindingResult result,
+			@ModelAttribute("formPhaseRechute") @Valid FormPhaseRechute formPhaseRechute, BindingResult result,
 			final RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-		logger.debug("===== value = " + request.getRequestURI() + ", method = " + request.getMethod() + " =====");
-
-		logger.debug("FormPhaseRechute {}", formPhaseRechute);
-		
 		formPhaseRechuteValidator.validate(formPhaseRechute, result);
 
 		if (result.hasErrors()) {
-			logService.saveLog("Modification échouée de la phase rechute " + formPhaseRechute);
+			logService.log("Modification échouée de la phase rechute");
 			ChuPatient patient = patientService.find(formPhaseRechute.getIdPatient());
 			ChuTumeur tumeur = tumeurService.find(formPhaseRechute.getIdTumeur());
 			model.addAttribute("formPhaseRechute", formPhaseRechute);
 			model.addAttribute("tumeur", tumeur);
 			this.populateAddTumorForm(patient, model);
 			return "tumeur/formPhaseRechute";
-		} else {
-			logger.debug("Validation OK");
+		} 
 
-			logService.saveLog("Modification validée de la phase rechute " + formPhaseRechute);
-			
+		else {
+
+			logService.log("Modification validée de la phase rechute");
+
 			redirectAttributes.addFlashAttribute("css", "success");
 			if (formPhaseRechute.isNew()) {
 				redirectAttributes.addFlashAttribute("msg", "Une nouvelle rechute a été ajoutée avec succès !");
@@ -357,8 +328,12 @@ public class TumeurController extends BaseController {
 
 	public void populateAddTumorForm(ChuPatient patient, Model model) {
 
+		List<String> listIdGroupeTopo = new ArrayList<String>();
+		listIdGroupeTopo.add("C50");
+		listIdGroupeTopo.add("C51");
+
+		List<ChuTopographie> listTopographies = topographieService.list(listIdGroupeTopo);
 		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
-		List<ChuTopographie> listTopographies = topographieService.list("C50");
 		List<ChuEvolution> listEvolutions = evolutionService.list();
 		List<ChuMetastase> listMetastases = metastaseService.list();
 		List<ChuPerformanceStatus> listPerformanceStatus = performanceStatusService.list();

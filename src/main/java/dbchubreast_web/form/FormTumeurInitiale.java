@@ -3,6 +3,8 @@ package dbchubreast_web.form;
 
 import java.util.Date;
 
+import org.hibernate.validator.constraints.Length;
+
 public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 
 	private Date dateDeces;
@@ -15,17 +17,34 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 	private Date dateEvolution;
 	private Integer idEvolution;
 
+	@Length(max = 100, message = "100 caractères au maximum")
 	private String natureDiagnostic;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String profondeur;
 
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String cT;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String cN;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String cM;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String cTaille;
 
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String pT;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String pN;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String pM;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
 	private String pTaille;
 
 	/** ========================================================================== */

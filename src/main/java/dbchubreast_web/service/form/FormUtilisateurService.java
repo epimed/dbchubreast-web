@@ -11,14 +11,14 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service.business;
+package dbchubreast_web.service.form;
 
-import org.springframework.web.servlet.ModelAndView;
+import dbchubreast_web.entity.AppUser;
+import dbchubreast_web.form.FormUtilisateur;
 
-public interface AppLogService {
-	public void log();
-	public void log(String comment);
-	public void log(ModelAndView modelAndView);
-	public void log(ModelAndView modelAndView, String comment);
-	public void logComment(String username, String comment);
+public interface FormUtilisateurService {
+
+	public void saveOrUpdateForm(FormUtilisateur form);
+
+	public FormUtilisateur getForm(AppUser utilisateur);
 }

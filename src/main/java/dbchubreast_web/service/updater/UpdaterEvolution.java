@@ -47,8 +47,17 @@ public class UpdaterEvolution extends AbstractUpdater {
 			ChuTumeur tumeur = (ChuTumeur) list.get(i);
 			ChuPatient patient = patientDao.find(tumeur.getIdTumeur());
 
-			tumeur.setChuEvolution(evolutionDao.find(5)); // dead
-			tumeur.setDateEvolution(patient.getDateDeces());
+			if (patient.getDateDeces()!=null) {
+				tumeur.setChuEvolution(evolutionDao.find(5)); // dead
+				tumeur.setDateEvolution(patient.getDateDeces());
+			}
+			else {
+				if (tumeur.getChuEvolution()!=null && tumeur.getChuEvolution().getIdEvolution().equals(5)) {
+					tumeur.setChuEvolution(null);
+					tumeur.setDateEvolution(null);
+				}
+			}
+			
 			tumeurDao.update(tumeur);
 		}
 	}

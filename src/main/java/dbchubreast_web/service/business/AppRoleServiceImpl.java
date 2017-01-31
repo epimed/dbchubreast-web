@@ -18,36 +18,25 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dbchubreast_web.dao.AppUserDao;
-import dbchubreast_web.entity.AppUser;
+import dbchubreast_web.dao.AppRoleDao;
+import dbchubreast_web.entity.AppRole;
 
 @Service
-public class AppUserServiceImpl implements AppUserService {
+public class AppRoleServiceImpl implements AppRoleService {
 
 	@Autowired
-	AppUserDao userDao;
+	AppRoleDao roleDao;
+
+	@Override
+	public AppRole findById(String idRole) {
+		return roleDao.findById(idRole);
+	}
+
+	@Override
+	public List<AppRole> list() {
+		return roleDao.list();
+	}
 	
 
-	public AppUser findByUsername(String username) {
-		return userDao.findByUsername(username);
-	}
-	
-	public AppUser findById(Integer idUser) {
-		return userDao.findById(idUser);
-	}
-	
-	public List<AppUser> list() {
-		return userDao.list();
-	}
-	
-	public void save(AppUser user) {
-		userDao.save(user);
-	}
-	public void update(AppUser user) {
-		userDao.update(user);
-	}
-	public void delete(AppUser user) {
-		userDao.delete(user);
-	}
 
 }
