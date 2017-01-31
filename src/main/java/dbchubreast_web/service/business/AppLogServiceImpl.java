@@ -69,21 +69,21 @@ public class AppLogServiceImpl implements AppLogService {
 
 	public void log(ModelAndView modelAndView, String comment) {
 
+		if (modelAndView!=null) {
 
-		String parameter = this.mapToString(modelAndView.getModelMap());
+			String parameter = this.mapToString(modelAndView.getModelMap());
 
-		this.saveLog(
-				this.getUsername(),
-				this.getRole(),
-				this.getIpAddress(),  // ip
-				request==null ? null : request.getMethod(),  // method
-						request==null ? null : request.getContextPath(),  // route
-								request==null ? null : request.getRequestURI(), // url
-										parameter,  // parameter
-										comment // comment
-				); 
-
-
+			this.saveLog(
+					this.getUsername(),
+					this.getRole(),
+					this.getIpAddress(),  // ip
+					request==null ? null : request.getMethod(),  // method
+							request==null ? null : request.getContextPath(),  // route
+									request==null ? null : request.getRequestURI(), // url
+											parameter,  // parameter
+											comment // comment
+					); 
+		}
 	}
 
 	/** ============================================================================================ */
