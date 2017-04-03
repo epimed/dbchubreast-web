@@ -16,21 +16,26 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuBiomarqueur;
+import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuPrelevement;
 import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 
 @Transactional
 @Repository
 
-@SuppressWarnings("unchecked")
 public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrelevementBiomarqueurDao {
 
 	@Autowired
@@ -42,26 +47,42 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 		if (idPrelevement == null || idBiomarqueur == null) {
 			return null;
 		}
-		ChuPrelevementBiomarqueur result = (ChuPrelevementBiomarqueur) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class).createAlias("chuPrelevement", "chuPrelevement")
-				.createAlias("chuBiomarqueur", "chuBiomarqueur")
-				.add(Restrictions.eq("chuPrelevement.idPrelevement", idPrelevement))
-				.add(Restrictions.eq("chuBiomarqueur.idBiomarqueur", idBiomarqueur)).uniqueResult();
-		this.populateDependencies(result);
-		return result;
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPrelevementBiomarqueur> criteria = builder.createQuery(ChuPrelevementBiomarqueur.class);
+			Root<ChuPrelevementBiomarqueur> root = criteria.from(ChuPrelevementBiomarqueur.class);
+			Join<ChuPrelevementBiomarqueur, ChuBiomarqueur> biomarqueur = root.join("chuBiomarqueur");
+			Join<ChuPrelevementBiomarqueur, ChuPrelevement> prelevement = root.join("chuPrelevement");
+			criteria.select(root).where(
+					builder.and(
+							builder.equal(biomarqueur.get("idBiomarqueur"), idBiomarqueur),
+							builder.equal(prelevement.get("idPrelevement"), idPrelevement)
+							)
+					);
+			ChuPrelevementBiomarqueur result = sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			this.populateDependencies(result);
+			return result;
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
 
 	public List<ChuPrelevementBiomarqueur> list(Integer idPrelevement) {
-		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class).createAlias("chuPrelevement", "chuPrelevement")
-				.createAlias("chuBiomarqueur", "chuBiomarqueur")
-				.add(Restrictions.eq("chuPrelevement.idPrelevement", idPrelevement))
-				.addOrder(Order.asc("chuBiomarqueur.ordre")).list();
-
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevementBiomarqueur> criteria = builder.createQuery(ChuPrelevementBiomarqueur.class);
+		Root<ChuPrelevementBiomarqueur> root = criteria.from(ChuPrelevementBiomarqueur.class);
+		Join<ChuPrelevementBiomarqueur, ChuBiomarqueur> biomarqueur = root.join("chuBiomarqueur");
+		Join<ChuPrelevementBiomarqueur, ChuPrelevement> prelevement = root.join("chuPrelevement");
+		criteria.select(root).where(builder.equal(prelevement.get("idPrelevement"), idPrelevement));
+		criteria.orderBy(builder.asc(biomarqueur.get("ordre")));
+		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
-
 		return list;
 	}
 
@@ -69,12 +90,20 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 
 	public List<ChuPrelevementBiomarqueur> list(Integer idPhaseTumeur, String idBiomarqueur) {
 
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPrelevementBiomarqueur.class)
-				.createAlias("chuPrelevement", "chuPrelevement")
-				.createAlias("chuPrelevement.chuPhaseTumeur", "chuPhaseTumeur")
-				.add(Restrictions.eq("id.idBiomarqueur", idBiomarqueur))
-				.add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhaseTumeur));
-		return crit.list();
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevementBiomarqueur> criteria = builder.createQuery(ChuPrelevementBiomarqueur.class);
+		Root<ChuPrelevementBiomarqueur> root = criteria.from(ChuPrelevementBiomarqueur.class);
+		Join<ChuPrelevementBiomarqueur, ChuBiomarqueur> biomarqueur = root.join("chuBiomarqueur");
+		Join<ChuPrelevementBiomarqueur, ChuPrelevement> prelevement = root.join("chuPrelevement");
+		Join<ChuPrelevement, ChuPhaseTumeur> phaseTumeur = prelevement.join("chuPhaseTumeur");
+		criteria.select(root).where(
+				builder.and(
+						builder.equal(biomarqueur.get("idBiomarqueur"), idBiomarqueur),
+						builder.equal(phaseTumeur.get("idPhase"), idPhaseTumeur)
+						)
+				);
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
 	}
 
 	/** ================================================= */
@@ -84,12 +113,20 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 		if (listIdPrelevements == null || listIdPrelevements.isEmpty()) {
 			return null;
 		}
-
-		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPrelevementBiomarqueur.class).createAlias("chuPrelevement", "chuPrelevement")
-				.createAlias("chuBiomarqueur", "chuBiomarqueur")
-				.add(Restrictions.in("chuPrelevement.idPrelevement", listIdPrelevements))
-				.addOrder(Order.asc("chuBiomarqueur.ordre")).list();
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevementBiomarqueur> criteria = builder.createQuery(ChuPrelevementBiomarqueur.class);
+		Root<ChuPrelevementBiomarqueur> root = criteria.from(ChuPrelevementBiomarqueur.class);
+		Join<ChuPrelevementBiomarqueur, ChuBiomarqueur> biomarqueur = root.join("chuBiomarqueur");
+		Join<ChuPrelevementBiomarqueur, ChuPrelevement> prelevement = root.join("chuPrelevement");
+		
+		criteria.select(root).where(
+				builder.in(prelevement.get("idPrelevement")).value(listIdPrelevements)
+				);
+		
+		criteria.orderBy(builder.asc(biomarqueur.get("ordre")));
+		
+		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
 		this.populateDependencies(list);
 
