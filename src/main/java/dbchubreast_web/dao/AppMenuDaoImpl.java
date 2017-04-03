@@ -17,10 +17,12 @@ package dbchubreast_web.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Criteria;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,14 +34,10 @@ import dbchubreast_web.entity.AppUser;
 
 @Transactional
 @Repository
-@SuppressWarnings("unchecked")
 public class AppMenuDaoImpl extends BaseDao implements AppMenuDao {
-
 
 	@Autowired
 	private SessionFactory sessionFactory;
-
-	String dbname = "db_chu_breast";
 
 
 	/** ================================================= */
@@ -47,25 +45,28 @@ public class AppMenuDaoImpl extends BaseDao implements AppMenuDao {
 
 	public List<AppMenu> loadMenuForUser(AppUser user) {
 
-
-		logger.debug("User {}", user);
+		logger.debug("loadMenuForUser:  user={}", user);
 
 		List<String> listIdRoles = new ArrayList<String>();
 		for (AppRole role : user.getAppRoles()) {
 			listIdRoles.add(role.getIdRole());
 		}
-		
-		Criteria crit = sessionFactory.getCurrentSession()
-				.createCriteria(AppMenu.class)
-				.createAlias("subMenus", "subMenus")
-				.createAlias("subMenus.appRoles", "subRoles")
-				.add(Restrictions.in("subRoles.idRole", listIdRoles))
-				.addOrder(Order.asc("level"))
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-				;
-		
-		List<AppMenu> listRootMenus = crit.list();
-		
+
+
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<AppMenu> criteria = builder.createQuery(AppMenu.class);
+		Root<AppMenu> root = criteria.from(AppMenu.class);
+		Join<AppMenu, AppMenu> submenus = root.join("subMenus");
+		Join<AppMenu, AppRole> roles = submenus.join("appRoles");
+
+		criteria.select(root).distinct(true).where(
+				builder.in(roles.get("idRole")).value(listIdRoles)
+				);
+
+		criteria.orderBy(builder.asc(root.get("level")));
+
+		List<AppMenu> listRootMenus =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 		for (AppMenu rootMenu : listRootMenus) {
 			List<AppMenu> subMenus = this.getAthorizedSubMenus(listIdRoles, rootMenu.getIdMenu());
 			rootMenu.setSubMenus(subMenus);
@@ -77,20 +78,26 @@ public class AppMenuDaoImpl extends BaseDao implements AppMenuDao {
 	}
 
 	/** ================================================= */
-	
-	
+
 	private List<AppMenu> getAthorizedSubMenus (List<String> listIdRoles, Integer idRootMenu) {
-		Criteria crit = sessionFactory.getCurrentSession()
-				.createCriteria(AppMenu.class)
-				.createAlias("rootMenu", "rootMenu")
-				.createAlias("appRoles", "appRoles")
-				.add(Restrictions.in("appRoles.idRole", listIdRoles))
-				.add(Restrictions.eq("rootMenu.idMenu", idRootMenu))
-				.addOrder(Order.asc("level"))
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-				;
-		return crit.list();
+
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<AppMenu> criteria = builder.createQuery(AppMenu.class);
+		Root<AppMenu> root = criteria.from(AppMenu.class);
+		Join<AppMenu, AppRole> roles = root.join("appRoles");
+		Join<AppMenu, AppMenu> rootMenu = root.join("rootMenu");
+		criteria.select(root).distinct(true).where(
+				builder.and(
+						builder.in(roles.get("idRole")).value(listIdRoles),
+						builder.equal(rootMenu.get("idMenu"), idRootMenu)
+						)
+				);
+
+		criteria.orderBy(builder.asc(root.get("level")));
+
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 	}
-	
+
 	/** ================================================= */
 }

@@ -16,11 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,6 @@ import dbchubreast_web.entity.AppUser;
 
 @Transactional
 @Repository
-@SuppressWarnings("unchecked")
 public class AppUserDaoImpl extends BaseDao implements AppUserDao {
 
 
@@ -40,53 +40,59 @@ public class AppUserDaoImpl extends BaseDao implements AppUserDao {
 	/** ================================================= */
 
 	public AppUser findByUsername(String username) {
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<AppUser> criteria = builder.createQuery(AppUser.class);
+			Root<AppUser> root = criteria.from(AppUser.class);
+			root.fetch("appRoles");
+			criteria.select(root).where(
+					builder.and(
+							builder.or(
+									builder.equal(root.get("login"), username),
+									builder.equal(root.get("email"), username)
+									),
+							builder.isTrue(root.get("enabled"))
+							)
+					);
+			AppUser user = sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			
+			return user;
 
-		Criteria crit = sessionFactory.getCurrentSession()
-				.createCriteria(AppUser.class);
-
-		crit.add(Restrictions.or(
-				Restrictions.eq("login", username),
-				Restrictions.eq("email", username)
-				));
-
-		crit.add(Restrictions.eq("enabled", true));
-
-		AppUser user = (AppUser) crit.uniqueResult();
-		if(user!=null){
-			Hibernate.initialize(user.getAppRoles());
 		}
-		return user;
+		catch (NoResultException ex) {
+			return null;
+		}
 	}
 
 	/** ================================================= */
 
 	public AppUser findById(Integer idUser) {
-		AppUser user = (AppUser) sessionFactory.getCurrentSession()
-				.createCriteria(AppUser.class)
-				.add(Restrictions.eq("idUser", idUser))
-				.uniqueResult();
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<AppUser> criteria = builder.createQuery(AppUser.class);
+			Root<AppUser> root = criteria.from(AppUser.class);
+			root.fetch("appRoles");
+			criteria.select(root).where(builder.equal(root.get("idUser"), idUser));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
 
-		if(user!=null){
-			Hibernate.initialize(user.getAppRoles());
 		}
-		return user;
-
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
 
 	public List<AppUser> list(){
-
-		List<AppUser> list = sessionFactory.getCurrentSession()
-				.createCriteria(AppUser.class)
-				.addOrder(Order.asc("lastName"))
-				.list();
-
-		for (AppUser user : list) {
-			Hibernate.initialize(user.getAppRoles());
-		}
-
-		return list;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<AppUser> criteria = builder.createQuery(AppUser.class);
+		Root<AppUser> root = criteria.from(AppUser.class);
+		root.fetch("appRoles");
+		criteria.select(root);
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 	}
 
 	/** ================================================= */
