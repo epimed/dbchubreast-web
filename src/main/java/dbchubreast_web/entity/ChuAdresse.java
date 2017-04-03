@@ -16,6 +16,10 @@ import javax.persistence.Table;
 @Table(name = "chu_adresse", schema = "db_chu_breast")
 public class ChuAdresse implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer idAdresse;
 	private ChuCommune chuCommune;
 	private ChuPatient chuPatient;

@@ -13,7 +13,6 @@
  */
 package dbchubreast_web.service.business;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +37,6 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 
 	public String getLastIdPatient() {
 		return patientDao.getLastIdPatient();
-	}
-
-	public ChuPatient find(String nom, String prenom, Date dateNaissance) {
-		return patientDao.find(nom, prenom, dateNaissance);
 	}
 
 	public ChuPatient find(String idPatient) {

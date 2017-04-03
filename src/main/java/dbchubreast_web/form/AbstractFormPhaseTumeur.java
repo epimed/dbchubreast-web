@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.validator.constraints.Length;
-
 import dbchubreast_web.service.BaseService;
 
 public abstract class AbstractFormPhaseTumeur extends BaseService implements IForm {

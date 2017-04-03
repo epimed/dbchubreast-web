@@ -28,6 +28,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -262,7 +263,7 @@ public class FileService {
 				for (int j = 0; j < data.length; j++) {
 
 					Cell cell = row.createCell(cellnum++);
-					cell.setCellType(Cell.CELL_TYPE_STRING);
+					cell.setCellType(CellType.STRING);
 
 					boolean isNull = (data[j] == null);
 					if (!isNull) {
@@ -315,7 +316,7 @@ public class FileService {
 				for (int j = 0; j < data.length; j++) {
 
 					Cell cell = row.createCell(cellnum++);
-					cell.setCellType(Cell.CELL_TYPE_STRING);
+					cell.setCellType(CellType.STRING);
 
 					boolean isNull = (data[j] == null);
 					if (!isNull) {
