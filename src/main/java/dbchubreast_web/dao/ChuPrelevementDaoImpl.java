@@ -16,7 +16,6 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;

@@ -16,10 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +30,6 @@ import dbchubreast_web.entity.ChuBiomarqueur;
 
 @Transactional
 @Repository
-
-@SuppressWarnings("unchecked")
 public class ChuBiomarqueurDaoImpl extends BaseDao implements ChuBiomarqueurDao {
 
 	@Autowired
@@ -38,27 +38,43 @@ public class ChuBiomarqueurDaoImpl extends BaseDao implements ChuBiomarqueurDao 
 	/** ================================================= */
 
 	public ChuBiomarqueur find(String idBiomarqueur) {
-		ChuBiomarqueur result = (ChuBiomarqueur) sessionFactory.getCurrentSession().createCriteria(ChuBiomarqueur.class)
-				.add(Restrictions.eq("idBiomarqueur", idBiomarqueur)).uniqueResult();
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuBiomarqueur> criteria = builder.createQuery(ChuBiomarqueur.class);
+			Root<ChuBiomarqueur> root = criteria.from(ChuBiomarqueur.class);
+			criteria.select(root).where(builder.equal(root.get("idBiomarqueur"), idBiomarqueur));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+	
 	}
 
 	/** ================================================= */
 
 	public List<ChuBiomarqueur> list() {
-		List<ChuBiomarqueur> result = sessionFactory.getCurrentSession().createCriteria(ChuBiomarqueur.class)
-				.addOrder(Order.asc("ordre")).list();
-		return result;
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuBiomarqueur> criteria = builder.createQuery(ChuBiomarqueur.class);
+		Root<ChuBiomarqueur> root = criteria.from(ChuBiomarqueur.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("ordre")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuBiomarqueur> list(Object[] noms) {
 
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuBiomarqueur.class)
-				.add(Restrictions.in("idBiomarqueur", noms)).addOrder(Order.asc("ordre"));
-
-		return crit.list();
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuBiomarqueur> criteria = builder.createQuery(ChuBiomarqueur.class);
+		Root<ChuBiomarqueur> root = criteria.from(ChuBiomarqueur.class);
+		criteria.select(root).where(builder.in(root.get("idBiomarqueur")).value(noms));
+		criteria.orderBy(builder.asc(root.get("ordre")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 	}
 
 	/** ================================================= */

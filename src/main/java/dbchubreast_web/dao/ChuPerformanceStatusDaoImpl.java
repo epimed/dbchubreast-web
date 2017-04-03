@@ -16,9 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,21 +30,38 @@ import dbchubreast_web.entity.ChuPerformanceStatus;
 
 @Transactional
 @Repository
-@SuppressWarnings("unchecked")
 public class ChuPerformanceStatusDaoImpl extends BaseDao implements ChuPerformanceStatusDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/** ================================================= */
+
 	public ChuPerformanceStatus find(Integer idPs) {
-		ChuPerformanceStatus result = (ChuPerformanceStatus) sessionFactory.getCurrentSession()
-				.createCriteria(ChuPerformanceStatus.class).add(Restrictions.eq("idPs", idPs)).uniqueResult();
-		return result;
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPerformanceStatus> criteria = builder.createQuery(ChuPerformanceStatus.class);
+			Root<ChuPerformanceStatus> root = criteria.from(ChuPerformanceStatus.class);
+			criteria.select(root).where(builder.equal(root.get("idPs"), idPs));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
 	}
 
+	/** ================================================= */
+
 	public List<ChuPerformanceStatus> list() {
-		List<ChuPerformanceStatus> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuPerformanceStatus.class).addOrder(Order.asc("idPs")).list();
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPerformanceStatus> criteria = builder.createQuery(ChuPerformanceStatus.class);
+		Root<ChuPerformanceStatus> root = criteria.from(ChuPerformanceStatus.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("idPs")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 	}
+
+	/** ================================================= */
 }

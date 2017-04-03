@@ -16,9 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +30,6 @@ import dbchubreast_web.entity.ChuMetastase;;
 
 @Transactional
 @Repository
-
-@SuppressWarnings("unchecked")
 public class ChuMetastaseDaoImpl extends BaseDao implements ChuMetastaseDao {
 
 	@Autowired
@@ -37,39 +38,58 @@ public class ChuMetastaseDaoImpl extends BaseDao implements ChuMetastaseDao {
 	/** ================================================= */
 
 	public ChuMetastase find(Integer idMetastase) {
-		ChuMetastase result = (ChuMetastase) sessionFactory.getCurrentSession().createCriteria(ChuMetastase.class)
-				.add(Restrictions.eq("idMetastase", idMetastase)).uniqueResult();
-		return result;
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuMetastase> criteria = builder.createQuery(ChuMetastase.class);
+			Root<ChuMetastase> root = criteria.from(ChuMetastase.class);
+			criteria.select(root).where(builder.equal(root.get("idMetastase"), idMetastase));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuMetastase> list() {
-
-		List<ChuMetastase> result = sessionFactory.getCurrentSession().createCriteria(ChuMetastase.class)
-				.addOrder(Order.asc("idMetastase")).list();
-
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuMetastase> criteria = builder.createQuery(ChuMetastase.class);
+		Root<ChuMetastase> root = criteria.from(ChuMetastase.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("idMetastase")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 	}
 
 	/** ================================================= */
 
 	public List<ChuMetastase> list(List<Integer> listIdMetastases) {
-		List<ChuMetastase> result = sessionFactory.getCurrentSession().createCriteria(ChuMetastase.class)
-				.add(Restrictions.in("idMetastase", listIdMetastases)).addOrder(Order.asc("idMetastase")).list();
 
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuMetastase> criteria = builder.createQuery(ChuMetastase.class);
+		Root<ChuMetastase> root = criteria.from(ChuMetastase.class);
+		criteria.select(root).where(builder.in(root.get("idMetastase")).value(listIdMetastases));
+		criteria.orderBy(builder.asc(root.get("idMetastase")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuMetastase> list(Integer idPhaseTumeur) {
-		List<ChuMetastase> result = sessionFactory.getCurrentSession().createCriteria(ChuMetastase.class)
-				.createAlias("chuPhaseTumeurs", "chuPhaseTumeurs")
-				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhaseTumeur)).addOrder(Order.asc("idMetastase"))
-				.list();
 
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuMetastase> criteria = builder.createQuery(ChuMetastase.class);
+		Root<ChuMetastase> root = criteria.from(ChuMetastase.class);
+		criteria.select(root).where(
+				builder.equal(
+						root.get("chuPhaseTumeurs").get("idPhase"),idPhaseTumeur)
+				);
+		criteria.orderBy(builder.asc(root.get("idMetastase")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 	}
 
 	/** ================================================= */

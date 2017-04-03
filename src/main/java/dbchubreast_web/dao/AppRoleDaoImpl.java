@@ -16,9 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +31,6 @@ import dbchubreast_web.entity.AppRole;
 
 @Transactional
 @Repository
-@SuppressWarnings("unchecked")
 public class AppRoleDaoImpl extends BaseDao implements AppRoleDao {
 
 
@@ -39,12 +41,18 @@ public class AppRoleDaoImpl extends BaseDao implements AppRoleDao {
 	/** ================================================= */
 
 	public AppRole findById(String idRole) {
-		AppRole role = (AppRole) sessionFactory.getCurrentSession()
-				.createCriteria(AppRole.class)
-				.add(Restrictions.eq("idRole", idRole))
-				.uniqueResult();
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<AppRole> criteria = builder.createQuery(AppRole.class);
+			Root<AppRole> root = criteria.from(AppRole.class);
+			criteria.select(root).where(builder.equal(root.get("idRole"), idRole));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
 
-		return role;
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 
 	}
 
@@ -52,12 +60,12 @@ public class AppRoleDaoImpl extends BaseDao implements AppRoleDao {
 
 	public List<AppRole> list(){
 
-		List<AppRole> list = sessionFactory.getCurrentSession()
-				.createCriteria(AppRole.class)
-				.addOrder(Order.asc("idRole"))
-				.list();
-
-		return list;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<AppRole> criteria = builder.createQuery(AppRole.class);
+		Root<AppRole> root = criteria.from(AppRole.class);
+		criteria.select(root);
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
 	}
 
 	/** ================================================= */

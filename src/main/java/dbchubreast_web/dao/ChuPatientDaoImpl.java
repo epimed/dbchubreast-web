@@ -14,72 +14,63 @@
 
 package dbchubreast_web.dao;
 
-import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Criteria;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CompoundSelection;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.entity.ChuTumeur;
 
 @Transactional
 @Repository
 
-@SuppressWarnings("unchecked")
 public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	/** =============================================================================================================================== */
+	/** ================================================= */
 
 	public List<ChuPatient> list() {
 
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPatient.class).addOrder(Order.asc("nom"))
-				.addOrder(Order.asc("prenom"));
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+		Root<ChuPatient> root = criteria.from(ChuPatient.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("nom")), builder.asc(root.get("prenom")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
-		return crit.list();
 	}
 
 	/** ================================================= */
 
 	public String getLastIdPatient() {
 
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPatient.class)
-				.setProjection(Projections.projectionList().add(Projections.property("idPatient")))
-				.addOrder(Order.desc("idPatient")).setMaxResults(1);
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<String> criteria = builder.createQuery(String.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			CompoundSelection<String> projection = builder.construct(String.class, root.get("idPatient"));
+			criteria.select(projection);
+			criteria.orderBy(builder.desc(root.get("idPatient")));
 
-		return (String) crit.uniqueResult();
-
-	}
-
-	/** ================================================= */
-
-	public ChuPatient find(String nom, String prenom, Date dateNaissance) {
-
-		ChuPatient result = null;
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuPatient.class);
-
-		crit.add(Restrictions.eq("nom", nom).ignoreCase());
-
-		if (prenom != null) {
-			crit.add(Restrictions.eq("prenom", prenom).ignoreCase());
+			return sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
 		}
-
-		if (dateNaissance != null) {
-			crit.add(Restrictions.eq("dateNaissance", dateNaissance));
+		catch (NoResultException ex) {
+			return null;
 		}
-
-		result = (ChuPatient) crit.uniqueResult();
-
-		return result;
 
 	}
 
@@ -87,57 +78,93 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 
 	public Long count() {
 
-		return (Long) sessionFactory.getCurrentSession().createCriteria(ChuPatient.class)
-				.setProjection(Projections.projectionList().add(Projections.rowCount())).uniqueResult();
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			criteria.select(builder.count(root));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
 	}
 
 	/** ================================================= */
 
 	public ChuPatient find(String idPatient) {
 
-		ChuPatient patient = (ChuPatient) sessionFactory.getCurrentSession().createCriteria(ChuPatient.class)
-				.add(Restrictions.eq("idPatient", idPatient)).uniqueResult();
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			criteria.select(root).where(builder.equal(root.get("idPatient"), idPatient));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 
-		return patient;
 	}
 
 	/** ================================================= */
 
-	public ChuPatient find(Integer idTumeur) {
-
-		ChuPatient patient = (ChuPatient) sessionFactory.getCurrentSession().createCriteria(ChuPatient.class)
-				.createAlias("chuTumeurs", "chuTumeurs").add(Restrictions.eq("chuTumeurs.idTumeur", idTumeur))
-				.uniqueResult();
-
-		return patient;
+	public ChuPatient find(Integer idTumeur) {	
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			criteria.select(root).where(builder.equal(root.get("chuTumeurs").get("idTumeur"), idTumeur));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 	}
 
 	/** ================================================= */
 
 	public ChuPatient findByIdPrelevement(Integer idPrelevement) {
-		ChuPatient patient = (ChuPatient) sessionFactory.getCurrentSession().createCriteria(ChuPatient.class)
-				.createAlias("chuTumeurs", "chuTumeurs").createAlias("chuTumeurs.chuPhaseTumeurs", "chuPhaseTumeurs")
-				.createAlias("chuPhaseTumeurs.chuPrelevements", "chuPrelevements")
-				.add(Restrictions.eq("chuPrelevements.idPrelevement", idPrelevement)).uniqueResult();
-		return patient;
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			Join<ChuPatient, ChuTumeur> tumeurs = root.join("chuTumeurs");
+			Join<ChuTumeur, ChuPhaseTumeur> phases = tumeurs.join("chuPhaseTumeurs");
+			Join<ChuPhaseTumeur, ChuPrelevement> prelevements = phases.join("chuPrelevements");
+			criteria.select(root).where(builder.equal(prelevements.get("idPrelevement"), idPrelevement));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuPatient> findInAttributes(String text) {
 
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ChuPatient.class);
+		text = text.toLowerCase();
 
-		Criterion criterion = Restrictions.or(Restrictions.like("nom", "%" + text + "%").ignoreCase(),
-				Restrictions.like("prenom", "%" + text + "%").ignoreCase(),
-				Restrictions.like("rcp", "%" + text + "%").ignoreCase(),
-				Restrictions.like("idPatient", "%" + text + "%").ignoreCase());
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+		Root<ChuPatient> root = criteria.from(ChuPatient.class);
+		criteria.select(root)
+		.where(
+				builder.or(
+						builder.like(builder.lower(root.get("nom")), "%" + text + "%"),
+						builder.like(builder.lower(root.get("prenom")), "%" + text + "%"),
+						builder.like(builder.lower(root.get("rcp")), "%" + text + "%"),
+						builder.like(builder.lower(root.get("idPatient")), "%" + text + "%")
+				)
+		);
 
-		criteria.add(criterion);
+		criteria.orderBy(builder.asc(root.get("nom")), builder.asc(root.get("prenom")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
-		criteria.addOrder(Order.asc("nom")).addOrder(Order.asc("prenom"));
-
-		return criteria.list();
 	}
 
 	/** ================================================= */

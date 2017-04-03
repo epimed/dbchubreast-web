@@ -16,9 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +31,6 @@ import dbchubreast_web.entity.ChuEvolution;
 @Transactional
 @Repository
 
-@SuppressWarnings("unchecked")
 public class ChuEvolutionDaoImpl extends BaseDao implements ChuEvolutionDao {
 
 	@Autowired
@@ -38,18 +40,30 @@ public class ChuEvolutionDaoImpl extends BaseDao implements ChuEvolutionDao {
 
 	public List<ChuEvolution> list() {
 
-		List<ChuEvolution> result = sessionFactory.getCurrentSession().createCriteria(ChuEvolution.class)
-				.addOrder(Order.asc("idEvolution")).list();
-
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuEvolution> criteria = builder.createQuery(ChuEvolution.class);
+		Root<ChuEvolution> root = criteria.from(ChuEvolution.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("idEvolution")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
 	}
 
 	/** ================================================= */
 
 	public ChuEvolution find(Integer idEvolution) {
-		ChuEvolution result = (ChuEvolution) sessionFactory.getCurrentSession().createCriteria(ChuEvolution.class)
-				.add(Restrictions.eq("idEvolution", idEvolution)).uniqueResult();
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuEvolution> criteria = builder.createQuery(ChuEvolution.class);
+			Root<ChuEvolution> root = criteria.from(ChuEvolution.class);
+			criteria.select(root).where(builder.equal(root.get("idEvolution"), idEvolution));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */

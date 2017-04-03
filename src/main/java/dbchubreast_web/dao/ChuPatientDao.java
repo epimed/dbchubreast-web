@@ -14,7 +14,6 @@
 
 package dbchubreast_web.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import dbchubreast_web.entity.ChuPatient;
@@ -24,8 +23,6 @@ public interface ChuPatientDao {
 	public List<ChuPatient> list();
 
 	public String getLastIdPatient();
-
-	public ChuPatient find(String nom, String prenom, Date dateNaissance);
 
 	public Long count();
 

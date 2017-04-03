@@ -13,7 +13,6 @@
  */
 package dbchubreast_web.service.business;
 
-import java.util.Date;
 import java.util.List;
 
 import dbchubreast_web.entity.ChuPatient;
@@ -27,8 +26,6 @@ public interface ChuPatientService {
 	public Long count();
 
 	public ChuPatient find(String idPatient);
-
-	public ChuPatient find(String nom, String prenom, Date dateNaissance);
 
 	public ChuPatient find(Integer idTumeur);
 

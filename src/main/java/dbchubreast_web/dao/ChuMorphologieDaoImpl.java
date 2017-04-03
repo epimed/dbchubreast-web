@@ -16,9 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +30,6 @@ import dbchubreast_web.entity.ChuMorphologie;
 
 @Transactional
 @Repository
-
-@SuppressWarnings("unchecked")
 public class ChuMorphologieDaoImpl extends BaseDao implements ChuMorphologieDao {
 
 	@Autowired
@@ -37,19 +38,33 @@ public class ChuMorphologieDaoImpl extends BaseDao implements ChuMorphologieDao 
 	/** ================================================= */
 
 	public ChuMorphologie find(String idMorphologie) {
-		ChuMorphologie result = (ChuMorphologie) sessionFactory.getCurrentSession().createCriteria(ChuMorphologie.class)
-				.add(Restrictions.eq("idMorphologie", idMorphologie)).uniqueResult();
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuMorphologie> criteria = builder.createQuery(ChuMorphologie.class);
+			Root<ChuMorphologie> root = criteria.from(ChuMorphologie.class);
+			criteria.select(root).where(builder.equal(root.get("idMorphologie"), idMorphologie));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
+	
 	public List<ChuMorphologie> list() {
-		List<ChuMorphologie> result = sessionFactory.getCurrentSession()
-				.createCriteria(ChuMorphologie.class)
-				.createAlias("chuGroupeMorphologie", "chuGroupeMorphologie")
-				.add(Restrictions.eq("chuGroupeMorphologie.idGroupeMorpho", "MG1"))
-				.addOrder(Order.asc("idMorphologie")).list();
-		return result;
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuMorphologie> criteria = builder.createQuery(ChuMorphologie.class);
+		Root<ChuMorphologie> root = criteria.from(ChuMorphologie.class);
+		criteria.select(root).where(
+				builder.equal(root.get("chuGroupeMorphologie").get("idGroupeMorpho"), "MG1")
+				);
+		criteria.orderBy(builder.asc(root.get("idMorphologie")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+	
 	}
 
 	/** ================================================= */
