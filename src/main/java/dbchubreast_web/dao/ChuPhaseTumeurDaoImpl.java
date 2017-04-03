@@ -29,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuPrelevement;
 import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.entity.ChuTypePhase;
 
@@ -117,7 +118,8 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 			CriteriaQuery<ChuPhaseTumeur> criteria = builder.createQuery(ChuPhaseTumeur.class);
 			Root<ChuPhaseTumeur> root = criteria.from(ChuPhaseTumeur.class);
-			criteria.select(root).where(builder.equal(root.get("chuPrelevements").get("idPrelevement"), idPrelevement));
+			Join<ChuPhaseTumeur, ChuPrelevement> prelevements = root.join("chuPrelevements");
+			criteria.select(root).where(builder.equal(prelevements.get("idPrelevement"), idPrelevement));
 			ChuPhaseTumeur result =  sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
 			this.populateDependencies(result);
 			return result;

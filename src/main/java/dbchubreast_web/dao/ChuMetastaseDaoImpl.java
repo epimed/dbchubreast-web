@@ -19,6 +19,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.SessionFactory;
@@ -26,7 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import dbchubreast_web.entity.ChuMetastase;;
+import dbchubreast_web.entity.ChuMetastase;
+import dbchubreast_web.entity.ChuPhaseTumeur;;
 
 @Transactional
 @Repository
@@ -83,9 +85,9 @@ public class ChuMetastaseDaoImpl extends BaseDao implements ChuMetastaseDao {
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuMetastase> criteria = builder.createQuery(ChuMetastase.class);
 		Root<ChuMetastase> root = criteria.from(ChuMetastase.class);
+		Join<ChuMetastase, ChuPhaseTumeur> phases = root.join("chuPhaseTumeurs");
 		criteria.select(root).where(
-				builder.equal(
-						root.get("chuPhaseTumeurs").get("idPhase"),idPhaseTumeur)
+				builder.equal(phases.get("idPhase"),idPhaseTumeur)
 				);
 		criteria.orderBy(builder.asc(root.get("idMetastase")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();

@@ -72,8 +72,6 @@ public class AppMenuDaoImpl extends BaseDao implements AppMenuDao {
 			rootMenu.setSubMenus(subMenus);
 		}
 
-		logger.debug("listRootMenus {}", listRootMenus);
-
 		return listRootMenus;
 	}
 

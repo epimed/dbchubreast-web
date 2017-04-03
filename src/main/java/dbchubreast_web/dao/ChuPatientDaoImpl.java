@@ -115,7 +115,8 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
 			Root<ChuPatient> root = criteria.from(ChuPatient.class);
-			criteria.select(root).where(builder.equal(root.get("chuTumeurs").get("idTumeur"), idTumeur));
+			Join<ChuPatient, ChuTumeur> tumeurs = root.join("chuTumeurs");
+			criteria.select(root).where(builder.equal(tumeurs.get("idTumeur"), idTumeur));
 			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
 		}
 		catch (NoResultException ex) {
