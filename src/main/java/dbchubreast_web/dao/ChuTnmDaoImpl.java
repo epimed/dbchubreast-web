@@ -14,12 +14,18 @@
 
 package dbchubreast_web.dao;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTnm;
 
 @Transactional
@@ -32,10 +38,24 @@ public class ChuTnmDaoImpl extends BaseDao implements ChuTnmDao {
 
 	/** ================================================= */
 	public ChuTnm find(Integer idPhase, String type) {
-		ChuTnm result = (ChuTnm) sessionFactory.getCurrentSession().createCriteria(ChuTnm.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
-				.add(Restrictions.eq("type", type)).uniqueResult();
-		return result;
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTnm> criteria = builder.createQuery(ChuTnm.class);
+			Root<ChuTnm> root = criteria.from(ChuTnm.class);
+			Join<ChuTnm, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+			criteria.select(root).where(
+					builder.and(
+							builder.equal(phase.get("idPhase"), idPhase),
+							builder.equal(root.get("type"), type)
+							)
+					);
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
 	}
 
 	/** ================================================= */

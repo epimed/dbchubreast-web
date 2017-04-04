@@ -16,20 +16,22 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuGroupeTopographie;
 import dbchubreast_web.entity.ChuTopographie;
 
 @Transactional
 @Repository
-
-@SuppressWarnings("unchecked")
 public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao {
 
 	@Autowired
@@ -38,31 +40,44 @@ public class ChuTopographieDaoImpl extends BaseDao implements ChuTopographieDao 
 	/** ================================================= */
 
 	public ChuTopographie find(String idTopographie) {
-		ChuTopographie result = (ChuTopographie) sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
-				.add(Restrictions.eq("idTopographie", idTopographie)).uniqueResult();
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTopographie> criteria = builder.createQuery(ChuTopographie.class);
+			Root<ChuTopographie> root = criteria.from(ChuTopographie.class);
+			criteria.select(root).where(builder.equal(root.get("idTopographie"), idTopographie));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 	}
 
 	/** ================================================= */
 
 	public List<ChuTopographie> list(List<String> listIdGroupeTopo) {
 
-		List<ChuTopographie> result = sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
-				.createAlias("chuGroupeTopographie", "chuGroupeTopographie")
-				.add(Restrictions.in("chuGroupeTopographie.idGroupeTopo", listIdGroupeTopo))
-				.addOrder(Order.asc("idTopographie")).list();
-
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTopographie> criteria = builder.createQuery(ChuTopographie.class);
+		Root<ChuTopographie> root = criteria.from(ChuTopographie.class);
+		Join<ChuTopographie, ChuGroupeTopographie> groupe = root.join("chuGroupeTopographie");
+		criteria.select(root).where(builder.in(groupe.get("idGroupeTopo")).value(listIdGroupeTopo));
+		criteria.orderBy(builder.asc(root.get("idTopographie")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
 	}
 
 	/** ================================================= */
 
 	public List<ChuTopographie> list() {
 
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuTopographie.class)
-				.addOrder(Order.asc("idTopographie"));
-
-		return crit.list();
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTopographie> criteria = builder.createQuery(ChuTopographie.class);
+		Root<ChuTopographie> root = criteria.from(ChuTopographie.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("idTopographie")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
 	}
 
 	/** ================================================= */

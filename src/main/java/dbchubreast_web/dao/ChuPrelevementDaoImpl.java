@@ -16,20 +16,26 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.entity.ChuTumeur;
 
 @Transactional
 @Repository
 
-@SuppressWarnings("unchecked")
 public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao {
 
 	@Autowired
@@ -38,21 +44,30 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 	/** ================================================= */
 
 	public ChuPrelevement find(Integer idPrelevement) {
-		ChuPrelevement result = (ChuPrelevement) sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
-				.add(Restrictions.eq("idPrelevement", idPrelevement)).uniqueResult();
-		this.populateDependencies(result);
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+			Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
+			criteria.select(root).where(builder.equal(root.get("idPrelevement"), idPrelevement));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
 
 	public List<ChuPrelevement> list() {
-
-		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
-				.addOrder(Order.asc("idPrelevement")).list();
-
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+		Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("idPrelevement")));
+		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
-
 		return list;
 	}
 
@@ -60,40 +75,51 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	public List<ChuPrelevement> listByIdPhase(Integer idPhase) {
 
-		List<ChuPrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").add(Restrictions.eq("chuPhaseTumeur.idPhase", idPhase))
-				.addOrder(Order.asc("datePrelevement")).addOrder(Order.asc("idPrelevement")).list();
-
-		this.populateDependencies(result);
-
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+		Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
+		Join<ChuPrelevement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+		criteria.select(root).where(builder.equal(phase.get("idPhase"), idPhase));
+		criteria.orderBy(builder.asc(root.get("datePrelevement")), builder.asc(root.get("idPrelevement")));
+		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(list);
+		return list;
+		
 	}
 
 	/** ================================================= */
 
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur) {
 
-		List<ChuPrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
-				.add(Restrictions.eq("chuTumeur.idTumeur", idTumeur)).addOrder(Order.asc("datePrelevement"))
-				.addOrder(Order.asc("idPrelevement")).list();
-
-		this.populateDependencies(result);
-
-		return result;
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+		Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
+		Join<ChuPrelevement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+		Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
+		criteria.select(root).where(builder.equal(tumeur.get("idTumeur"), idTumeur));
+		criteria.orderBy(builder.asc(root.get("datePrelevement")), builder.asc(root.get("idPrelevement")));
+		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(list);
+		return list;
+		
 	}
 
 	/** ================================================= */
 
 	public List<ChuPrelevement> listByIdPatient(String idPatient) {
-		List<ChuPrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuPrelevement.class)
-				.createAlias("chuPhaseTumeur", "chuPhaseTumeur").createAlias("chuPhaseTumeur.chuTumeur", "chuTumeur")
-				.createAlias("chuTumeur.chuPatient", "chuPatient")
-				.add(Restrictions.eq("chuPatient.idPatient", idPatient)).addOrder(Order.asc("datePrelevement"))
-				.addOrder(Order.asc("idPrelevement")).list();
-		this.populateDependencies(result);
-
-		return result;
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+		Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
+		Join<ChuPrelevement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+		Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
+		Join<ChuTumeur, ChuPatient> patient = tumeur.join("chuPatient");
+		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
+		criteria.orderBy(builder.asc(root.get("datePrelevement")), builder.asc(root.get("idPrelevement")));
+		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(list);
+		return list;
+		
 	}
 
 	/** ================================================= */

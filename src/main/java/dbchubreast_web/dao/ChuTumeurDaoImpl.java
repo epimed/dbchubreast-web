@@ -16,22 +16,26 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuEvolution;
+import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuTopographie;
 import dbchubreast_web.entity.ChuTumeur;
 
 @Transactional
 @Repository
-
-@SuppressWarnings("unchecked")
 public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	@Autowired
@@ -41,72 +45,97 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	public ChuTumeur find(Integer idTumeur) {
 
-		ChuTumeur tumeur = (ChuTumeur) sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.add(Restrictions.eq("idTumeur", idTumeur)).uniqueResult();
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+			Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+			criteria.select(root).where(builder.equal(root.get("idTumeur"), idTumeur));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 
-		return tumeur;
 	}
 
 	/** ================================================= */
 
 	public ChuTumeur findWithDependencies(Integer idTumeur) {
 
-		ChuTumeur tumeur = (ChuTumeur) sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.add(Restrictions.eq("idTumeur", idTumeur)).uniqueResult();
-
-		Hibernate.initialize(tumeur.getChuEvolution());
-		Hibernate.initialize(tumeur.getChuTopographie());
-		Hibernate.initialize(tumeur.getChuPatient());
-
-		return tumeur;
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+			Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+			criteria.select(root).where(builder.equal(root.get("idTumeur"), idTumeur));
+			ChuTumeur tumeur =  sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			this.populateDependencies(tumeur);
+			return tumeur;
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 	}
 
 	/** ================================================= */
 
 	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase) {
 
-		ChuTumeur tumeur = (ChuTumeur) sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.createAlias("chuPhaseTumeurs", "chuPhaseTumeurs")
-				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhase)).uniqueResult();
-
-		this.populateDependencies(tumeur);
-
-		return tumeur;
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+			Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+			Join<ChuTumeur, ChuPhaseTumeur> phases = root.join("chuPhaseTumeurs");
+			criteria.select(root).where(builder.equal(phases.get("idPhase"), idPhase));
+			ChuTumeur tumeur =  sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			this.populateDependencies(tumeur);
+			return tumeur;
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
 
 	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur) {
 
-		List<ChuTumeur> list = sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.add(Restrictions.eq("idTumeur", idTumeur)).list();
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+		criteria.select(root).where(builder.equal(root.get("idTumeur"), idTumeur));
+		List<ChuTumeur> tumeurs =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(tumeurs);
+		return tumeurs;
 
-		this.populateDependencies(list);
-
-		return list;
 	}
 
 	/** ================================================= */
 
 	public List<ChuTumeur> find(String idPatient) {
 
-		List<ChuTumeur> list = sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.createAlias("chuPatient", "chuPatient").add(Restrictions.eq("chuPatient.idPatient", idPatient))
-				.addOrder(Order.asc("idTumeur")).list();
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+		Join<ChuTumeur, ChuPatient> patient = root.join("chuPatient");
+		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
+		criteria.orderBy(builder.asc(root.get("idTumeur")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
-		return list;
 	}
 
 	/** ================================================= */
 
 	public List<ChuTumeur> findWithDependencies(String idPatient) {
 
-		List<ChuTumeur> list = sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.createAlias("chuPatient", "chuPatient").add(Restrictions.eq("chuPatient.idPatient", idPatient))
-				.addOrder(Order.asc("idTumeur")).list();
-
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+		Join<ChuTumeur, ChuPatient> patient = root.join("chuPatient");
+		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
+		criteria.orderBy(builder.asc(root.get("idTumeur")));
+		List<ChuTumeur> list =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
-
 		return list;
 	}
 
@@ -114,35 +143,41 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	public List<ChuTumeur> findInAttributesWithDependencies(String text) {
 
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.createAlias("chuEvolution", "chuEvolution").createAlias("chuTopographie", "chuTopographie")
-				.createAlias("chuPatient", "chuPatient");
-
-		Criterion criterion = Restrictions.or(
-				Restrictions.like("chuTopographie.idTopographie", "%" + text + "%").ignoreCase(),
-				Restrictions.like("chuEvolution.code", "%" + text + "%").ignoreCase(),
-				Restrictions.like("chuPatient.idPatient", "%" + text + "%").ignoreCase(),
-				Restrictions.like("chuPatient.prenom", "%" + text + "%").ignoreCase(),
-				Restrictions.like("chuPatient.nom", "%" + text + "%").ignoreCase(),
-				Restrictions.like("chuPatient.rcp", "%" + text + "%").ignoreCase());
-
-		criteria.add(criterion);
-
-		criteria.addOrder(Order.asc("idTumeur"));
-
-		List<ChuTumeur> list = criteria.list();
-
+		text = text.toLowerCase();
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+		Join<ChuTumeur, ChuPatient> patient = root.join("chuPatient");
+		Join<ChuTumeur, ChuEvolution> evolution = root.join("chuEvolution");
+		Join<ChuTumeur, ChuTopographie> topographie = root.join("chuTopographie");
+		
+		criteria.select(root).where(
+				builder.or(
+						builder.like(builder.lower(topographie.get("idTopographie")), "%" + text + "%"),
+						builder.like(builder.lower(evolution.get("code")), "%" + text + "%"),
+						builder.like(builder.lower(patient.get("idPatient")), "%" + text + "%"),
+						builder.like(builder.lower(patient.get("prenom")), "%" + text + "%"),
+						builder.like(builder.lower(patient.get("nom")), "%" + text + "%"),
+						builder.like(builder.lower(patient.get("rcp")), "%" + text + "%")
+						)
+				);
+		
+		criteria.orderBy(builder.asc(root.get("idTumeur")));
+		List<ChuTumeur> list =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
-
 		return list;
 	}
 
 	/** ================================================= */
 
 	public List<ChuTumeur> list() {
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(ChuTumeur.class)
-				.addOrder(Order.asc("idTumeur"));
-		return crit.list();
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
+		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+		criteria.select(root);
+		criteria.orderBy(builder.asc(root.get("idTumeur")));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 	}
 
 	/** ================================================= */
@@ -156,9 +191,9 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	/** ================================================= */
 
 	public void save(ChuTumeur tumeur) {
-		
+
 		logger.debug("DAO save {}", tumeur);
-		
+
 		sessionFactory.getCurrentSession().save(tumeur);
 	}
 

@@ -16,8 +16,12 @@ package dbchubreast_web.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +30,6 @@ import dbchubreast_web.entity.ChuTypePrelevement;
 
 @Transactional
 @Repository
-@SuppressWarnings("unchecked")
 public class ChuTypePrelevementDaoImpl extends BaseDao implements ChuTypePrelevementDao {
 
 	@Autowired
@@ -35,37 +38,59 @@ public class ChuTypePrelevementDaoImpl extends BaseDao implements ChuTypePreleve
 	/** ================================================= */
 
 	public ChuTypePrelevement find(Integer idTypePrelevement) {
-		ChuTypePrelevement result = (ChuTypePrelevement) sessionFactory.getCurrentSession()
-				.createCriteria(ChuTypePrelevement.class).add(Restrictions.eq("idTypePrelevement", idTypePrelevement))
-				.uniqueResult();
-		return result;
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
+			Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
+			criteria.select(root).where(builder.equal(root.get("idTypePrelevement"), idTypePrelevement));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuTypePrelevement> list(Integer[] listIdTypePrelevement) {
-		List<ChuTypePrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuTypePrelevement.class)
-				.add(Restrictions.in("idTypePrelevement", (Object[]) listIdTypePrelevement)).list();
-		return result;
+
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
+		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
+		criteria.select(root).where(builder.in(root.get("idTypePrelevement")).value(listIdTypePrelevement));
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuTypePrelevement> listPhaseInitiale() {
-		List<ChuTypePrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuTypePrelevement.class)
-				.add(Restrictions.not(Restrictions.like("nom", "rechute").ignoreCase())).list();
-		return result;
+
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
+		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
+		criteria.select(root).where(
+				builder.notLike(builder.lower(root.get("nom")), builder.lower(root.get("rechute")))
+				);
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuTypePrelevement> listPhaseRechute() {
-		List<ChuTypePrelevement> result = sessionFactory.getCurrentSession().createCriteria(ChuTypePrelevement.class)
-				.add(Restrictions.like("nom", "rechute").ignoreCase()).list();
-		return result;
-	}
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
+		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
+		criteria.select(root).where(
+				builder.like(builder.lower(root.get("nom")), builder.lower(root.get("rechute")))
+				);
+		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
-	/** ================================================= */
+	}
 
 	/** ================================================= */
 

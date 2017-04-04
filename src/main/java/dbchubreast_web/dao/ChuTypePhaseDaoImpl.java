@@ -14,12 +14,18 @@
 
 package dbchubreast_web.dao;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTypePhase;
 
 @Transactional
@@ -33,18 +39,36 @@ public class ChuTypePhaseDaoImpl extends BaseDao implements ChuTypePhaseDao {
 	/** ================================================= */
 
 	public ChuTypePhase find(Integer idTypePhase) {
-		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession().createCriteria(ChuTypePhase.class)
-				.add(Restrictions.eq("idTypePhase", idTypePhase)).uniqueResult();
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTypePhase> criteria = builder.createQuery(ChuTypePhase.class);
+			Root<ChuTypePhase> root = criteria.from(ChuTypePhase.class);
+			criteria.select(root).where(builder.equal(root.get("idTypePhase"), idTypePhase));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
 
 	public ChuTypePhase findByIdPhase(Integer idPhase) {
-		ChuTypePhase result = (ChuTypePhase) sessionFactory.getCurrentSession().createCriteria(ChuTypePhase.class)
-				.createAlias("chuPhaseTumeurs", "chuPhaseTumeurs")
-				.add(Restrictions.eq("chuPhaseTumeurs.idPhase", idPhase)).uniqueResult();
-		return result;
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTypePhase> criteria = builder.createQuery(ChuTypePhase.class);
+			Root<ChuTypePhase> root = criteria.from(ChuTypePhase.class);
+			Join<ChuTypePhase, ChuPhaseTumeur> phases = root.join("chuPhaseTumeurs");
+			criteria.select(root).where(builder.equal(phases.get("idPhase"), idPhase));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+		
 	}
 
 	/** ================================================= */
