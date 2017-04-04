@@ -50,7 +50,9 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 			CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
 			Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
 			criteria.select(root).where(builder.equal(root.get("idPrelevement"), idPrelevement));
-			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			ChuPrelevement prelevement =  sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			this.populateDependencies(prelevement);
+			return prelevement;
 		}
 		catch (NoResultException ex) {
 			return null;
@@ -110,13 +112,17 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 		
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+		
 		Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
 		Join<ChuPrelevement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
 		Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
 		Join<ChuTumeur, ChuPatient> patient = tumeur.join("chuPatient");
+		
 		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
 		criteria.orderBy(builder.asc(root.get("datePrelevement")), builder.asc(root.get("idPrelevement")));
+		
 		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
 		this.populateDependencies(list);
 		return list;
 		

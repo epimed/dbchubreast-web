@@ -72,7 +72,7 @@ public class ChuTypePrelevementDaoImpl extends BaseDao implements ChuTypePreleve
 		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
 		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
 		criteria.select(root).where(
-				builder.notLike(builder.lower(root.get("nom")), builder.lower(root.get("rechute")))
+				builder.notLike(builder.lower(root.get("nom")), "rechute")
 				);
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
@@ -86,7 +86,7 @@ public class ChuTypePrelevementDaoImpl extends BaseDao implements ChuTypePreleve
 		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
 		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
 		criteria.select(root).where(
-				builder.like(builder.lower(root.get("nom")), builder.lower(root.get("rechute")))
+				builder.like(builder.lower(root.get("nom")), "rechute")
 				);
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
