@@ -31,6 +31,8 @@ public interface ChuPatientDao {
 	public ChuPatient find(Integer idTumeur);
 
 	public ChuPatient findByIdPrelevement(Integer idPrelevement);
+	
+	public ChuPatient findByIdTraitement(Integer idTraitement);
 
 	public List<ChuPatient> findInAttributes(String text);
 

@@ -28,7 +28,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="dbchubreast_web" level="warn" additivity="false">
+	<logger name="dbchubreast_web" level="debug" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 

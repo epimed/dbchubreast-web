@@ -18,7 +18,7 @@
 </c:if>
 
 
-<!-- Prélèvement -->
+<!-- Prelevement -->
 <c:if test="${not empty listPrelevements}">
 		<a
 			href="${pageContext.request.contextPath}/patient/${patient.idPatient}/prelevements">Prélèvements</a>&nbsp;>
@@ -28,6 +28,18 @@
 <c:if test="${not empty prelevement  and not empty prelevement.idPrelevement}">
 		<a
 			href="${pageContext.request.contextPath}/prelevement/${prelevement.idPrelevement}">Prélèvement&nbsp;${prelevement.idPrelevement}</a>&nbsp;>
+</c:if>
+
+<!-- Traitement -->
+<c:if test="${not empty listTraitements}">
+		<a
+			href="${pageContext.request.contextPath}/patient/${patient.idPatient}/traitements">Traitements</a>&nbsp;>
+</c:if>
+
+<!-- Prelevement ID -->
+<c:if test="${not empty traitement and not empty traitement.idTraitement}">
+		<a
+			href="${pageContext.request.contextPath}/traitement/${traitement.idTraitement}">Traitement&nbsp;${traitement.idTraitement}</a>&nbsp;>
 </c:if>
 
 </div>

@@ -1,14 +1,17 @@
 package dbchubreast_web.entity;
-// Generated 19 d�c. 2016 13:44:40 by Hibernate Tools 4.3.1.Final
+// Generated 12 mai 2017 13:31:51 by Hibernate Tools 4.3.5.Final
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,22 +33,25 @@ public class ChuProtocoleTraitement implements java.io.Serializable {
 	private ChuMethodeTraitement chuMethodeTraitement;
 	private String code;
 	private String nom;
+	private List<ChuComposantTraitement> chuComposantTraitements = new ArrayList<ChuComposantTraitement>(0);
 	private List<ChuTraitement> chuTraitements = new ArrayList<ChuTraitement>(0);
 
 	public ChuProtocoleTraitement() {
 	}
 
-	public ChuProtocoleTraitement(Integer idProtocole, String nom) {
+	public ChuProtocoleTraitement(Integer idProtocole, ChuMethodeTraitement chuMethodeTraitement, String nom) {
 		this.idProtocole = idProtocole;
+		this.chuMethodeTraitement = chuMethodeTraitement;
 		this.nom = nom;
 	}
 
 	public ChuProtocoleTraitement(Integer idProtocole, ChuMethodeTraitement chuMethodeTraitement, String code,
-			String nom, List<ChuTraitement> chuTraitements) {
+			String nom, List<ChuComposantTraitement> chuComposantTraitements, List<ChuTraitement> chuTraitements) {
 		this.idProtocole = idProtocole;
 		this.chuMethodeTraitement = chuMethodeTraitement;
 		this.code = code;
 		this.nom = nom;
+		this.chuComposantTraitements = chuComposantTraitements;
 		this.chuTraitements = chuTraitements;
 	}
 
@@ -62,7 +68,7 @@ public class ChuProtocoleTraitement implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_methode")
+	@JoinColumn(name = "id_methode", nullable = false)
 	public ChuMethodeTraitement getChuMethodeTraitement() {
 		return this.chuMethodeTraitement;
 	}
@@ -80,13 +86,25 @@ public class ChuProtocoleTraitement implements java.io.Serializable {
 		this.code = code;
 	}
 
-	@Column(name = "nom", nullable = false, length = 500)
+	@Column(name = "nom", nullable = false)
 	public String getNom() {
 		return this.nom;
 	}
 
 	public void setNom(String nom) {
 		this.nom = nom;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "chu_protocole_composant", schema = "db_chu_breast", joinColumns = {
+			@JoinColumn(name = "id_protocole", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "id_composant", nullable = false, updatable = false) })
+	public List<ChuComposantTraitement> getChuComposantTraitements() {
+		return this.chuComposantTraitements;
+	}
+
+	public void setChuComposantTraitements(List<ChuComposantTraitement> chuComposantTraitements) {
+		this.chuComposantTraitements = chuComposantTraitements;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuProtocoleTraitement")
@@ -125,8 +143,9 @@ public class ChuProtocoleTraitement implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "ChuProtocoleTraitement [idProtocole=" + idProtocole + ", chuMethodeTraitement=" + chuMethodeTraitement
-				+ ", code=" + code + ", nom=" + nom + "]";
+		return "ChuProtocoleTraitement [idProtocole=" + idProtocole + ", code=" + code + ", nom=" + nom + "]";
 	}
+	
+	
 
 }

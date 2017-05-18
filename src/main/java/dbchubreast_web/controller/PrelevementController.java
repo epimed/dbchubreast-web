@@ -224,7 +224,7 @@ public class PrelevementController extends BaseController {
 					redirectAttributes.addFlashAttribute("msg", "Un nouveau prélèvement a été ajouté avec succès !");
 				} else {
 					redirectAttributes.addFlashAttribute("msg",
-							"La modification du prélèvement a été effectué avec succès !");
+							"La modification du prélèvement a été effectuée avec succès !");
 				}
 				formPrelevementService.saveOrUpdateForm(formPrelevement);
 			}

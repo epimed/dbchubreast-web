@@ -54,6 +54,10 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	public ChuPatient findByIdPrelevement(Integer idPrelevement) {
 		return patientDao.findByIdPrelevement(idPrelevement);
 	}
+	
+	public ChuPatient findByIdTraitement(Integer idTraitement) {
+		return patientDao.findByIdTraitement(idTraitement);
+	}
 
 	public List<ChuPatient> findInAttributes(String text) {
 		return patientDao.findInAttributes(text);

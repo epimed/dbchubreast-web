@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.entity.ChuTumeur;
 
 @Transactional
@@ -141,9 +142,26 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 		catch (NoResultException ex) {
 			return null;
 		}
-
 	}
 
+	/** ================================================= */
+	
+	public ChuPatient findByIdTraitement(Integer idTraitement) {
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			Join<ChuPatient, ChuTumeur> tumeurs = root.join("chuTumeurs");
+			Join<ChuTumeur, ChuPhaseTumeur> phases = tumeurs.join("chuPhaseTumeurs");
+			Join<ChuPhaseTumeur, ChuTraitement> traitements = phases.join("chuTraitements");
+			criteria.select(root).where(builder.equal(traitements.get("idTraitement"), idTraitement));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	/** ================================================= */
 
 	public List<ChuPatient> findInAttributes(String text) {

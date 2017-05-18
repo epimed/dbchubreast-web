@@ -1,13 +1,15 @@
 package dbchubreast_web.entity;
-// Generated 19 d�c. 2016 13:44:40 by Hibernate Tools 4.3.1.Final
+// Generated 12 mai 2017 13:31:51 by Hibernate Tools 4.3.5.Final
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 /**
@@ -25,6 +27,7 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 	private String nom;
 	private List<ChuProtocoleTraitement> chuProtocoleTraitements = new ArrayList<ChuProtocoleTraitement>(0);
 	private List<ChuTraitement> chuTraitements = new ArrayList<ChuTraitement>(0);
+	private List<ChuComposantTraitement> chuComposantTraitements = new ArrayList<ChuComposantTraitement>(0);
 
 	public ChuMethodeTraitement() {
 	}
@@ -35,11 +38,12 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 	}
 
 	public ChuMethodeTraitement(Integer idMethode, String nom, List<ChuProtocoleTraitement> chuProtocoleTraitements,
-			List<ChuTraitement> chuTraitements) {
+			List<ChuTraitement> chuTraitements, List<ChuComposantTraitement> chuComposantTraitements) {
 		this.idMethode = idMethode;
 		this.nom = nom;
 		this.chuProtocoleTraitements = chuProtocoleTraitements;
 		this.chuTraitements = chuTraitements;
+		this.chuComposantTraitements = chuComposantTraitements;
 	}
 
 	@Id
@@ -63,6 +67,7 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuMethodeTraitement")
+	@OrderBy("code")
 	public List<ChuProtocoleTraitement> getChuProtocoleTraitements() {
 		return this.chuProtocoleTraitements;
 	}
@@ -78,6 +83,15 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 
 	public void setChuTraitements(List<ChuTraitement> chuTraitements) {
 		this.chuTraitements = chuTraitements;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuMethodeTraitement")
+	public List<ChuComposantTraitement> getChuComposantTraitements() {
+		return this.chuComposantTraitements;
+	}
+
+	public void setChuComposantTraitements(List<ChuComposantTraitement> chuComposantTraitements) {
+		this.chuComposantTraitements = chuComposantTraitements;
 	}
 
 	@Override
@@ -109,5 +123,7 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 	public String toString() {
 		return "ChuMethodeTraitement [idMethode=" + idMethode + ", nom=" + nom + "]";
 	}
+	
+	
 
 }

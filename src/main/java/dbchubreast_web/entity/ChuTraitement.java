@@ -1,5 +1,5 @@
 package dbchubreast_web.entity;
-// Generated 19 d�c. 2016 13:44:40 by Hibernate Tools 4.3.1.Final
+// Generated 12 mai 2017 13:31:51 by Hibernate Tools 4.3.5.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -37,21 +37,21 @@ public class ChuTraitement implements java.io.Serializable {
 	private String dose;
 	private String nbCures;
 	private Boolean ggSentinelle;
+	private String remarque;
 
 	public ChuTraitement() {
 	}
 
-	public ChuTraitement(Integer idTraitement, ChuMethodeTraitement chuMethodeTraitement, ChuPhaseTumeur chuPhaseTumeur,
-			ChuTypeTraitement chuTypeTraitement) {
+	public ChuTraitement(Integer idTraitement, ChuMethodeTraitement chuMethodeTraitement,
+			ChuPhaseTumeur chuPhaseTumeur) {
 		this.idTraitement = idTraitement;
 		this.chuMethodeTraitement = chuMethodeTraitement;
 		this.chuPhaseTumeur = chuPhaseTumeur;
-		this.chuTypeTraitement = chuTypeTraitement;
 	}
 
 	public ChuTraitement(Integer idTraitement, ChuMethodeTraitement chuMethodeTraitement, ChuPhaseTumeur chuPhaseTumeur,
 			ChuProtocoleTraitement chuProtocoleTraitement, ChuReponse chuReponse, ChuTypeTraitement chuTypeTraitement,
-			Date dateDebut, Date dateFin, String dose, String nbCures, Boolean ggSentinelle) {
+			Date dateDebut, Date dateFin, String dose, String nbCures, Boolean ggSentinelle, String remarque) {
 		this.idTraitement = idTraitement;
 		this.chuMethodeTraitement = chuMethodeTraitement;
 		this.chuPhaseTumeur = chuPhaseTumeur;
@@ -63,6 +63,7 @@ public class ChuTraitement implements java.io.Serializable {
 		this.dose = dose;
 		this.nbCures = nbCures;
 		this.ggSentinelle = ggSentinelle;
+		this.remarque = remarque;
 	}
 
 	@Id
@@ -118,7 +119,7 @@ public class ChuTraitement implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_type_traitement", nullable = false)
+	@JoinColumn(name = "id_type_traitement")
 	public ChuTypeTraitement getChuTypeTraitement() {
 		return this.chuTypeTraitement;
 	}
@@ -174,6 +175,15 @@ public class ChuTraitement implements java.io.Serializable {
 		this.ggSentinelle = ggSentinelle;
 	}
 
+	@Column(name = "remarque")
+	public String getRemarque() {
+		return this.remarque;
+	}
+
+	public void setRemarque(String remarque) {
+		this.remarque = remarque;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -201,13 +211,11 @@ public class ChuTraitement implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "ChuTraitement [idTraitement=" + idTraitement + ", chuProtocoleTraitement=" + chuProtocoleTraitement
-				+ ", chuReponse=" + chuReponse + ", chuTypeTraitement=" + chuTypeTraitement + ", dateDebut=" + dateDebut
-				+ ", dateFin=" + dateFin + ", dose=" + dose + ", nbCures=" + nbCures + ", ggSentinelle=" + ggSentinelle
-				+ "]";
+		return "ChuTraitement [idTraitement=" + idTraitement + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin
+				+ ", dose=" + dose + ", nbCures=" + nbCures + ", ggSentinelle=" + ggSentinelle + ", remarque="
+				+ remarque + "]";
 	}
+	
+	
 
-	public boolean dataEmpty() {
-		return this.getChuProtocoleTraitement() == null && this.getDateDebut() == null;
-	}
 }
