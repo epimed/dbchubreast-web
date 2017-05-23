@@ -86,6 +86,7 @@ public class ChuMethodeTraitement implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuMethodeTraitement")
+	@OrderBy("nomInternational")
 	public List<ChuComposantTraitement> getChuComposantTraitements() {
 		return this.chuComposantTraitements;
 	}

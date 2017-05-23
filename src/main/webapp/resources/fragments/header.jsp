@@ -1,3 +1,5 @@
+<title>${globalDatabaseName} - ${globalApplicationName}</title>
+
 <!-- Bootstrap -->
 <link href="<c:url value="/resources/bootstrap-3.3.7-dist/css/bootstrap.min.css" />" rel="stylesheet">
 

@@ -3,8 +3,6 @@
 <html lang="en">
 
 <head>
-<title>EpiMed Database - BD "Cancer du sein"</title>
-
 <!-- Header -->
 <%@ include file="/resources/fragments/header.jsp"%>
 

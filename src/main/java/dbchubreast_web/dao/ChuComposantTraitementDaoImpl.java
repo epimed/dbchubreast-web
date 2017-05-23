@@ -20,6 +20,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.SessionFactory;
@@ -47,13 +48,13 @@ public class ChuComposantTraitementDaoImpl extends BaseDao implements ChuComposa
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 			CriteriaQuery<ChuComposantTraitement> criteria = builder.createQuery(ChuComposantTraitement.class);
 			Root<ChuComposantTraitement> root = criteria.from(ChuComposantTraitement.class);
+			this.fetchDependencies(root);
 			criteria.select(root).where(builder.equal(root.get("idComposant"), idComposant));
 			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
 		}
 		catch (NoResultException ex) {
 			return null;
 		}
-
 	}
 	
 	/** ================================================= */
@@ -62,6 +63,7 @@ public class ChuComposantTraitementDaoImpl extends BaseDao implements ChuComposa
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuComposantTraitement> criteria = builder.createQuery(ChuComposantTraitement.class);
 		Root<ChuComposantTraitement> root = criteria.from(ChuComposantTraitement.class);
+		this.fetchDependencies(root);
 		criteria.select(root);
 		criteria.orderBy(builder.asc(root.get("idComposant")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
@@ -107,7 +109,36 @@ public class ChuComposantTraitementDaoImpl extends BaseDao implements ChuComposa
 		criteria.orderBy(builder.asc(root.get("idComposant")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 	}
-
+	
 	/** ================================================= */
 	
+	public void save(ChuComposantTraitement composant) {
+		sessionFactory.getCurrentSession().save(composant);
+	}
+	
+	/** ================================================= */
+	
+	public void update (ChuComposantTraitement composant) {
+		sessionFactory.getCurrentSession().update(composant);
+	}
+	
+	/** ================================================= */
+
+	public void saveOrUpdate (ChuComposantTraitement composant) {
+		sessionFactory.getCurrentSession().saveOrUpdate(composant);
+	}
+	
+	/** ================================================= */
+	
+	public void delete (ChuComposantTraitement composant) {
+		sessionFactory.getCurrentSession().delete(composant);
+	}
+	
+	/** ================================================= */
+
+	private void fetchDependencies(Root<ChuComposantTraitement> root) {
+		root.fetch("chuMethodeTraitement", JoinType.INNER);
+	}
+	
+	/** ================================================= */
 }

@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -43,9 +44,12 @@ import dbchubreast_web.interceptor.LogInterceptor;
 public class AppConfig extends WebMvcConfigurerAdapter {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
-	
+
 	@Autowired
-	LogInterceptor logInterceptor;
+	private WebApplicationContext webApplicationContext;
+
+	@Autowired
+	private LogInterceptor logInterceptor;
 
 	// === Servlet ===
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -104,12 +108,20 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
 	}
-	
+
 	// === Interceptors ===
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-	    registry.addInterceptor(logInterceptor);
+		registry.addInterceptor(logInterceptor);
+	}
+
+	// === Global variables in application scope ===
+	@Bean
+	public Object applicationScope() {
+		webApplicationContext.getServletContext().setAttribute("globalApplicationName", "PROBREAST");
+		webApplicationContext.getServletContext().setAttribute("globalDatabaseName", "EpiMed Database");
+		return webApplicationContext;
 	}
 
 }

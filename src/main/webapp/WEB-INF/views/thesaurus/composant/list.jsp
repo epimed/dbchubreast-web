@@ -17,23 +17,32 @@
 	<!-- Container -->
 	<div class="container">
 
-		<!-- Fil d'Ariane -->
-		<%@ include file="../inc/filAriane.jsp"%>
+		<c:if test="${not empty msg}">
+			<p></p>
+			<div class="alert alert-${css} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>${msg}</strong>
+			</div>
+		</c:if>
+
 
 		<div>
 
 			<!-- H1 Patient -->
-			<%@ include file="../inc/h1Patient.jsp"%>
+			<h1>Thésaurus : Composants de traitement</h1>
 
-			<h2>Prélèvements :</h2>
+
+			<p></p>
 
 			<!-- Results -->
-			<%@ include file="../inc/tablePrelevements.jsp"%>
+			<%@ include file="tableComposants.jsp"%>
 
 		</div>
 
-		<!-- Bouton ajouter tumeur -->
-		<%@ include file="../inc/boutonAjouterPrelevement.jsp"%>
+
 
 	</div>
 

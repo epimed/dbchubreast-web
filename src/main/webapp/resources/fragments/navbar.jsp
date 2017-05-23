@@ -14,9 +14,8 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/">BD
-				"Cancer du sein" <span class="glyphicon glyphicon-home"
-				aria-hidden="true" title="Epimed"></span>
+			<a class="navbar-brand" href="${pageContext.request.contextPath}/">${globalApplicationName} &nbsp; <span
+				class="glyphicon glyphicon-home" aria-hidden="true" title="${globalApplicationName}"></span>
 			</a>
 		</div>
 

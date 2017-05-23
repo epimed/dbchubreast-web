@@ -11,7 +11,7 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.controller;
+package dbchubreast_web.controller.thesaurus;
 
 import java.util.List;
 
@@ -28,11 +28,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import dbchubreast_web.controller.BaseController;
 import dbchubreast_web.entity.ChuComposantTraitement;
 import dbchubreast_web.entity.ChuMethodeTraitement;
 import dbchubreast_web.entity.ChuProtocoleTraitement;
 import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.form.FormProtocole;
+import dbchubreast_web.service.business.AppLogService;
 import dbchubreast_web.service.business.ChuComposantTraitementService;
 import dbchubreast_web.service.business.ChuMethodeTraitementService;
 import dbchubreast_web.service.business.ChuProtocoleTraitementService;
@@ -42,7 +44,7 @@ import dbchubreast_web.validator.FormProtocoleValidator;
 
 @Controller
 @RequestMapping(value = "/thesaurus")
-public class ThesaurusController extends BaseController {
+public class ProtocoleController extends BaseController {
 
 
 	@Autowired
@@ -62,6 +64,9 @@ public class ThesaurusController extends BaseController {
 
 	@Autowired
 	private FormProtocoleValidator formProtocoleValidator;
+	
+	@Autowired
+	private AppLogService logService;
 
 	/** ====================================================================================== */
 
@@ -73,7 +78,6 @@ public class ThesaurusController extends BaseController {
 
 		return "thesaurus/protocole/list";
 	}
-
 
 	/** ====================================================================================== */
 
@@ -156,20 +160,50 @@ public class ThesaurusController extends BaseController {
 	
 	/** ====================================================================================== */
 
-	@RequestMapping(value = { "/protocole/{idProtocole}/delete" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/protocole/{idProtocole}/delete" }, method = {RequestMethod.GET, RequestMethod.POST})
 	public String showDeleteForm(Model model, 
 			@PathVariable Integer idProtocole, 
+			@RequestParam(value = "button", required = false) String button,
+			final RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
-
+		
 		ChuProtocoleTraitement protocole = protocoleTraitementService.find(idProtocole);
 		model.addAttribute("protocole", protocole);
-
+		
 		List<ChuTraitement> listTraitements = traitementService.listByIdProtocole(protocole.getIdProtocole());
 		model.addAttribute("listTraitements", listTraitements);
 		
+		
+		// ===== Bouton supprimer =====
+		
+		if (button!=null && button.equals("delete")) {
+		
+			
+			if (listTraitements==null || listTraitements.isEmpty()) {
+				// OK
+				protocoleTraitementService.delete(protocole);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "Le protocole " + protocole.getNom() + " a été supprimé !");
+				logService.log("Suppression du protocole " + idProtocole);
+				return "redirect:/thesaurus/protocoles";
+			}
+			else {
+				// KO
+				redirectAttributes.addFlashAttribute("css", "danger");
+				redirectAttributes.addFlashAttribute("msg", "Le protocole " + protocole.getNom() + " ne peut pas être supprimé !");
+				logService.log("Le protocole " + idProtocole + " ne peut pas être supprimé");
+				return "redirect:/thesaurus/protocoles";
+			}	
+		}
+		
+		// ===== Bouton annuler =====
+		
+		if (button!=null && button.equals("cancel")) {
+			return "redirect:/thesaurus/protocoles";
+		}
+		
 		return "thesaurus/protocole/delete";
 	}
-
 
 	/** ====================================================================================== */
 

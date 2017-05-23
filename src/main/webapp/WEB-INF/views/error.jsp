@@ -3,7 +3,6 @@
 <html lang="en">
 
 <head>
-<title>EpiMed Database</title>
 
 <!-- Header -->
 <%@ include file="/resources/fragments/header.jsp"%>

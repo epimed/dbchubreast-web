@@ -3,7 +3,6 @@
 <html lang="en">
 
 <head>
-<title>EpiMed Database - BD "Cancer du sein"</title>
 
 <!-- Header -->
 <%@ include file="/resources/fragments/header.jsp"%>
@@ -145,15 +144,23 @@
 			<div>
 				<spring:url value="/traitement/${traitement.idTraitement}/update"
 					var="updateUrl" />
-				<button class="btn btn-primary" onclick="location.href='${updateUrl}'">Modifier</button>
+				<button class="btn btn-primary"
+					onclick="location.href='${updateUrl}'">Modifier</button>
+
+				<spring:url value="/traitement/${traitement.idTraitement}/delete"
+					var="deleteUrl" />
+				<button class="btn-sm btn-danger"
+					onclick="location.href='${deleteUrl}'">Supprimer</button>
+
 			</div>
-			
+
 			<p></p>
-			
+
 			<div>
-			<spring:url value="/patient/${patient.idPatient}/traitements"
+				<spring:url value="/patient/${patient.idPatient}/traitements"
 					var="listUrl" />
-				<button class="btn btn-info" onclick="location.href='${listUrl}'">Consulter les traitements de ce patient</button>
+				<button class="btn btn-info" onclick="location.href='${listUrl}'">Consulter
+					les traitements de ce patient</button>
 			</div>
 
 

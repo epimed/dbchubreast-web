@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuComposantTraitement;
 import dbchubreast_web.entity.ChuMethodeTraitement;
 import dbchubreast_web.entity.ChuProtocoleTraitement;
 
@@ -73,7 +74,7 @@ public class ChuProtocoleTraitementDaoImpl extends BaseDao implements ChuProtoco
 
 	/** ================================================= */
 
-	public List<ChuProtocoleTraitement> list(Integer idMethode) {
+	public List<ChuProtocoleTraitement> listByMethode(Integer idMethode) {
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuProtocoleTraitement> criteria = builder.createQuery(ChuProtocoleTraitement.class);
 		Root<ChuProtocoleTraitement> root = criteria.from(ChuProtocoleTraitement.class);
@@ -83,6 +84,21 @@ public class ChuProtocoleTraitementDaoImpl extends BaseDao implements ChuProtoco
 				builder.equal(methode.get("idMethode"), idMethode)
 				);
 		criteria.orderBy(builder.asc(root.get("nom")));
+		List<ChuProtocoleTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		return list;
+	}
+	
+	/** ================================================= */
+	
+	public List<ChuProtocoleTraitement> listByComposant(Integer idComposant) {
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuProtocoleTraitement> criteria = builder.createQuery(ChuProtocoleTraitement.class);
+		Root<ChuComposantTraitement> composant = criteria.from(ChuComposantTraitement.class);
+		Join<ChuComposantTraitement, ChuProtocoleTraitement> protocoles = composant.join("chuProtocoleTraitements");
+		criteria.select(protocoles).where(
+				builder.equal(composant.get("idComposant"), idComposant)
+				);
+		criteria.orderBy(builder.asc(protocoles.get("nom")));
 		List<ChuProtocoleTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		return list;
 	}

@@ -11,7 +11,7 @@
 				value="/thesaurus/methode/${methode.idMethode}/protocoles/add"
 				var="url" />
 			<button class="btn btn-success" onclick="location.href='${url}'">Ajouter
-				un protocole</button>
+				un protocole ${methode.nom}</button>
 		</div>
 
 		<p></p>

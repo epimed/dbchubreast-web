@@ -204,6 +204,7 @@ public class TraitementController extends BaseController {
 			this.populateFormTraitement(formTraitement, model);
 			return "traitement/form";
 		}
+		
 
 		// === Bouton "reinitialiser" ===
 
@@ -239,6 +240,12 @@ public class TraitementController extends BaseController {
 				formTraitementService.saveOrUpdateForm(formTraitement);
 			}
 
+		}
+		
+		// === Bouton "annuler" ===
+		
+		if (button!=null && button.equals("cancel")) {
+			return "redirect:/patient/" + formTraitement.getIdPatient() + "/traitements";
 		}
 
 		// POST/REDIRECT/GET
@@ -322,7 +329,7 @@ public class TraitementController extends BaseController {
 
 		// Protocole
 		if (formTraitement.getIdMethode() != null) {
-			List<ChuProtocoleTraitement> listProtocoles = protocoleTraitementService.list(formTraitement.getIdMethode());
+			List<ChuProtocoleTraitement> listProtocoles = protocoleTraitementService.listByMethode(formTraitement.getIdMethode());
 			model.addAttribute("listProtocoles", listProtocoles);
 
 			// Protocole pre-selectionne si unique
@@ -339,4 +346,7 @@ public class TraitementController extends BaseController {
 		model.addAttribute("formTraitement", formTraitement);
 
 	}
+	
+	/** ====================================================================================== */
+	
 }

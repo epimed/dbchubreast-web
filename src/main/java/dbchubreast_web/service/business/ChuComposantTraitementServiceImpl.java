@@ -48,6 +48,19 @@ public class ChuComposantTraitementServiceImpl implements ChuComposantTraitement
 		return composantTraitementDao.listByProtocole(idProtocole);
 	}
 
+	public void save(ChuComposantTraitement composant) {
+		composantTraitementDao.save(composant);
+	}
 	
-
+	public void update(ChuComposantTraitement composant) {
+		composantTraitementDao.update(composant);
+	}
+	
+	public void saveOrUpdate(ChuComposantTraitement composant) {
+		composantTraitementDao.saveOrUpdate(composant);
+	}
+	
+	public void delete(ChuComposantTraitement composant) {
+		composantTraitementDao.delete(composant);
+	}
 }

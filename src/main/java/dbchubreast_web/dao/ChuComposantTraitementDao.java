@@ -24,4 +24,8 @@ public interface ChuComposantTraitementDao {
 	public List<ChuComposantTraitement> listById(List<Integer> listIdComposants);
 	public List<ChuComposantTraitement> listByMethode(Integer idMethode);
 	public List<ChuComposantTraitement> listByProtocole(Integer idProtocole);
+	public void save(ChuComposantTraitement composant);
+	public void update (ChuComposantTraitement composant);
+	public void saveOrUpdate (ChuComposantTraitement composant);
+	public void delete (ChuComposantTraitement composant);
 }

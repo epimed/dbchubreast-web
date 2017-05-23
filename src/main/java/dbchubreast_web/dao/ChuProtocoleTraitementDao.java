@@ -19,10 +19,10 @@ import java.util.List;
 import dbchubreast_web.entity.ChuProtocoleTraitement;
 
 public interface ChuProtocoleTraitementDao {
-	
 	public ChuProtocoleTraitement find(Integer idProtocole);
 	public List<ChuProtocoleTraitement> list();
-	public List<ChuProtocoleTraitement> list(Integer idMethode);
+	public List<ChuProtocoleTraitement> listByMethode(Integer idMethode);
+	public List<ChuProtocoleTraitement> listByComposant(Integer idComposant);
 	public void save(ChuProtocoleTraitement protocole);
 	public void update(ChuProtocoleTraitement protocole);
 	public void saveOrUpdate(ChuProtocoleTraitement protocole);

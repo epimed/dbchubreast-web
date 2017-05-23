@@ -35,8 +35,12 @@ public class ChuProtocoleTraitementServiceImpl implements ChuProtocoleTraitement
 		return protocoleTraitementDao.list();
 	}
 
-	public List<ChuProtocoleTraitement> list(Integer idMethode) {
-		return protocoleTraitementDao.list(idMethode);
+	public List<ChuProtocoleTraitement> listByMethode(Integer idMethode) {
+		return protocoleTraitementDao.listByMethode(idMethode);
+	}
+	
+	public List<ChuProtocoleTraitement> listByComposant(Integer idComposant) {
+		return protocoleTraitementDao.listByComposant(idComposant);
 	}
 	
 	public void save(ChuProtocoleTraitement protocole) {

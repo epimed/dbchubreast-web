@@ -3,7 +3,6 @@
 <html lang="en">
 
 <head>
-<title>EpiMed Database - BD "Cancer du sein"</title>
 
 <!-- Header -->
 <%@ include file="/resources/fragments/header.jsp"%>
@@ -183,8 +182,7 @@
 						<form:select class="form-control" path="idReponse">
 							<form:option value="" label="--- Sélectionner ---" />
 							<c:forEach var="reponse" items="${listReponses}">
-								<form:option value="${reponse.idReponse}"
-									label="${reponse.nom}" />
+								<form:option value="${reponse.idReponse}" label="${reponse.nom}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idReponse" class="control-label" />
@@ -205,12 +203,16 @@
 
 			<!-- Buttons -->
 
-			<button type="submit" class="btn-lg btn-primary pull-right"
-				name="button" value="save">Enregistrer</button>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary" name="button"
+					value="save">Enregistrer</button>
 
-			<button type="submit" class="btn-lg btn-default pull-right"
-				name="button" value="reset">Réinitialiser</button>
-
+				<button type="submit" class="btn btn-info" name="button"
+					value="reset">Réinitialiser le formulaire</button>
+					
+				<button type="submit" class="btn btn-default" name="button"
+					value="cancel">Annuler</button>
+			</div>
 
 		</form:form>
 
