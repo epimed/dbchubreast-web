@@ -18,13 +18,26 @@
 	<div class="container">
 
 
+		<!-- Dismissible alert -->
+		<%@ include file="../inc/dismissibleAlert.jsp"%>
+
 		<div class="starter-template">
 			<h1>Patients</h1>
 		</div>
 
+
+
+		<!-- Boutons ajouter et rechercher -->
+		<div>
+			<%@ include file="boutonAjouterPatient.jsp"%>
+			<%@ include file="boutonRechercherPatient.jsp"%>
+		</div>
+
+		<h4>Nombre de patients trouvés : ${fn:length(listPatients)}</h4>
+
 		<!-- Results -->
-		<%@ include file="../inc/tablePatients.jsp"%>
-		
+		<%@ include file="tablePatients.jsp"%>
+
 
 	</div>
 

@@ -36,8 +36,6 @@ public class FormPatientValidator extends BaseService implements Validator {
 
 		FormPatient form = (FormPatient) target;
 
-
-
 		Date dateCourante = new Date();
 		Date dateDeces = form.getDateDeces();
 		Date dateNaissance = form.getDateNaissance();

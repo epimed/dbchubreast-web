@@ -21,16 +21,8 @@
 		<%@ include file="../inc/filAriane.jsp"%>
 
 
-		<c:if test="${not empty msg}">
-			<p></p>
-			<div class="alert alert-${css} alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<strong>${msg}</strong>
-			</div>
-		</c:if>
+		<!-- Dismissible alert -->
+		<%@ include file="../inc/dismissibleAlert.jsp"%>
 
 
 		<div>
@@ -49,7 +41,10 @@
 
 			<div class="row">
 				<label class="col-sm-2">Date du diagnostic</label>
-				<div class="col-sm-10">${tumeur.dateDiagnostic}</div>
+				<div class="col-sm-10">
+					<fmt:formatDate pattern="dd/MM/yyyy"
+						value="${tumeur.dateDiagnostic}" />
+				</div>
 			</div>
 
 			<div class="row">
@@ -70,30 +65,47 @@
 
 			<div class="row">
 				<label class="col-sm-2">Dernière nouvelle</label>
-				<div class="col-sm-10">${tumeur.dateEvolution}</div>
+				<div class="col-sm-10">
+					<fmt:formatDate pattern="dd/MM/yyyy"
+						value="${tumeur.dateEvolution}" />
+				</div>
 			</div>
 
 			<div class="row">
-				<label class="col-sm-2">Statut</label>
+				<label class="col-sm-2">Statut à la dernière nouvelle</label>
 				<div class="col-sm-10">${tumeur.chuEvolution.code} -
 					${tumeur.chuEvolution.nom}</div>
+			</div>
+
+			<div class="row">
+				<label class="col-sm-2">Triple negative</label>
+				<div class="col-sm-10">
+					<c:if
+						test="${not empty tumeur.tripleNegative and tumeur.tripleNegative}">oui</c:if>
+					<c:if
+						test="${not empty tumeur.tripleNegative and not tumeur.tripleNegative}">non</c:if>
+				</div>
 			</div>
 
 		</div>
 
 		<!-- Phases de la tumeur -->
 		<div>
-			<%@ include file="../inc/tablePhasesInitiales.jsp"%>
+			<%@ include file="tablePhasesInitiales.jsp"%>
 		</div>
 		<div>
-			<%@ include file="../inc/tablePhasesRechutes.jsp"%>
+			<%@ include file="tablePhasesRechutes.jsp"%>
 			<p></p>
 
 			<spring:url value="/tumeur/${tumeur.idTumeur}/rechute/add" var="url" />
-			<button class="btn btn-danger" onclick="location.href='${url}'">Ajouter
+			<button class="btn-sm btn-success" onclick="location.href='${url}'">Ajouter
 				une rechute</button>
 
 		</div>
+
+		<!-- Boutons consulter -->
+		<%@ include file="../inc/boutonsConsulter.jsp"%>
+
 
 	</div>
 

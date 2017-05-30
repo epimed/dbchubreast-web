@@ -36,12 +36,12 @@
 				<h2>Tumeurs :</h2>
 
 				<!-- Results -->
-				<%@ include file="../inc/tableTumeurs.jsp"%>
+				<%@ include file="tableTumeurs.jsp"%>
 
 			</div>
 
 			<!-- Bouton ajouter tumeur -->
-			<%@ include file="../inc/boutonAjouterTumeur.jsp"%>
+			<%@ include file="boutonAjouterTumeur.jsp"%>
 
 		</c:if>
 	</div>

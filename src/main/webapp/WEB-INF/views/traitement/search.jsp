@@ -37,10 +37,10 @@
 				<h2>Traitements :</h2>
 
 				<!-- Results -->
-				<%@ include file="../inc/tableTraitements.jsp"%>
+				<%@ include file="tableTraitements.jsp"%>
 
-				<!-- Bouton ajouter tumeur -->
-				<%@ include file="../inc/boutonAjouterTraitement.jsp"%>
+				<!-- Bouton ajouter -->
+				<%@ include file="boutonAjouterTraitement.jsp"%>
 			</div>
 		</c:if>
 

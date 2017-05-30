@@ -32,6 +32,17 @@
 
 			<form:hidden path="idPatient" />
 
+			<spring:bind path="tk">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-2 control-label">Numéro TK</label>
+					<div class="col-10">
+						<form:input path="tk" type="text" class="form-control " id="tk"
+							placeholder="TK" />
+						<form:errors path="tk" class="control-label" />
+					</div>
+				</div>
+			</spring:bind>
+
 			<spring:bind path="rcp">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
 					<label class="col-2 control-label">Numéro RCP</label>
@@ -59,7 +70,7 @@
 					<label class="col-2 control-label required-field">Nom *</label>
 					<div class="col-10">
 						<form:input path="nom" type="text" class="form-control " id="nom"
-							placeholder="Nom" />
+							placeholder="NOM" />
 						<form:errors path="nom" class="control-label" />
 					</div>
 				</div>
@@ -81,7 +92,8 @@
 
 			<spring:bind path="dateNaissance">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-2 control-label required-field">Date de naissance *</label>
+					<label class="col-2 control-label required-field">Date de
+						naissance *</label>
 					<div class="col-10">
 						<form:input path="dateNaissance" type="date" class="form-control "
 							id="dateNaissance" placeholder="Date de naissance" />
@@ -107,17 +119,16 @@
 				<div class="form-group ${status.error ? 'has-error' : ''}">
 					<label class="col-2 control-label">Cause de décès</label>
 					<div class="col-10">
-						<form:input path="causeDeces" type="text" class="form-control "
-							id="causeDeces" list="listCauses" />
-						<datalist id="listCauses">
-							<option value="Suites néoplasiques" />
-							<option value="Autre cancer" />
-							<option value="Autre cancer du sein" />
-							<option value="Multiples cancers dont le sein" />
-							<option value="Maladie intercurrente (ou suicide)" />
-							<option value="Complications liées au traitement" />
-							<option value="Cause inconnue" />
-						</datalist>
+						<form:select class="form-control" path="causeDeces">
+							<form:option value="" label="--- Sélectionner ---" />
+							<form:option value="Suites néoplasiques" />
+							<form:option value="Autre cancer" />
+							<form:option value="Autre cancer du sein" />
+							<form:option value="Multiples cancers dont le sein" />
+							<form:option value="Maladie intercurrente (ou suicide)" />
+							<form:option value="Complications liées au traitement" />
+							<form:option value="Cause inconnue" />
+						</form:select>
 						<form:errors path="causeDeces" class="control-label" />
 					</div>
 				</div>
@@ -127,13 +138,12 @@
 				<div class="form-group ${status.error ? 'has-error' : ''}">
 					<label class="col-2 control-label">Statut BRCA</label>
 					<div class="col-10">
-						<form:input path="statutBrca" type="text" class="form-control "
-							id="statutBrca" list="listBrcaMutations" />
-						<datalist id="listBrcaMutations">
-							<option value="Non muté" />
-							<option value="BRCA1" />
-							<option value="BRCA2" />
-						</datalist>
+						<form:select path="statutBrca" class="form-control">
+							<form:option value="" label="--- Sélectionner ---" />
+							<form:option value="Non muté" />
+							<form:option value="BRCA1" />
+							<form:option value="BRCA2" />
+						</form:select>
 						<form:errors path="statutBrca" class="control-label" />
 					</div>
 				</div>
@@ -153,12 +163,9 @@
 				</div>
 			</spring:bind>
 
-			<div class="form-group">
-				<div class="col-offset-2 col-10">
-					<p></p>
-					<button type="submit" class="btn-lg btn-primary pull-right">Enregistrer</button>
-				</div>
-			</div>
+			<!-- Buttons -->
+			<%@ include file="../inc/boutonsFormulaire.jsp"%>
+
 
 
 		</form:form>

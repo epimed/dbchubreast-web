@@ -31,38 +31,56 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	@Autowired
 	private FormatService formatService;
 
+	/** ================================================================= */
+	
 	public List<ChuPatient> list() {
 		return patientDao.list();
 	}
+	
+	/** ================================================================= */
 
 	public String getLastIdPatient() {
 		return patientDao.getLastIdPatient();
 	}
+	
+	/** ================================================================= */
 
 	public ChuPatient find(String idPatient) {
 		return patientDao.find(idPatient);
 	}
+	
+	/** ================================================================= */
 
 	public Long count() {
 		return patientDao.count();
 	}
 
+	/** ================================================================= */
+	
 	public ChuPatient find(Integer idTumeur) {
 		return patientDao.find(idTumeur);
 	}
 
+	/** ================================================================= */
+	
 	public ChuPatient findByIdPrelevement(Integer idPrelevement) {
 		return patientDao.findByIdPrelevement(idPrelevement);
 	}
 	
+	/** ================================================================= */
+	
 	public ChuPatient findByIdTraitement(Integer idTraitement) {
 		return patientDao.findByIdTraitement(idTraitement);
 	}
+	
+	/** ================================================================= */
 
 	public List<ChuPatient> findInAttributes(String text) {
 		return patientDao.findInAttributes(text);
 	}
 
+	/** ================================================================= */
+	
 	public void saveOrUpdate(ChuPatient patient) {
 
 		// === Format nom prenom ===
@@ -88,5 +106,13 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 		}
 
 	}
+	
+	/** ================================================================= */
+	
+	public boolean delete(ChuPatient patient) {
+		return patientDao.delete(patient);
+	}
+	
+	/** ================================================================= */
 
 }

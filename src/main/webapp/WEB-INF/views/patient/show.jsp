@@ -17,16 +17,8 @@
 	<!-- Container -->
 	<div class="container">
 
-
-		<c:if test="${not empty msg}">
-			<div class="alert alert-${css} alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<strong>${msg}</strong>
-			</div>
-		</c:if>
+		<!-- Dismissible alert -->
+		<%@ include file="../inc/dismissibleAlert.jsp"%>
 
 		<h1>Détail du patient</h1>
 		<br />
@@ -34,6 +26,11 @@
 		<div class="row">
 			<label class="col-sm-2">ID patient</label>
 			<div class="col-sm-10">${patient.idPatient}</div>
+		</div>
+
+		<div class="row">
+			<label class="col-sm-2">Numéro TK</label>
+			<div class="col-sm-10">${patient.tk}</div>
 		</div>
 
 		<div class="row">
@@ -58,12 +55,18 @@
 
 		<div class="row">
 			<label class="col-sm-2">Date de naissance</label>
-			<div class="col-sm-10">${patient.dateNaissance}</div>
+			<div class="col-sm-10">
+				<fmt:formatDate pattern="dd/MM/yyyy"
+					value="${patient.dateNaissance}" />
+			</div>
+
 		</div>
 
 		<div class="row">
 			<label class="col-sm-2">Date de décès</label>
-			<div class="col-sm-10">${patient.dateDeces}</div>
+			<div class="col-sm-10">
+				<fmt:formatDate pattern="dd/MM/yyyy" value="${patient.dateDeces}" />
+			</div>
 		</div>
 
 		<div class="row">
@@ -89,29 +92,20 @@
 		<p></p>
 
 		<div>
-			<spring:url value="/patient/${patient.idPatient}/update" var="url" />
-			<button class="btn btn-danger" onclick="location.href='${url}'">Modifier</button>
+			<spring:url value="/patient/${patient.idPatient}/update"
+				var="urlUpdate" />
+			<button class="btn-sm btn-primary"
+				onclick="location.href='${urlUpdate}'">Modifier</button>
+				
+				<spring:url
+						value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}" var="deleteUrl" />
+					<button class="btn-sm btn-danger"
+						onclick="location.href='${deleteUrl}'">Supprimer</button></td>
+				
 		</div>
 
-		<p></p>
-
-		<div>
-			<spring:url value="/patient/${patient.idPatient}/tumeurs" var="url" />
-			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher
-				les tumeurs de ce patient</button>
-		</div>
-
-
-		<p></p>
-
-		<div>
-			<spring:url value="/patient/${patient.idPatient}/prelevements"
-				var="url" />
-			<button class="btn btn-primary" onclick="location.href='${url}'">Afficher
-				les prélèvements de ce patient</button>
-		</div>
-
-
+		<!-- Boutons consulter -->
+		<%@ include file="../inc/boutonsConsulter.jsp"%>
 
 	</div>
 

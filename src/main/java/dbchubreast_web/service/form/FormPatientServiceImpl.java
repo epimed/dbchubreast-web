@@ -71,6 +71,7 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 		}
 
 		// === Attributs ===
+		patient.setTk(form.getTk());
 		patient.setRcp(form.getRcp());
 		patient.setSexe(form.getSexe());
 		patient.setDateNaissance(form.getDateNaissance());
@@ -105,16 +106,19 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 
 	public FormPatient getForm(ChuPatient patient) {
 		FormPatient form = new FormPatient();
-		form.setIdPatient(patient.getIdPatient());
-		form.setRcp(patient.getRcp());
-		form.setPrenom(patient.getPrenom());
-		form.setNom(patient.getNom());
-		form.setSexe(patient.getSexe());
-		form.setDateNaissance(patient.getDateNaissance());
-		form.setDateDeces(patient.getDateDeces());
-		form.setCauseDeces(patient.getCauseDeces());
-		form.setStatutBrca(patient.getStatutBrca());
-		form.setConsentement(patient.getConsentement());
+		if (patient!=null) {
+			form.setIdPatient(patient.getIdPatient());
+			form.setTk(patient.getTk());
+			form.setRcp(patient.getRcp());
+			form.setPrenom(patient.getPrenom());
+			form.setNom(patient.getNom());
+			form.setSexe(patient.getSexe());
+			form.setDateNaissance(patient.getDateNaissance());
+			form.setDateDeces(patient.getDateDeces());
+			form.setCauseDeces(patient.getCauseDeces());
+			form.setStatutBrca(patient.getStatutBrca());
+			form.setConsentement(patient.getConsentement());
+		}
 		return form;
 	}
 

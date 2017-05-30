@@ -20,17 +20,8 @@
 		<!-- Fil d'Ariane -->
 		<%@ include file="../inc/filAriane.jsp"%>
 
-		<c:if test="${not empty msg}">
-			<p></p>
-			<div class="alert alert-${css} alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<strong>${msg}</strong>
-			</div>
-		</c:if>
-
+		<!-- Dismissible alert -->
+		<%@ include file="../inc/dismissibleAlert.jsp"%>
 
 		<div>
 
@@ -40,12 +31,12 @@
 			<h2>Traitements :</h2>
 
 			<!-- Results -->
-			<%@ include file="../inc/tableTraitements.jsp"%>
+			<%@ include file="tableTraitements.jsp"%>
 
 		</div>
 
-		<!-- Bouton ajouter tumeur -->
-		<%@ include file="../inc/boutonAjouterTraitement.jsp"%>
+		<!-- Bouton ajouter -->
+		<%@ include file="boutonAjouterTraitement.jsp"%>
 
 	</div>
 

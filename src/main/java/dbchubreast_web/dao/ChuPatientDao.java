@@ -21,22 +21,14 @@ import dbchubreast_web.entity.ChuPatient;
 public interface ChuPatientDao {
 
 	public List<ChuPatient> list();
-
 	public String getLastIdPatient();
-
 	public Long count();
-
 	public ChuPatient find(String idPatient);
-
 	public ChuPatient find(Integer idTumeur);
-
 	public ChuPatient findByIdPrelevement(Integer idPrelevement);
-	
 	public ChuPatient findByIdTraitement(Integer idTraitement);
-
 	public List<ChuPatient> findInAttributes(String text);
-
 	public void update(ChuPatient patient);
-
 	public void save(ChuPatient patient);
+	public boolean delete(ChuPatient patient);
 }

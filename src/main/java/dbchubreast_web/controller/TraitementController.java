@@ -101,10 +101,11 @@ public class TraitementController extends BaseController {
 	/** ====================================================================================== */
 
 	@RequestMapping(value = { "/traitement" }, method = { RequestMethod.GET, RequestMethod.POST })
-	public String searchTraitement(Model model, @RequestParam(value = "idPatient", required = false) String idPatient,
+	public String searchTraitement(Model model, 
+			@RequestParam(value = "idPatient", required = false) String idPatient,
 			HttpServletRequest request) {
 
-		logService.log("Affichage de traitement du patient " + idPatient);
+		logService.log("Affichage des traitements du patient " + idPatient);
 
 		if (idPatient != null) {
 			ChuPatient patient = patientService.find(idPatient);
@@ -137,7 +138,7 @@ public class TraitementController extends BaseController {
 		// Tumeurs
 		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
 		model.addAttribute("listTumeurs", listTumeurs);
-		
+
 		// Traitements
 		List<ChuTraitement> listTraitements = traitementService.listByIdPatient(patient.getIdPatient());
 		model.addAttribute("listTraitements", listTraitements);
@@ -168,12 +169,24 @@ public class TraitementController extends BaseController {
 	/** ====================================================================================== */
 
 	@RequestMapping(value = { "/patient/{idPatient}/traitement/add" }, method = RequestMethod.GET)
-	public String showAddForm(Model model, @PathVariable String idPatient, HttpServletRequest request) {
+	public String showAddForm(Model model, 
+			@PathVariable String idPatient,
+			@RequestParam(value = "idTumeur", required = false) Integer idTumeur,
+			@RequestParam(value = "idPhase", required = false) Integer idPhase,
+			HttpServletRequest request) {
 
 		logService.log("Affichage d'un formulaire pour ajouter un traitement au patient " + idPatient);
 
 		// Form traitement
 		FormTraitement formTraitement = new FormTraitement(idPatient);
+
+		if (idTumeur!=null) {
+			formTraitement.setIdTumeur(idTumeur);
+		}
+		if (idPhase!=null) {
+			formTraitement.setIdPhase(idPhase);
+		}
+
 		populateFormTraitement(formTraitement, model);
 
 		return "traitement/form";
@@ -204,14 +217,15 @@ public class TraitementController extends BaseController {
 			this.populateFormTraitement(formTraitement, model);
 			return "traitement/form";
 		}
-		
+
 
 		// === Bouton "reinitialiser" ===
 
 		if (button != null && button.equals("reset")) {
-			ChuTraitement traitement = traitementService.find(formTraitement.getIdTraitement());
-			this.populateFormTraitement(formTraitementService.getForm(traitement), model);
-			return "traitement/form";
+			if (formTraitement!=null && formTraitement.getIdTraitement()!=null) {
+				return "redirect:/traitement/" + formTraitement.getIdTraitement() + "/update";
+			}
+			return "redirect:/patient/" + formTraitement.getIdPatient() + "/traitement/add";
 		}
 
 
@@ -241,9 +255,9 @@ public class TraitementController extends BaseController {
 			}
 
 		}
-		
+
 		// === Bouton "annuler" ===
-		
+
 		if (button!=null && button.equals("cancel")) {
 			return "redirect:/patient/" + formTraitement.getIdPatient() + "/traitements";
 		}
@@ -283,11 +297,11 @@ public class TraitementController extends BaseController {
 			logService.log("Suppression du traitement " + idTraitement);
 			return "redirect:/patient/" + patient.getIdPatient() + "/traitements";
 		}
-		
+
 		if (button!=null && button.equals("cancel")) {
 			return "redirect:/patient/" + patient.getIdPatient() + "/traitements";
 		}
-		
+
 		return "traitement/delete";
 	}
 
@@ -346,7 +360,7 @@ public class TraitementController extends BaseController {
 		model.addAttribute("formTraitement", formTraitement);
 
 	}
-	
+
 	/** ====================================================================================== */
-	
+
 }

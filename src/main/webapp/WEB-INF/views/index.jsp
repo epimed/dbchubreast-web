@@ -27,7 +27,7 @@
 			<ol>
 				<li><a href="${pageContext.request.contextPath}/patient/add">Créer
 						un nouveau patient</a> ou <a
-					href="${pageContext.request.contextPath}/patient">rechercher un
+					href="${pageContext.request.contextPath}/patients">rechercher un
 						patient existant</a></li>
 				<li><a href="${pageContext.request.contextPath}/tumeur">Saisir
 						l'information sur les tumeurs du patient</a>, en phase initiale et

@@ -198,35 +198,54 @@ public class TumeurController extends BaseController {
 
 	@RequestMapping(value = "/tumeur/update", method = RequestMethod.POST)
 	public String saveOrUpdateTumorForm(Model model,
-			@ModelAttribute("formTumeurInitiale") @Valid FormTumeurInitiale formTumeurInitiale, 
-			BindingResult result,
+			@ModelAttribute("formTumeurInitiale") @Valid FormTumeurInitiale formTumeurInitiale, BindingResult result,
+			@RequestParam(value = "button", required = false) String button,
 			final RedirectAttributes redirectAttributes, 
 			HttpServletRequest request) {
 
-		formTumeurInitialeValidator.validate(formTumeurInitiale, result);
 
-		if (result.hasErrors()) {
-			logService.log("Modification échouée de la phase initiale");
-			ChuPatient patient = patientService.find(formTumeurInitiale.getIdPatient());
-			this.populateAddTumorForm(patient, model);
-			model.addAttribute("formTumeurInitiale", formTumeurInitiale);
-			return "tumeur/formTumeurInitiale";
-		} 
+		// === Bouton "reinitialiser" ===
 
-		else {
-
-			logService.log("Modification validée de la phase initiale");
-
-			redirectAttributes.addFlashAttribute("css", "success");
-			if (formTumeurInitiale.isNew()) {
-				redirectAttributes.addFlashAttribute("msg", "Une nouvelle tumeur a été ajoutée avec succès !");
-			} else {
-				redirectAttributes.addFlashAttribute("msg",
-						"La modification de la tumeur a été effectuée avec succès !");
+		if (button != null && button.equals("reset")) {
+			if (formTumeurInitiale!=null && formTumeurInitiale.getIdTumeur()!=null) {
+				return "redirect:/tumeur/" + formTumeurInitiale.getIdTumeur() + "/update";
 			}
-
-			formPhaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
+			else {
+				return "redirect:/patient/" + formTumeurInitiale.getIdPatient() + "/tumeur/add";
+			}
 		}
+
+
+		// === Bouton "enregistrer" ===
+
+		if (button != null && button.equals("save")) {
+
+			formTumeurInitialeValidator.validate(formTumeurInitiale, result);
+
+			if (result.hasErrors()) {
+				logService.log("Modification échouée de la phase initiale");
+				ChuPatient patient = patientService.find(formTumeurInitiale.getIdPatient());
+				this.populateAddTumorForm(patient, model);
+				model.addAttribute("formTumeurInitiale", formTumeurInitiale);
+				return "tumeur/formTumeurInitiale";
+			} 
+
+			else {
+
+				logService.log("Modification validée de la phase initiale");
+
+				redirectAttributes.addFlashAttribute("css", "success");
+				if (formTumeurInitiale.isNew()) {
+					redirectAttributes.addFlashAttribute("msg", "Une nouvelle tumeur a été ajoutée avec succès !");
+				} else {
+					redirectAttributes.addFlashAttribute("msg",
+							"La modification de la tumeur a été effectuée avec succès !");
+				}
+
+				formPhaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
+			}
+		}
+
 
 		// POST/REDIRECT/GET
 		return "redirect:/tumeur/" + formTumeurInitiale.getIdTumeur();
@@ -290,34 +309,54 @@ public class TumeurController extends BaseController {
 	@RequestMapping(value = "/rechute/update", method = RequestMethod.POST)
 	public String saveOrUpdateRelapseForm(Model model,
 			@ModelAttribute("formPhaseRechute") @Valid FormPhaseRechute formPhaseRechute, BindingResult result,
+			@RequestParam(value = "button", required = false) String button,
 			final RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-		formPhaseRechuteValidator.validate(formPhaseRechute, result);
+		// === Bouton "reinitialiser" ===
 
-		if (result.hasErrors()) {
-			logService.log("Modification échouée de la phase rechute");
-			ChuPatient patient = patientService.find(formPhaseRechute.getIdPatient());
-			ChuTumeur tumeur = tumeurService.find(formPhaseRechute.getIdTumeur());
-			model.addAttribute("formPhaseRechute", formPhaseRechute);
-			model.addAttribute("tumeur", tumeur);
-			this.populateAddTumorForm(patient, model);
-			return "tumeur/formPhaseRechute";
-		} 
-
-		else {
-
-			logService.log("Modification validée de la phase rechute");
-
-			redirectAttributes.addFlashAttribute("css", "success");
-			if (formPhaseRechute.isNew()) {
-				redirectAttributes.addFlashAttribute("msg", "Une nouvelle rechute a été ajoutée avec succès !");
-			} else {
-				redirectAttributes.addFlashAttribute("msg", "La modification de la rechute "
-						+ formPhaseRechute.getIdPhase() + " a été effectuée avec succès !");
+		if (button != null && button.equals("reset")) {
+			if (formPhaseRechute!=null && formPhaseRechute.getIdPhase()!=null) {
+				return "redirect:/rechute/" + formPhaseRechute.getIdPhase() + "/update";
+			}
+			else {
+				return "redirect:/tumeur/" + formPhaseRechute.getIdTumeur() + "/rechute/add";
 			}
 
-			formPhaseTumeurService.saveOrUpdateForm(formPhaseRechute);
 		}
+
+
+		// === Bouton "enregistrer" ===
+
+		if (button != null && button.equals("save")) {
+
+			formPhaseRechuteValidator.validate(formPhaseRechute, result);
+
+			if (result.hasErrors()) {
+				logService.log("Modification échouée de la phase rechute");
+				ChuPatient patient = patientService.find(formPhaseRechute.getIdPatient());
+				ChuTumeur tumeur = tumeurService.find(formPhaseRechute.getIdTumeur());
+				model.addAttribute("formPhaseRechute", formPhaseRechute);
+				model.addAttribute("tumeur", tumeur);
+				this.populateAddTumorForm(patient, model);
+				return "tumeur/formPhaseRechute";
+			} 
+
+			else {
+
+				logService.log("Modification validée de la phase rechute");
+
+				redirectAttributes.addFlashAttribute("css", "success");
+				if (formPhaseRechute.isNew()) {
+					redirectAttributes.addFlashAttribute("msg", "Une nouvelle rechute a été ajoutée avec succès !");
+				} else {
+					redirectAttributes.addFlashAttribute("msg", "La modification de la rechute "
+							+ formPhaseRechute.getIdPhase() + " a été effectuée avec succès !");
+				}
+
+				formPhaseTumeurService.saveOrUpdateForm(formPhaseRechute);
+			}
+		}
+
 
 		// POST/REDIRECT/GET
 		return "redirect:/tumeur/" + formPhaseRechute.getIdTumeur();

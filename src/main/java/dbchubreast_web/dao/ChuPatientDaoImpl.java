@@ -145,7 +145,7 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 	}
 
 	/** ================================================= */
-	
+
 	public ChuPatient findByIdTraitement(Integer idTraitement) {
 		try {
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
@@ -161,7 +161,7 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 			return null;
 		}
 	}
-	
+
 	/** ================================================= */
 
 	public List<ChuPatient> findInAttributes(String text) {
@@ -177,9 +177,10 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 						builder.like(builder.lower(root.get("nom")), "%" + text + "%"),
 						builder.like(builder.lower(root.get("prenom")), "%" + text + "%"),
 						builder.like(builder.lower(root.get("rcp")), "%" + text + "%"),
+						builder.like(builder.lower(root.get("tk")), "%" + text + "%"),
 						builder.like(builder.lower(root.get("idPatient")), "%" + text + "%")
-				)
-		);
+						)
+				);
 
 		criteria.orderBy(builder.asc(root.get("nom")), builder.asc(root.get("prenom")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
@@ -211,4 +212,17 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 	}
 
 	/** ================================================= */
+
+	public boolean delete(ChuPatient patient) {
+		try {
+			sessionFactory.getCurrentSession().delete(patient);
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+
+	/** ================================================= */
+
 }

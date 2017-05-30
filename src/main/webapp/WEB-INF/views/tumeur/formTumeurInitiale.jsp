@@ -151,7 +151,7 @@
 
 			<!-- Statut -->
 			<div class="form-group">
-				<label class="col-sm-2 control-label">Statut</label>
+				<label class="col-sm-2 control-label">Statut à la dernière nouvelle</label>
 				<div class="col-sm-10">
 					<c:choose>
 						<c:when
@@ -276,17 +276,8 @@
 			</div>
 
 
-			<!-- Button -->
-
-			<p></p>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<p></p>
-					<button type="submit" class="btn-lg btn-primary pull-right">Enregistrer</button>
-				</div>
-			</div>
-
+			<!-- Buttons -->
+			<%@ include file="../inc/boutonsFormulaire.jsp"%>
 
 		</form:form>
 

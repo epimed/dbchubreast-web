@@ -14,6 +14,9 @@ public class FormPatient extends BaseService implements IForm {
 
 	@Length(max = 100, message = "100 caractères au maximum")
 	private String rcp;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String tk;
 
 	@NotNull(message = "Ne peut pas être vide")
 	@Length(max = 255, message = "255 caractères au maximum")
@@ -129,12 +132,23 @@ public class FormPatient extends BaseService implements IForm {
 	public void setConsentement(Boolean consentement) {
 		this.consentement = consentement;
 	}
+	
+
+	public String getTk() {
+		return tk;
+	}
+
+	public void setTk(String tk) {
+		this.tk = tk;
+	}
+
+	
 
 	@Override
 	public String toString() {
-		return "FormPatient [idPatient=" + idPatient + ", rcp=" + rcp + ", prenom=" + prenom + ", nom=" + nom
-				+ ", dateNaissance=" + dateNaissance + ", sexe=" + sexe + ", statutBrca=" + statutBrca + ", dateDeces="
-				+ dateDeces + ", causeDeces=" + causeDeces + ", consentement=" + consentement + "]";
+		return "FormPatient [idPatient=" + idPatient + ", rcp=" + rcp + ", tk=" + tk + ", prenom=" + prenom + ", nom="
+				+ nom + ", dateNaissance=" + dateNaissance + ", sexe=" + sexe + ", statutBrca=" + statutBrca
+				+ ", dateDeces=" + dateDeces + ", causeDeces=" + causeDeces + ", consentement=" + consentement + "]";
 	}
 
 	/** ====================================================================================== */

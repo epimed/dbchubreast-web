@@ -63,19 +63,19 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 
 
 		ChuTraitement traitement = null;
-		
+
 		if (form.isNew()) {
 			traitement = new ChuTraitement();
 		}
 		else {
 			traitement = traitementService.find(form.getIdTraitement());
-			
+
 		}
-		
+
 		logger.debug("Traitement {}", traitement);
-		
-		
-		
+
+
+
 		ChuPhaseTumeur phase = phaseTumeurService.find(form.getIdPhase());
 		traitement.setChuPhaseTumeur(phase);
 		traitement.setChuMethodeTraitement(methodeTraitementService.find(form.getIdMethode()));
@@ -111,24 +111,27 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 		logger.debug("=== " + this.getClass().getName() + ": getForm" + " ===");
 
 		FormTraitement form = new FormTraitement();
-		form.setIdTraitement(traitement.getIdTraitement());
-		form.setIdTumeur(traitement.getChuPhaseTumeur().getChuTumeur().getIdTumeur());
-		form.setIdPhase(traitement.getChuPhaseTumeur().getIdPhase());
-		form.setIdMethode(traitement.getChuMethodeTraitement().getIdMethode());
 
-		if (traitement.getChuProtocoleTraitement()!=null) {
-			form.setIdProtocole(traitement.getChuProtocoleTraitement().getIdProtocole());
+		if (traitement!=null) {
+			form.setIdTraitement(traitement.getIdTraitement());
+			form.setIdTumeur(traitement.getChuPhaseTumeur().getChuTumeur().getIdTumeur());
+			form.setIdPhase(traitement.getChuPhaseTumeur().getIdPhase());
+			form.setIdMethode(traitement.getChuMethodeTraitement().getIdMethode());
+
+			if (traitement.getChuProtocoleTraitement()!=null) {
+				form.setIdProtocole(traitement.getChuProtocoleTraitement().getIdProtocole());
+			}
+
+			form.setDateDebut(traitement.getDateDebut());
+			form.setDateFin(traitement.getDateFin());
+			form.setNbCures(traitement.getNbCures());
+			form.setGgSentinelle(traitement.getGgSentinelle());
+			form.setRemarque(traitement.getRemarque());
+
+			// Patient
+			ChuPatient patient = patientService.findByIdTraitement(traitement.getIdTraitement());
+			form.setIdPatient(patient.getIdPatient());
 		}
-
-		form.setDateDebut(traitement.getDateDebut());
-		form.setDateFin(traitement.getDateFin());
-		form.setNbCures(traitement.getNbCures());
-		form.setGgSentinelle(traitement.getGgSentinelle());
-		form.setRemarque(traitement.getRemarque());
-
-		// Patient
-		ChuPatient patient = patientService.findByIdTraitement(traitement.getIdTraitement());
-		form.setIdPatient(patient.getIdPatient());
 
 		return form;
 	}

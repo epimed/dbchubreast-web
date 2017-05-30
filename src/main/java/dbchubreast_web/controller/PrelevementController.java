@@ -169,13 +169,25 @@ public class PrelevementController extends BaseController {
 	/** ====================================================================================== */
 
 	@RequestMapping(value = { "/patient/{idPatient}/prelevement/add" }, method = RequestMethod.GET)
-	public String showAddSampleForm(Model model, @PathVariable String idPatient, HttpServletRequest request) {
+	public String showAddSampleForm(Model model, 
+			@PathVariable String idPatient,
+			@RequestParam(value = "idTumeur", required = false) Integer idTumeur,
+			@RequestParam(value = "idPhase", required = false) Integer idPhase,
+			HttpServletRequest request) {
 
 		logService.log("Affichage d'un formulaire pour ajouter un prélèvement au patient " + idPatient);
 		
 		// Form prelevement
 		FormPrelevement formPrelevement = new FormPrelevement(idPatient);
 		formPrelevement.init(biomarqueurService.list());
+
+		if (idTumeur!=null) {
+			formPrelevement.setIdTumeur(idTumeur);
+		}
+		if (idPhase!=null) {
+			formPrelevement.setIdPhase(idPhase);
+		}
+		
 		this.populateAddSampleForm(formPrelevement, model);
 
 		return "prelevement/form";
