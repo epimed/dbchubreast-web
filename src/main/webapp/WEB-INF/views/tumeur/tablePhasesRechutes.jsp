@@ -7,6 +7,8 @@
 			<tr class="danger">
 				<th>ID phase rechute</th>
 				<th>Date</th>
+				<th>Locale</th>
+				<th>Métastases</th>
 				<th>Actions</th>
 
 			</tr>
@@ -16,6 +18,18 @@
 			<tr>
 				<td>${phase.idPhase}</td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy" value="${phase.dateDiagnostic}" /></td>
+				
+				<td>
+					<c:if test="${phase.locale}">oui</c:if>
+					<c:if test="${not phase.locale}">non</c:if>
+				</td>
+				
+				
+				<td><c:forEach var="metastase" items="${phase.chuMetastases}"
+						varStatus="loop">${metastase.nom}<c:if
+							test="${not loop.last}">, </c:if>
+					</c:forEach></td>
+				
 				<td>
 				
 				<spring:url value="/rechute/${phase.idPhase}/update"

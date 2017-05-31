@@ -37,6 +37,7 @@ public class ChuPrelevement implements java.io.Serializable {
 	private Boolean associationCis;
 	private Date datePrelevement;
 	private String sitePrelevement;
+	private String tk;
 	private List<ChuPrelevementBiomarqueur> chuPrelevementBiomarqueurs = new ArrayList<ChuPrelevementBiomarqueur>(0);
 	private List<ChuRessourceBiologique> chuRessourceBiologiques = new ArrayList<ChuRessourceBiologique>(0);
 
@@ -49,10 +50,14 @@ public class ChuPrelevement implements java.io.Serializable {
 		this.chuTypePrelevement = chuTypePrelevement;
 	}
 
+	
+
 	public ChuPrelevement(Integer idPrelevement, ChuMorphologie chuMorphologie, ChuPhaseTumeur chuPhaseTumeur,
 			ChuTypePrelevement chuTypePrelevement, String typeHistologique, Boolean associationCis,
-			Date datePrelevement, String sitePrelevement, List<ChuPrelevementBiomarqueur> chuPrelevementBiomarqueurs,
+			Date datePrelevement, String sitePrelevement, String tk,
+			List<ChuPrelevementBiomarqueur> chuPrelevementBiomarqueurs,
 			List<ChuRessourceBiologique> chuRessourceBiologiques) {
+		super();
 		this.idPrelevement = idPrelevement;
 		this.chuMorphologie = chuMorphologie;
 		this.chuPhaseTumeur = chuPhaseTumeur;
@@ -61,6 +66,7 @@ public class ChuPrelevement implements java.io.Serializable {
 		this.associationCis = associationCis;
 		this.datePrelevement = datePrelevement;
 		this.sitePrelevement = sitePrelevement;
+		this.tk = tk;
 		this.chuPrelevementBiomarqueurs = chuPrelevementBiomarqueurs;
 		this.chuRessourceBiologiques = chuRessourceBiologiques;
 	}
@@ -142,6 +148,15 @@ public class ChuPrelevement implements java.io.Serializable {
 
 	public void setSitePrelevement(String sitePrelevement) {
 		this.sitePrelevement = sitePrelevement;
+	}
+	
+	@Column(name = "tk", length = 50)
+	public String getTk() {
+		return this.tk;
+	}
+
+	public void setTk(String tk) {
+		this.tk = tk;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPrelevement")

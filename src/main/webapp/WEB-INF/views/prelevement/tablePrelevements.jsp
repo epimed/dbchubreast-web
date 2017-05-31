@@ -3,14 +3,13 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr class="info">
-				<th>#ID prel.</th>
-				<th>#ID tumeur</th>
-				<th>Type</th>
+				<th>ID prel.</th>
+				<th>TK prel.</th>
+				<th>ID tumeur</th>
 				<th>Date</th>
+				<th>Type</th>
 				<th>Site</th>
 				<th>Morpho</th>
-				<th>Histologie</th>
-				<th>CIS</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -19,18 +18,28 @@
 			<tr>
 				<td><a
 					href="${pageContext.request.contextPath}/prelevement/${prel.idPrelevement}">${prel.idPrelevement}</a></td>
+
+				<td>${prel.tk}</td>
+
 				<td><a
 					href="${pageContext.request.contextPath}/tumeur/${prel.chuPhaseTumeur.chuTumeur.idTumeur}">
 						${prel.chuPhaseTumeur.chuTumeur.idTumeur}</a></td>
+
+				<td><fmt:formatDate pattern="dd/MM/yyyy"
+						value="${prel.datePrelevement}" /></td>
+
 				<td>${prel.chuTypePrelevement.nom}</td>
-				<td>${prel.datePrelevement}</td>
+
 				<td>${prel.sitePrelevement}</td>
-				<td><abbr title="${prel.chuMorphologie.nomFr} / ${prel.chuMorphologie.nomEn}">${prel.chuMorphologie.idMorphologie}</abbr></td>
-				<td>${prel.typeHistologique}</td>
-				<td>${prel.associationCis}</td>
-				<td><spring:url
+				<td><abbr
+					title="${prel.chuMorphologie.nomFr} / ${prel.chuMorphologie.nomEn}">${prel.chuMorphologie.idMorphologie}</abbr>
+				</td>
+				<td><spring:url value="/prelevement/${prel.idPrelevement}"
+						var="selectUrl" />
+					<button class="btn-sm btn-info"
+						onclick="location.href='${selectUrl}'">Consulter</button> <spring:url
 						value="/prelevement/${prel.idPrelevement}/update" var="updateUrl" />
-					<button class="btn btn-primary"
+					<button class="btn-sm btn-primary"
 						onclick="location.href='${updateUrl}'">Modifier</button></td>
 			</tr>
 			<tr>
@@ -38,8 +47,8 @@
 						items="${listPrelevementBiomarqueurs}">
 						<c:if
 							test="${prelBio.chuPrelevement.idPrelevement == prel.idPrelevement }">
-								${prelBio.chuBiomarqueur.nom}=<c:out value="${prelBio.valeur}" /> 
-								<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if> &nbsp;
+								${prelBio.chuBiomarqueur.nom}=<c:out value="${prelBio.valeur}" />
+							<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if> &nbsp;
 						</c:if>
 					</c:forEach></td>
 			</tr>

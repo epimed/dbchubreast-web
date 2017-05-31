@@ -87,6 +87,11 @@
 				</div>
 			</div>
 
+			<div class="row">
+				<label class="col-sm-2">Survie (mois)</label>
+				<div class="col-sm-10">globale : ${tumeur.osMonths}, sans rechute : ${tumeur.dfsMonths}</div>
+			</div>
+
 		</div>
 
 		<!-- Phases de la tumeur -->

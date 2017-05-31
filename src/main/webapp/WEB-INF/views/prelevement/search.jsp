@@ -37,10 +37,10 @@
 				<h2>Prélèvements :</h2>
 
 				<!-- Results -->
-				<%@ include file="../inc/tablePrelevements.jsp"%>
+				<%@ include file="tablePrelevements.jsp"%>
 
 				<!-- Bouton ajouter tumeur -->
-				<%@ include file="../inc/boutonAjouterPrelevement.jsp"%>
+				<%@ include file="boutonAjouterPrelevement.jsp"%>
 			</div>
 		</c:if>
 
