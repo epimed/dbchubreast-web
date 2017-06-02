@@ -147,11 +147,9 @@ public class PatientController extends BaseController {
 
 
 		// === Bouton "reinitialiser" ===
-
+		
 		if (button != null && button.equals("reset")) {
-			ChuPatient patient = patientService.find(formPatient.getIdPatient());
-			model.addAttribute("formPatient", formPatientService.getForm(patient));
-			return "patient/form";
+			return "redirect:/patient/" + formPatient.getIdPatient() + "/update";
 		}
 
 
@@ -196,7 +194,7 @@ public class PatientController extends BaseController {
 		ChuPatient patient = patientService.find(idPatient);
 		model.addAttribute("patient", patient);
 
-		List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(patient.getIdPatient(), "tumeurs");
 		model.addAttribute("listTumeurs", listTumeurs);
 
 		String redirectPath = "redirect:/patients";

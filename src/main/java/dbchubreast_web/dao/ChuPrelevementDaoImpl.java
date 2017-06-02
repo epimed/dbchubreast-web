@@ -148,7 +148,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	/** ================================================= */
 
-	private void populateDependencies(List<ChuPrelevement> list) {
+	public void populateDependencies(List<ChuPrelevement> list) {
 
 		for (ChuPrelevement prel : list) {
 			this.populateDependencies(prel);
@@ -157,7 +157,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	/** ================================================= */
 
-	private void populateDependencies(ChuPrelevement prel) {
+	public void populateDependencies(ChuPrelevement prel) {
 		if (prel != null) {
 			Hibernate.initialize(prel.getChuMorphologie());
 			Hibernate.initialize(prel.getChuTypePrelevement());

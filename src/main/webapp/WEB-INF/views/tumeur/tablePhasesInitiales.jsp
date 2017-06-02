@@ -45,10 +45,15 @@
 			</tr>
 			<c:if test="${not empty phase.remarque}">
 				<tr>
-					<td colspan="3">${phase.remarque}</td>
+					<td colspan="5"><c:if test="${not empty phase.chuTnms}">
+							<c:forEach var="tnm" items="${phase.chuTnms}">
+							${tnm.t} ${tnm.n} ${tnm.m}. 
+						</c:forEach>
+						</c:if> <c:if test="${not empty phase.nodules and phase.nodules}">Contient des nodules. </c:if>
+						${phase.remarque}</td>
 				</tr>
 			</c:if>
-			
+
 		</c:forEach>
 	</table>
 

@@ -39,17 +39,24 @@
 				<div class="col-sm-10">${prelevement.idPrelevement}</div>
 			</div>
 
+			<!-- TK -->
+			<div class="row">
+				<label class="col-sm-2">TK</label>
+				<div class="col-sm-10">${prelevement.tk}</div>
+			</div>
+
 			<!-- Tumeur ID -->
 			<div class="row">
 				<label class="col-sm-2">ID tumeur</label>
-				
+
 				<div class="col-sm-10">${prelevement.chuPhaseTumeur.chuTumeur.idTumeur}</div>
 			</div>
 
 			<!-- Phase tumeur ID -->
 			<div class="row">
 				<label class="col-sm-2">ID phase de la tumeur</label>
-				<div class="col-sm-10">${prelevement.chuPhaseTumeur.idPhase} (phase ${prelevement.chuPhaseTumeur.chuTypePhase.nom})</div>
+				<div class="col-sm-10">${prelevement.chuPhaseTumeur.idPhase}
+					(phase ${prelevement.chuPhaseTumeur.chuTypePhase.nom})</div>
 			</div>
 
 			<!-- Type de prelevement -->
@@ -61,7 +68,10 @@
 			<!-- Date de prelevement -->
 			<div class="row">
 				<label class="col-sm-2">Date de prélèvement</label>
-				<div class="col-sm-10">${prelevement.datePrelevement}</div>
+				<div class="col-sm-10">
+					<fmt:formatDate pattern="dd/MM/yyyy"
+						value="${prelevement.datePrelevement}" />
+				</div>
 			</div>
 
 			<!-- Site de prelevement -->
@@ -74,7 +84,8 @@
 			<div class="row">
 				<label class="col-sm-2">Morphologie ICD-O</label>
 				<div class="col-sm-10">${prelevement.chuMorphologie.idMorphologie}
-					- ${prelevement.chuMorphologie.nomFr} / ${prelevement.chuMorphologie.nomEn}</div>
+					- ${prelevement.chuMorphologie.nomFr} /
+					${prelevement.chuMorphologie.nomEn}</div>
 			</div>
 
 			<!-- Histologie -->
@@ -91,27 +102,35 @@
 			</div>
 
 			<!-- Biomarqueurs -->
-			
-			<h3>Biomarqueurs:</h3>
-			<c:forEach var="prelBio" items="${listPrelevementBiomarqueurs}">
 
-				<div class="row">
-					<label class="col-sm-2">${prelBio.chuBiomarqueur.nom}</label>
-					<div class="col-sm-10"><c:out value="${prelBio.valeur}" />
-						<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if>
+			<c:if test="${not empty listPrelevementBiomarqueurs}">
+				<h3>Biomarqueurs:</h3>
+				<c:forEach var="prelBio" items="${listPrelevementBiomarqueurs}">
+
+					<div class="row">
+						<label class="col-sm-2">${prelBio.chuBiomarqueur.nom}</label>
+						<div class="col-sm-10">
+							<c:out value="${prelBio.valeur}" />
+							<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if>
+						</div>
 					</div>
-				</div>
 
-			</c:forEach>
+				</c:forEach>
+			</c:if>
+			
 		</div>
-		
+
 		<p></p>
 		<div>
-			<spring:url value="/prelevement/${prelevement.idPrelevement}/update" var="url" />
-			<button class="btn btn-primary" onclick="location.href='${url}'">Modifier</button>
+			<spring:url value="/prelevement/${prelevement.idPrelevement}/update"
+				var="url" />
+			<button class="btn-sm btn-primary" onclick="location.href='${url}'">Modifier</button>
 		</div>
-		
-		
+
+		<!-- Boutons consulter -->
+		<%@ include file="../inc/boutonsConsulter.jsp"%>
+
+
 	</div>
 
 	<!-- Footer -->

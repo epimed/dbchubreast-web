@@ -13,7 +13,6 @@
  */
 package dbchubreast_web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,7 +85,7 @@ public class PrelevementController extends BaseController {
 
 	@Autowired
 	private FormPrelevementValidator formPrelevementValidator;
-	
+
 	@Autowired
 	private AppLogService logService;
 
@@ -95,20 +94,20 @@ public class PrelevementController extends BaseController {
 	@RequestMapping(value = { "/patient/{idPatient}/prelevements" }, method = RequestMethod.GET)
 	public String listPrelevements(Model model, @PathVariable String idPatient, HttpServletRequest request) {
 
-		logService.log("Affichage de prélèvements du patient " + idPatient);
-		
 		ChuPatient patient = patientService.find(idPatient);
 		model.addAttribute("patient", patient);
 
-		List<ChuPrelevement> listPrelevements = prelevementService.listByIdPatient(idPatient);
-		this.populatePrelevementBiomarqueurs(model, listPrelevements);
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(idPatient, "prelevements");
+		model.addAttribute("listTumeurs", listTumeurs);
+
 		return "prelevement/list";
 	}
 
 	/** ====================================================================================== */
 
 	@RequestMapping(value = { "/prelevement" }, method = { RequestMethod.GET, RequestMethod.POST })
-	public String searchPrelevement(Model model, @RequestParam(value = "idPatient", required = false) String idPatient,
+	public String searchPrelevement(Model model, 
+			@RequestParam(value = "idPatient", required = false) String idPatient,
 			HttpServletRequest request) {
 
 		logService.log("Affichage de prélèvements du patient " + idPatient);
@@ -116,8 +115,8 @@ public class PrelevementController extends BaseController {
 		if (idPatient != null) {
 			ChuPatient patient = patientService.find(idPatient);
 			model.addAttribute("patient", patient);
-			List<ChuPrelevement> listPrelevements = prelevementService.listByIdPatient(idPatient);
-			this.populatePrelevementBiomarqueurs(model, listPrelevements);
+			List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(idPatient, "prelevements");
+			model.addAttribute("listTumeurs", listTumeurs);
 		}
 
 		List<ChuPatient> listPatients = patientService.list();
@@ -132,9 +131,9 @@ public class PrelevementController extends BaseController {
 
 	@RequestMapping(value = { "/prelevement/{idPrelevement}" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public String showPrelevement(Model model, @PathVariable Integer idPrelevement, HttpServletRequest request) {
-		
+
 		logService.log("Affichage du prélèvement " + idPrelevement);
-		
+
 		// Patient
 		ChuPatient patient = patientService.findByIdPrelevement(idPrelevement);
 		model.addAttribute("patient", patient);
@@ -157,7 +156,7 @@ public class PrelevementController extends BaseController {
 	public String showUpdateSampleForm(Model model, @PathVariable Integer idPrelevement, HttpServletRequest request) {
 
 		logService.log("Affichage d'un formulaire pour modifier le prélèvement " + idPrelevement);
-		
+
 		// Form prelevement
 		ChuPrelevement prelevement = prelevementService.find(idPrelevement);
 		FormPrelevement formPrelevement = formPrelevementService.getForm(prelevement);
@@ -176,7 +175,7 @@ public class PrelevementController extends BaseController {
 			HttpServletRequest request) {
 
 		logService.log("Affichage d'un formulaire pour ajouter un prélèvement au patient " + idPatient);
-		
+
 		// Form prelevement
 		FormPrelevement formPrelevement = new FormPrelevement(idPatient);
 		formPrelevement.init(biomarqueurService.list());
@@ -187,7 +186,7 @@ public class PrelevementController extends BaseController {
 		if (idPhase!=null) {
 			formPrelevement.setIdPhase(idPhase);
 		}
-		
+
 		this.populateAddSampleForm(formPrelevement, model);
 
 		return "prelevement/form";
@@ -197,7 +196,7 @@ public class PrelevementController extends BaseController {
 
 	@RequestMapping(value = { "/prelevement/update" }, method = RequestMethod.GET)
 	public String redirectSampleForm() {
-		
+
 		// POST/REDIRECT/GET
 		return "redirect:/prelevement";
 	}
@@ -206,20 +205,31 @@ public class PrelevementController extends BaseController {
 
 	@RequestMapping(value = { "/prelevement/update" }, method = RequestMethod.POST)
 	public String showDetailAddSampleForm(Model model,
-			@RequestParam(value = "saveButton", required = false) String saveButton,
+			@RequestParam(value = "button", required = false) String button,
 			@ModelAttribute("formPrelevement") FormPrelevement formPrelevement, BindingResult result,
 			final RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		
-		// === Mise a jour de la forme sans bouton "enregistrer" ===
 
-		if (saveButton == null) {
+		// === Mise a jour de la forme sans bouton ===
+
+		if (button == null) {
 			this.populateAddSampleForm(formPrelevement, model);
 			return "prelevement/form";
 		}
 
+		// === Bouton "reinitialiser" ===
+
+		if (button != null && button.equals("reset")) {
+			if (formPrelevement!=null && formPrelevement.getIdPrelevement()!=null) {
+				return "redirect:/prelevement/" + formPrelevement.getIdPrelevement() + "/update";
+			}
+			else {
+				return "redirect:/patient/" + formPrelevement.getIdPatient() + "/prelevement/add";
+			}
+		}
+
 		// === Bouton "enregistrer" ===
 
-		if (saveButton != null) {
+		if (button != null && button.equals("save")) {
 
 			formPrelevementValidator.validate(formPrelevement, result);
 
@@ -243,6 +253,13 @@ public class PrelevementController extends BaseController {
 
 		}
 
+		// === Bouton "annuler" ===
+
+		if (button != null && button.equals("cancel")) {
+			return "redirect:/patient/" + formPrelevement.getIdPatient() + "/prelevements";
+		}
+
+
 		// POST/REDIRECT/GET
 		return "redirect:/prelevement/" + formPrelevement.getIdPrelevement();
 
@@ -258,21 +275,6 @@ public class PrelevementController extends BaseController {
 
 	/** ====================================================================================== */
 
-	private void populatePrelevementBiomarqueurs(Model model, List<ChuPrelevement> listPrelevements) {
-
-		model.addAttribute("listPrelevements", listPrelevements);
-
-		List<Integer> listIdPrelevements = new ArrayList<Integer>();
-		for (ChuPrelevement prel : listPrelevements) {
-			listIdPrelevements.add(prel.getIdPrelevement());
-		}
-		List<ChuPrelevementBiomarqueur> listPrelevementBiomarqueurs = prelevementBiomarqueurService
-				.list(listIdPrelevements);
-		model.addAttribute("listPrelevementBiomarqueurs", listPrelevementBiomarqueurs);
-	}
-
-	/** ====================================================================================== */
-
 	private void populateAddSampleForm(FormPrelevement formPrelevement, Model model) {
 
 		// Patient
@@ -280,7 +282,7 @@ public class PrelevementController extends BaseController {
 		model.addAttribute("patient", patient);
 
 		// Tumeurs
-		List<ChuTumeur> listTumeurs = tumeurService.find(formPrelevement.getIdPatient());
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatient(formPrelevement.getIdPatient());
 		model.addAttribute("listTumeurs", listTumeurs);
 
 		// Tumeur pre-selectionnee si unique

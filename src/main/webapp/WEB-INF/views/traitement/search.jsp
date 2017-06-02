@@ -39,8 +39,6 @@
 				<!-- Results -->
 				<%@ include file="tableTraitements.jsp"%>
 
-				<!-- Bouton ajouter -->
-				<%@ include file="boutonAjouterTraitement.jsp"%>
 			</div>
 		</c:if>
 

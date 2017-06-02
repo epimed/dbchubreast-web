@@ -27,6 +27,7 @@ import dbchubreast_web.service.business.ChuPhaseTumeurService;
 import dbchubreast_web.service.business.ChuProtocoleTraitementService;
 import dbchubreast_web.service.business.ChuReponseService;
 import dbchubreast_web.service.business.ChuTraitementService;
+import dbchubreast_web.service.business.ChuTumeurService;
 import dbchubreast_web.service.updater.UpdaterTypeTraitement;
 
 @Service
@@ -34,6 +35,9 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 
 	@Autowired
 	private ChuPatientService patientService;
+	
+	@Autowired
+	private ChuTumeurService tumeurService;
 
 	@Autowired
 	private ChuPhaseTumeurService phaseTumeurService;
@@ -100,7 +104,7 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 
 
 		// === Type traitement ===
-		updaterTypeTraitement.update(traitement);
+		updaterTypeTraitement.update(tumeurService.findByIdPhaseWithDependencies(phase.getIdPhase()));
 
 	}
 
@@ -120,6 +124,10 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 
 			if (traitement.getChuProtocoleTraitement()!=null) {
 				form.setIdProtocole(traitement.getChuProtocoleTraitement().getIdProtocole());
+			}
+			
+			if (traitement.getChuReponse()!=null) {
+				form.setIdReponse(traitement.getChuReponse().getIdReponse());
 			}
 
 			form.setDateDebut(traitement.getDateDebut());

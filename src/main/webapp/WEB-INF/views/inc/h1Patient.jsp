@@ -4,8 +4,7 @@
 				pattern="dd/MM/yyyy" value="${patient.dateNaissance}" />
 
 			<c:if test="${not empty patient.dateDeces}">
-				-&nbsp;<fmt:formatDate pattern="dd/MM/yyyy"
-					value="${patient.dateDeces}" />
+			<small>patient(e) décédé(e) le <fmt:formatDate pattern="dd/MM/yyyy" value="${patient.dateDeces}"/></small>
 			</c:if>
 
 		</h1>

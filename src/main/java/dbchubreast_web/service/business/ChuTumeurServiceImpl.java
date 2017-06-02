@@ -35,12 +35,12 @@ public class ChuTumeurServiceImpl implements ChuTumeurService {
 		return tumeurDao.findWithDependencies(idTumeur);
 	}
 
-	public List<ChuTumeur> find(String idPatient) {
-		return tumeurDao.find(idPatient);
+	public List<ChuTumeur> listByIdPatient(String idPatient) {
+		return tumeurDao.listByIdPatient(idPatient);
 	}
 
-	public List<ChuTumeur> findWithDependencies(String idPatient) {
-		return tumeurDao.findWithDependencies(idPatient);
+	public List<ChuTumeur> listByIdPatientWithDependencies(String idPatient, String dependency) {
+		return tumeurDao.listByIdPatientWithDependencies(idPatient, dependency);
 	}
 
 	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur) {

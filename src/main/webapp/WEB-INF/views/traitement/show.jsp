@@ -148,13 +148,8 @@
 
 			<p></p>
 
-			<div>
-				<spring:url value="/patient/${patient.idPatient}/traitements"
-					var="listUrl" />
-				<button class="btn btn-info" onclick="location.href='${listUrl}'">Consulter
-					les traitements de ce patient</button>
-			</div>
-
+			<!-- Boutons consulter -->
+			<%@ include file="../inc/boutonsConsulter.jsp"%>
 
 
 		</div>

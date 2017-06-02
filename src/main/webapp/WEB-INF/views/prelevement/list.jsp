@@ -32,9 +32,6 @@
 
 		</div>
 
-		<!-- Bouton ajouter tumeur -->
-		<%@ include file="boutonAjouterPrelevement.jsp"%>
-
 	</div>
 
 	<!-- Footer -->

@@ -53,7 +53,7 @@
 			</tr>
 			<c:if test="${not empty phase.remarque}">
 				<tr>
-					<td colspan="3">${phase.remarque}</td>
+					<td colspan="6">${phase.remarque}</td>
 				</tr>
 			</c:if>
 		</c:forEach>

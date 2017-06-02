@@ -13,6 +13,7 @@
  */
 package dbchubreast_web.validator;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +22,17 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.form.FormPrelevement;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.business.ChuPatientService;
-import dbchubreast_web.service.business.ChuPhaseTumeurService;
 
 @Component
 public class FormPrelevementValidator extends BaseService implements Validator {
 
-	@Autowired
-	private ChuPatientService patientService;
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 	@Autowired
-	private ChuPhaseTumeurService phaseTumeurService;
+	private ChuPatientService patientService;
 
 	public boolean supports(Class<?> clazz) {
 		return FormPrelevement.class.isAssignableFrom(clazz);
@@ -70,21 +68,12 @@ public class FormPrelevementValidator extends BaseService implements Validator {
 
 		Date datePrelevement = form.getDatePrelevement();
 
-		ChuPhaseTumeur phaseTumeur = phaseTumeurService.find(form.getIdPhase());
-		Date dateDiagnosticPhase = phaseTumeur == null ? null : phaseTumeur.getDateDiagnostic();
-
-		if (datePrelevement != null && dateDiagnosticPhase != null && datePrelevement.before(dateDiagnosticPhase)) {
-			message = "La date de prélèvement ne peut pas être antérieure à la date du diagnostic de la phase de tumeur "
-					+ dateDiagnosticPhase + " !";
-			errors.rejectValue("datePrelevement", "Consistensy.formPrelevement.datePrelevement", message);
-		}
-
 		ChuPatient patient = patientService.find(form.getIdPatient());
 		Date dateDeces = patient == null ? null : patient.getDateDeces();
 
 		if (datePrelevement != null && dateDeces != null && datePrelevement.after(dateDeces)) {
-			message = "La date de prélèvement ne peut pas être postérieure à la date de décès du patient " + dateDeces
-					+ " !";
+			message = "La date de prélèvement ne peut pas être postérieure à la date de décès du patient " + dateFormat.format(dateDeces)
+			+ " !";
 			errors.rejectValue("datePrelevement", "Consistensy.formPrelevement.datePrelevement", message);
 		}
 	}

@@ -24,9 +24,9 @@ public interface ChuTumeurService {
 
 	public ChuTumeur findByIdPhaseWithDependencies(Integer idPhase);
 
-	public List<ChuTumeur> find(String idPatient);
+	public List<ChuTumeur> listByIdPatient(String idPatient);
 
-	public List<ChuTumeur> findWithDependencies(String idPatient);
+	public List<ChuTumeur> listByIdPatientWithDependencies(String idPatient, String dependency);
 
 	public List<ChuTumeur> findAsListWithDependencies(Integer idTumeur);
 

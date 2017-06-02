@@ -105,6 +105,26 @@ public class ChuTraitementDaoImpl extends BaseDao implements ChuTraitementDao {
 		return list;
 
 	}
+	
+	/** ================================================= */
+	
+	public List<ChuTraitement> listByIdTumeur(Integer idTumeur) {
+		
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTraitement> criteria = builder.createQuery(ChuTraitement.class);
+
+		Root<ChuTraitement> root = criteria.from(ChuTraitement.class);
+		Join<ChuTraitement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+		Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
+
+		criteria.select(root).where(builder.equal(tumeur.get("idTumeur"), idTumeur));
+		criteria.orderBy(builder.asc(root.get("dateDebut")));
+
+		List<ChuTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
+		this.populateDependencies(list);
+		return list;
+	}
 
 	/** ================================================= */
 

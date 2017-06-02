@@ -16,45 +16,50 @@
 
 		<p></p>
 
-		<table class="table table-bordered">
-			<thead>
-				<tr class="info">
-					<th>#ID</th>
-					<th>Libellé</th>
-					<th>Nom commercial</th>
-					<th>Classe</th>
-					<th>Mode d'action</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
+		<c:if test="${not empty methode.chuComposantTraitements }">
+
+			<table class="table table-bordered">
+				<thead>
+					<tr class="info">
+						<th>Libellé</th>
+						<th>Nom alternatif ou commercial</th>
+						<th>Classe</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
 
 
-			<c:forEach var="composant" items="${methode.chuComposantTraitements}">
-				<tr>
-					<td>${composant.idComposant}</td>
-					<td>${composant.nomInternational}</td>
-					<td>${composant.nomCommercial}</td>
-					<td>${composant.classe}</td>
-					<td>${composant.action}</td>
-					<td>
-						<div>
-							<spring:url
-								value="/thesaurus/composant/${composant.idComposant}/update"
-								var="updateUrl" />
-							<button class="btn-sm btn-primary"
-								onclick="location.href='${updateUrl}'">Modifier</button>
-							<spring:url
-								value="/thesaurus/composant/${composant.idComposant}/delete"
-								var="deleteUrl" />
-							<button class="btn-sm btn-danger"
-								onclick="location.href='${deleteUrl}'">Supprimer</button>
-						</div>
-					</td>
-				</tr>
-			</c:forEach>
+				<c:forEach var="composant"
+					items="${methode.chuComposantTraitements}">
+					<tr>
+						<td>${composant.nomInternational}</td>
+						<td>${composant.nomCommercial}</td>
+						<td>${composant.classe}<c:if
+								test="${not empty composant.action}">
+								<br />
+								<span class="text-info"><small>${composant.action}</small></span>
+							</c:if>
+						</td>
 
-		</table>
+						<td>
+							<div>
+								<spring:url
+									value="/thesaurus/composant/${composant.idComposant}/update"
+									var="updateUrl" />
+								<button class="btn-sm btn-primary"
+									onclick="location.href='${updateUrl}'">Modifier</button>
+								<spring:url
+									value="/thesaurus/composant/${composant.idComposant}/delete"
+									var="deleteUrl" />
+								<button class="btn-sm btn-danger"
+									onclick="location.href='${deleteUrl}'">Supprimer</button>
+							</div>
+						</td>
+					</tr>
+				</c:forEach>
 
+			</table>
+		</c:if>
 		<p></p>
 
 	</c:forEach>

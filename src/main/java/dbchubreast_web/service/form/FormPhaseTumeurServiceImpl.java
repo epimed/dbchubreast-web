@@ -13,6 +13,7 @@
  */
 package dbchubreast_web.service.form;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import dbchubreast_web.form.FormPhaseRechute;
 import dbchubreast_web.form.FormTumeurInitiale;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.updater.UpdaterNodule;
+import dbchubreast_web.service.updater.UpdaterSurvival;
 import dbchubreast_web.service.util.FormatService;
 
 @Service
@@ -75,6 +77,9 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 	@Autowired
 	private FormatService formatService;
 
+	@Autowired
+	private UpdaterSurvival updaterSurvival;
+	
 	@Autowired
 	private UpdaterNodule updaterNodule;
 
@@ -219,6 +224,12 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		// ====== UPDATE DEPENDENCIES =====
 
+		// === Survival ===
+		List<ChuTumeur> listTumeurs = new ArrayList<ChuTumeur>();
+		listTumeurs.add(tumeur);
+		updaterSurvival.update(listTumeurs);
+
+
 		// === Update nodules ===
 		updaterNodule.update(phaseTumeur);
 	}
@@ -309,8 +320,8 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		if (phase.getChuPerformanceStatus()!=null) {
 			form.setIdPs(phase.getChuPerformanceStatus().getIdPs());
 		}
-		
-		
+
+
 		// === Metastases ===
 
 		List<ChuMetastase> listMetastases = metastaseDao.list(phase.getIdPhase());
@@ -388,6 +399,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 			phaseTumeur.setMetastases(true);
 		} else {
 			phaseTumeur.setMetastases(false);
+			phaseTumeur.setChuMetastases(null);
 		}
 
 	}

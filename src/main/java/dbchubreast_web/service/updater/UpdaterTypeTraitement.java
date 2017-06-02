@@ -19,9 +19,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dbchubreast_web.dao.ChuPhaseTumeurDao;
-import dbchubreast_web.dao.ChuTumeurDao;
-import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.service.business.ChuTraitementService;
@@ -31,60 +28,59 @@ import dbchubreast_web.service.business.ChuTypeTraitementService;
 public class UpdaterTypeTraitement extends AbstractUpdater {
 
 	@Autowired
-	private ChuTumeurDao tumeurDao;
-
-	@Autowired
-	private ChuPhaseTumeurDao phaseTumeurDao;
-
-	@Autowired
 	private ChuTraitementService traitementService;
-	
+
 	@Autowired
 	private ChuTypeTraitementService typeTraitementService;
 
-	
+
 
 	/** ================================================================================= */
 
-	public void update(ChuTraitement traitement) {
+	public void update(ChuTumeur tumeur) {
 
 		logger.debug("=== " + this.getClass() + " ===");
 
-		Integer idPhase = traitement.getChuPhaseTumeur().getIdPhase();
-		ChuPhaseTumeur phase = phaseTumeurDao.findWithDependencies(idPhase);
-		ChuTumeur tumeur = tumeurDao.findByIdPhaseWithDependencies(idPhase);
 		ChuTraitement chirurgieReference = traitementService.findChirurgieReference(tumeur.getIdTumeur());
-		
-		Date dateChirurgie = chirurgieReference.getDateDebut();
-		Date dateTraitement = traitement.getDateDebut();
-		
-		traitement.setChuTypeTraitement(null);
-		
-		// Phase initiale, traitement autre que la chirurgie de reference 
-		
-		if (phase.getChuTypePhase().getIdTypePhase().equals(1) 
-				&& !traitement.getIdTraitement().equals(chirurgieReference.getIdTraitement())) {
-			
-			// Traitement neoadjuvant
-			
-			if (dateTraitement!=null && dateChirurgie!=null && dateTraitement.before(dateChirurgie)) {
-				traitement.setChuTypeTraitement(typeTraitementService.find(1));
-				if (traitement.getDateFin()==null) {
-					traitement.setDateFin(dateChirurgie);
+		List<ChuTraitement> listTraitements = traitementService.listByIdTumeur(tumeur.getIdTumeur());
+
+
+		for (ChuTraitement traitement : listTraitements) {
+
+			traitement.setChuTypeTraitement(null);
+
+			if (chirurgieReference!=null) {
+
+				Date dateChirurgie = chirurgieReference.getDateDebut();
+				Date dateTraitement = traitement.getDateDebut();
+
+				// Phase initiale, traitement autre que la chirurgie de reference 
+
+				if (traitement.getChuPhaseTumeur().getChuTypePhase().getIdTypePhase().equals(1) 
+						&& !traitement.getIdTraitement().equals(chirurgieReference.getIdTraitement())) {
+
+					// Traitement neoadjuvant
+
+					if (dateTraitement!=null && dateChirurgie!=null && dateTraitement.before(dateChirurgie)) {
+						traitement.setChuTypeTraitement(typeTraitementService.find(1));
+						if (traitement.getDateFin()==null) {
+							traitement.setDateFin(dateChirurgie);
+						}
+					}
+
+					// Traitement adjuvent
+
+					if (dateTraitement!=null && dateChirurgie!=null && dateTraitement.after(dateChirurgie)) {
+						traitement.setChuTypeTraitement(typeTraitementService.find(2));
+					}
+
 				}
+
 			}
-			
-			// Traitement adjuvent
-			
-			if (dateTraitement!=null && dateChirurgie!=null && dateTraitement.after(dateChirurgie)) {
-				traitement.setChuTypeTraitement(typeTraitementService.find(2));
-			}
-			
+
+			traitementService.update(traitement);
 		}
 
-		traitementService.update(traitement);
-		
-		
 	}
 
 	/** ================================================================================= */

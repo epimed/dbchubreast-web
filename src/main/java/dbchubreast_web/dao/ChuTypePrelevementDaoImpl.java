@@ -19,6 +19,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.SessionFactory;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbchubreast_web.entity.ChuTypePhase;
 import dbchubreast_web.entity.ChuTypePrelevement;
 
 @Transactional
@@ -71,8 +73,9 @@ public class ChuTypePrelevementDaoImpl extends BaseDao implements ChuTypePreleve
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
 		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
+		Join<ChuTypePrelevement, ChuTypePhase> typesPhase = root.join("chuTypePhases");
 		criteria.select(root).where(
-				builder.notLike(builder.lower(root.get("nom")), "rechute")
+				builder.equal(typesPhase.get("idTypePhase"), 1)
 				);
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
@@ -85,8 +88,9 @@ public class ChuTypePrelevementDaoImpl extends BaseDao implements ChuTypePreleve
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuTypePrelevement> criteria = builder.createQuery(ChuTypePrelevement.class);
 		Root<ChuTypePrelevement> root = criteria.from(ChuTypePrelevement.class);
+		Join<ChuTypePrelevement, ChuTypePhase> typesPhase = root.join("chuTypePhases");
 		criteria.select(root).where(
-				builder.like(builder.lower(root.get("nom")), "rechute")
+				builder.equal(typesPhase.get("idTypePhase"), 2)
 				);
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 

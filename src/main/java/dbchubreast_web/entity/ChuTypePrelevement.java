@@ -3,10 +3,14 @@ package dbchubreast_web.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,6 +28,7 @@ public class ChuTypePrelevement implements java.io.Serializable {
 	private Integer idTypePrelevement;
 	private String nom;
 	private List<ChuPrelevement> chuPrelevements = new ArrayList<ChuPrelevement>(0);
+	private List<ChuTypePhase> chuTypePhases = new ArrayList<ChuTypePhase>(0);
 
 	public ChuTypePrelevement() {
 	}
@@ -37,6 +42,16 @@ public class ChuTypePrelevement implements java.io.Serializable {
 		this.idTypePrelevement = idTypePrelevement;
 		this.nom = nom;
 		this.chuPrelevements = chuPrelevements;
+	}
+
+
+	public ChuTypePrelevement(Integer idTypePrelevement, String nom, List<ChuPrelevement> chuPrelevements,
+			List<dbchubreast_web.entity.ChuTypePhase> chuTypePhases) {
+		super();
+		this.idTypePrelevement = idTypePrelevement;
+		this.nom = nom;
+		this.chuPrelevements = chuPrelevements;
+		this.chuTypePhases = chuTypePhases;
 	}
 
 	@Id
@@ -57,6 +72,18 @@ public class ChuTypePrelevement implements java.io.Serializable {
 
 	public void setNom(String nom) {
 		this.nom = nom;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "chu_type_prelevement_type_phase", schema = "db_chu_breast", joinColumns = {
+			@JoinColumn(name = "id_type_prelevement", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "id_type_phase", nullable = false, updatable = false) })
+	public List<ChuTypePhase> getChuTypePhases() {
+		return this.chuTypePhases;
+	}
+
+	public void setChuTypePhases(List<ChuTypePhase> chuTypePhases) {
+		this.chuTypePhases = chuTypePhases;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuTypePrelevement")

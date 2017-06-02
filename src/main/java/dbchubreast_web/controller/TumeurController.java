@@ -98,7 +98,7 @@ public class TumeurController extends BaseController {
 		logService.log("Affichage de tumeurs du patient " + idPatient);
 
 		ChuPatient patient = patientService.find(idPatient);
-		List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(patient.getIdPatient(), "phases");
 
 		model.addAttribute("patient", patient);
 		model.addAttribute("listTumeurs", listTumeurs);
@@ -115,7 +115,7 @@ public class TumeurController extends BaseController {
 		if (idPatient != null) {
 			logService.log("Recherche de tumeurs pour le patient " + idPatient);
 			ChuPatient patient = patientService.find(idPatient);
-			List<ChuTumeur> listTumeurs = tumeurService.findWithDependencies(idPatient);
+			List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(patient.getIdPatient(), "phases");
 			model.addAttribute("patient", patient);
 			model.addAttribute("listTumeurs", listTumeurs);
 		}
@@ -137,7 +137,7 @@ public class TumeurController extends BaseController {
 
 		ChuPatient patient = patientService.find(idTumeur);
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
-		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatient(patient.getIdPatient());
 		List<ChuPhaseTumeur> listPhasesInitiales = phaseTumeurService.list(idTumeur, 1);
 		List<ChuPhaseTumeur> listPhasesRechutes = phaseTumeurService.list(idTumeur, 2);
 
@@ -245,6 +245,12 @@ public class TumeurController extends BaseController {
 				formPhaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
 			}
 		}
+		
+		// === Bouton "annuler" ===
+
+				if (button != null && button.equals("cancel")) {
+					return "redirect:/patient/" +  formTumeurInitiale.getIdPatient() + "/tumeurs";
+				}
 
 
 		// POST/REDIRECT/GET
@@ -372,7 +378,7 @@ public class TumeurController extends BaseController {
 		listIdGroupeTopo.add("C51");
 
 		List<ChuTopographie> listTopographies = topographieService.list(listIdGroupeTopo);
-		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatient(patient.getIdPatient());
 		List<ChuEvolution> listEvolutions = evolutionService.list();
 		List<ChuMetastase> listMetastases = metastaseService.list();
 		List<ChuPerformanceStatus> listPerformanceStatus = performanceStatusService.list();

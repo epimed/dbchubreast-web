@@ -95,6 +95,7 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 		prelevement.setChuMorphologie(morphologieDao.find(form.getIdMorphologie()));
 		prelevement.setTypeHistologique(form.getTypeHistologique());
 		prelevement.setAssociationCis(form.getAssociationCis());
+		prelevement.setTk(form.getTk());
 
 		prelevementDao.saveOrUpdate(prelevement);
 
@@ -165,6 +166,7 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 		form.setAssociationCis(prelevement.getAssociationCis());
 		form.setDatePrelevement(prelevement.getDatePrelevement());
 		form.setSitePrelevement(prelevement.getSitePrelevement());
+		form.setTk(prelevement.getTk());
 
 		ChuPhaseTumeur phase = phaseTumeurDao.findByIdPrelevementWithDependencies(prelevement.getIdPrelevement());
 		form.setIdPhase(phase.getIdPhase());

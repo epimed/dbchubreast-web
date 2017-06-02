@@ -3,10 +3,12 @@ package dbchubreast_web.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,6 +26,7 @@ public class ChuTypePhase implements java.io.Serializable {
 	private Integer idTypePhase;
 	private String nom;
 	private List<ChuPhaseTumeur> chuPhaseTumeurs = new ArrayList<ChuPhaseTumeur>(0);
+	private List<ChuTypePrelevement> chuTypePrelevements = new ArrayList<ChuTypePrelevement>(0);
 
 	public ChuTypePhase() {
 	}
@@ -67,6 +70,16 @@ public class ChuTypePhase implements java.io.Serializable {
 	public void setChuPhaseTumeurs(List<ChuPhaseTumeur> chuPhaseTumeurs) {
 		this.chuPhaseTumeurs = chuPhaseTumeurs;
 	}
+	
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "chuTypePhases")
+	public List<ChuTypePrelevement> getChuTypePrelevements() {
+		return this.chuTypePrelevements;
+	}
+
+	public void setChuTypePrelevements(List<ChuTypePrelevement> chuTypePrelevements) {
+		this.chuTypePrelevements = chuTypePrelevements;
+	}
+
 
 	@Override
 	public int hashCode() {

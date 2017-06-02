@@ -39,7 +39,7 @@
 			<!-- Methode -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Methode</label>
-				<div class="col-sm-1 control-label">${formComposant.nomMethode}</div>
+				<div class="col-sm-10">${formComposant.nomMethode}</div>
 			</div>
 
 			<!-- Nom international -->
@@ -57,7 +57,7 @@
 			<!-- Nom commercial -->
 			<spring:bind path="nomCommercial">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-sm-2 control-label">Nom commercial</label>
+					<label class="col-sm-2 control-label">Nom alternatif ou commercial</label>
 					<div class="col-sm-10">
 						<form:input class="form-control" path="nomCommercial" type="text" />
 						<form:errors path="nomCommercial" class="control-label" />

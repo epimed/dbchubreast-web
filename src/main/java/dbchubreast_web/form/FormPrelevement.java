@@ -19,6 +19,7 @@ public class FormPrelevement extends BaseService implements IForm {
 	private String idMorphologie;
 	private String typeHistologique;
 	private Boolean associationCis;
+	private String tk;
 
 	private List<FormBiomarqueur> listFormBiomarqueurs;
 
@@ -134,21 +135,31 @@ public class FormPrelevement extends BaseService implements IForm {
 		this.idPatient = idPatient;
 	}
 
+	
+	
+	public String getTk() {
+		return tk;
+	}
+
+	public void setTk(String tk) {
+		this.tk = tk;
+	}
+
 	/** ====================================================================================== */
 
 	public boolean isNew() {
 		return this.idPrelevement == null;
 	}
 
-	/** ====================================================================================== */
-
 	@Override
 	public String toString() {
 		return "FormPrelevement [idPrelevement=" + idPrelevement + ", idPatient=" + idPatient + ", idTumeur=" + idTumeur
-				+ ", idPhase=" + idPhase + ", idTypePrelevement=" + idTypePrelevement + ", typeHistologique="
-				+ typeHistologique + ", idMorphologie=" + idMorphologie + ", associationCis=" + associationCis
-				+ ", datePrelevement=" + datePrelevement + ", sitePrelevement=" + sitePrelevement
+				+ ", idPhase=" + idPhase + ", idTypePrelevement=" + idTypePrelevement + ", datePrelevement="
+				+ datePrelevement + ", sitePrelevement=" + sitePrelevement + ", idMorphologie=" + idMorphologie
+				+ ", typeHistologique=" + typeHistologique + ", associationCis=" + associationCis + ", tk=" + tk
 				+ ", listFormBiomarqueurs=" + listFormBiomarqueurs + "]";
 	}
+
+	/** ====================================================================================== */
 
 }

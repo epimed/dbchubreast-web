@@ -39,7 +39,7 @@
 			<!-- Methode -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Methode</label>
-				<div class="col-sm-1 control-label">${formProtocole.nomMethode}</div>
+				<div class="col-sm-10">${formProtocole.nomMethode}</div>
 			</div>
 
 			<!-- Code -->
@@ -83,7 +83,6 @@
 									<label> <form:checkbox path="listIdComposants"
 											value="${composant.idComposant}" />
 										${composant.nomInternational} <b>${composant.nomCommercial}</b>
-										<small> (${composant.classe}, ${composant.action})</small>
 									</label>
 								</c:forEach>
 							</div>

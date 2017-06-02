@@ -41,8 +41,17 @@
 			<form:hidden path="idPrelevement" />
 			<form:hidden path="idPatient" />
 
+			<!-- TK -->
+			<div class="form-group">
+				<label class="col-sm-2 control-label">TK</label>
+				<div class="col-sm-3">
+					<form:input class="form-control" path="tk" type="text" />
+					<form:errors path="tk" />
+				</div>
+			</div>
 
 			<!-- Tumeur -->
+
 			<spring:bind path="idTumeur">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
 					<label class="col-sm-2 control-label">Tumeur *</label>
@@ -51,8 +60,12 @@
 							onchange="this.form.submit()">
 							<form:option value="" label="--- Sélectionner ---" />
 							<c:forEach var="tumeur" items="${listTumeurs}">
+
+								<fmt:formatDate pattern="dd/MM/yyyy"
+									value="${tumeur.dateDiagnostic}" var="dateTumeur" />
+
 								<form:option value="${tumeur.idTumeur}"
-									label="[ID ${tumeur.idTumeur}] ${tumeur.dateDiagnostic} - ${tumeur.cote}" />
+									label="[ID ${tumeur.idTumeur}] ${dateTumeur} - ${tumeur.cote}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idTumeur" class="control-label" />
@@ -69,8 +82,12 @@
 							onchange="this.form.submit()">
 							<form:option value="" label="--- Sélectionner ---" />
 							<c:forEach var="phase" items="${listPhases}">
+							
+							<fmt:formatDate pattern="dd/MM/yyyy"
+									value="${phase.dateDiagnostic}" var="datePhase" />
+							
 								<form:option value="${phase.idPhase}"
-									label="[ID ${phase.idPhase}] ${phase.dateDiagnostic} - ${phase.chuTypePhase.nom}" />
+									label="[ID ${phase.idPhase}] ${datePhase} - ${phase.chuTypePhase.nom}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idPhase" class="control-label" />
@@ -112,11 +129,21 @@
 			<!-- Site de prelevement -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Site de prélèvement</label>
-				<div class="col-sm-3">
-					<form:input class="form-control" path="sitePrelevement" type="text" />
+				<div class="col-sm-4">
+					<form:input class="form-control" path="sitePrelevement" type="text" list="listSitesPrelevement"/>
+					<datalist id="listSitesPrelevement">
+							<option value="Adénopathie locorégionale (axillaire, sus ou sous claviculaire)" />
+							<option value="Adénopathie autre (à distance) : tumeurs d'emblée métastatiques" />
+							<option value="Métastase hépatique" />
+							<option value="Métastase autre de l'appareil digestif" />
+							<option value="Métastase osseuse" />
+							<option value="Métastase cérébrale" />
+							<option value="Métastase surrénalienne" />
+							<option value="Métastase cutanée ou sous-cutanée ou des parties molles" />
+						</datalist>
 					<form:errors path="sitePrelevement" />
 				</div>
-				<div class="col-sm-7">
+				<div class="col-sm-6">
 					<span id="helpBlock" class="help-block">Laisser vide par
 						défaut si le site de prélèvement correspond à la tumeur principale</span>
 				</div>
@@ -198,11 +225,8 @@
 			</div>
 
 
-			<!-- Button -->
-
-
-			<input type="submit" class="btn-lg btn-primary pull-right"
-				name="saveButton" value="Enregistrer" />
+			<!-- Buttons -->
+			<%@ include file="../inc/boutonsFormulaire.jsp"%>
 
 		</form:form>
 

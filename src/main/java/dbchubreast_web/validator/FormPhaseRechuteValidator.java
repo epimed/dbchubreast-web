@@ -13,6 +13,8 @@
  */
 package dbchubreast_web.validator;
 
+import java.text.SimpleDateFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -28,6 +30,8 @@ import dbchubreast_web.service.business.ChuTumeurService;
 @Component
 public class FormPhaseRechuteValidator extends BaseService implements Validator {
 
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	
 	@Autowired
 	private ChuPatientService patientService;
 
@@ -70,7 +74,7 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator 
 		if (form.getDateDiagnostic() != null && tumeur.getDateDiagnostic() != null) {
 			if (form.getDateDiagnostic().before(tumeur.getDateDiagnostic())) {
 				String message = "La date du diagnostic de la rechute ne peut pas être antérieure à la date du diagnostic de la phase initiale "
-						+ tumeur.getDateDiagnostic() + " !";
+						+ dateFormat.format(tumeur.getDateDiagnostic()) + " !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formPhaseRechute.dateDiagnostic", message);
 			}
 		}
@@ -80,7 +84,7 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator 
 		if (form.getDateDiagnostic() != null && patient.getDateDeces() != null) {
 			if (form.getDateDiagnostic().after(patient.getDateDeces())) {
 				String message = "La date du diagnostic ne peut pas être postéreure à la date de décès "
-						+ patient.getDateDeces() + " !";
+						+ dateFormat.format(patient.getDateDeces()) + " !";
 				errors.rejectValue("dateDiagnostic", "Consistency.formPhaseRechute.dateDiagnostic", message);
 			}
 		}

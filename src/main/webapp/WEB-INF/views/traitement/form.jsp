@@ -51,8 +51,12 @@
 							onchange="this.form.submit()">
 							<form:option value="" label="--- Sélectionner ---" />
 							<c:forEach var="tumeur" items="${listTumeurs}">
+
+								<fmt:formatDate pattern="dd/MM/yyyy"
+									value="${tumeur.dateDiagnostic}" var="dateTumeur" />
+
 								<form:option value="${tumeur.idTumeur}"
-									label="[ID ${tumeur.idTumeur}] ${tumeur.dateDiagnostic} - ${tumeur.cote}" />
+									label="[ID ${tumeur.idTumeur}] ${dateTumeur} - ${tumeur.cote}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idTumeur" class="control-label" />
@@ -68,8 +72,12 @@
 						<form:select class="form-control" path="idPhase">
 							<form:option value="" label="--- Sélectionner ---" />
 							<c:forEach var="phase" items="${listPhases}">
+
+								<fmt:formatDate pattern="dd/MM/yyyy"
+									value="${phase.dateDiagnostic}" var="datePhase" />
+
 								<form:option value="${phase.idPhase}"
-									label="[ID ${phase.idPhase}] ${phase.dateDiagnostic} - ${phase.chuTypePhase.nom}" />
+									label="[ID ${phase.idPhase}] ${datePhase} - ${phase.chuTypePhase.nom}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idPhase" class="control-label" />
@@ -174,22 +182,27 @@
 			</c:if>
 
 
-			<!-- Reponse -->
-			<spring:bind path="idReponse">
-				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<label class="col-sm-2 control-label">Réponse au traitement</label>
-					<div class="col-sm-10">
-						<form:select class="form-control" path="idReponse">
-							<form:option value="" label="--- Sélectionner ---" />
-							<c:forEach var="reponse" items="${listReponses}">
-								<form:option value="${reponse.idReponse}" label="${reponse.nom}" />
-							</c:forEach>
-						</form:select>
-						<form:errors path="idReponse" class="control-label" />
+			<!-- methode != chururgie -->
+			<c:if
+				test="${not empty formTraitement.idMethode and  formTraitement.idMethode!=1}">
+				<!-- Reponse -->
+				<spring:bind path="idReponse">
+					<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Réponse au
+							traitement</label>
+						<div class="col-sm-10">
+							<form:select class="form-control" path="idReponse">
+								<form:option value="" label="--- Sélectionner ---" />
+								<c:forEach var="reponse" items="${listReponses}">
+									<form:option value="${reponse.idReponse}"
+										label="${reponse.nom}" />
+								</c:forEach>
+							</form:select>
+							<form:errors path="idReponse" class="control-label" />
+						</div>
 					</div>
-				</div>
-			</spring:bind>
-
+				</spring:bind>
+			</c:if>
 
 			<!-- Remarque -->
 			<div class="form-group">

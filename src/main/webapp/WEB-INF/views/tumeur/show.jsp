@@ -73,8 +73,7 @@
 
 			<div class="row">
 				<label class="col-sm-2">Statut à la dernière nouvelle</label>
-				<div class="col-sm-10">${tumeur.chuEvolution.code} -
-					${tumeur.chuEvolution.nom}</div>
+				<div class="col-sm-10">${tumeur.chuEvolution.code} ${tumeur.chuEvolution.nom}</div>
 			</div>
 
 			<div class="row">
@@ -89,8 +88,14 @@
 
 			<div class="row">
 				<label class="col-sm-2">Survie (mois)</label>
-				<div class="col-sm-10">globale : ${tumeur.osMonths}, sans rechute : ${tumeur.dfsMonths}</div>
+				<div class="col-sm-10">
+					<c:if test="${not empty tumeur.osMonths}">globale : ${tumeur.osMonths}</c:if>
+					<c:if
+						test="${not empty tumeur.osMonths and not empty tumeur.dfsMonths}">, &nbsp;</c:if>
+					<c:if test="${not empty tumeur.dfsMonths}">sans rechute : ${tumeur.dfsMonths}</c:if>
+				</div>
 			</div>
+
 
 		</div>
 
@@ -103,7 +108,7 @@
 			<p></p>
 
 			<spring:url value="/tumeur/${tumeur.idTumeur}/rechute/add" var="url" />
-			<button class="btn-sm btn-success" onclick="location.href='${url}'">Ajouter
+			<button class="btn-sm btn-warning" onclick="location.href='${url}'">Ajouter
 				une rechute</button>
 
 		</div>

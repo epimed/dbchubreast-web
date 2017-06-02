@@ -45,6 +45,7 @@ import dbchubreast_web.service.business.ChuReponseService;
 import dbchubreast_web.service.business.ChuTraitementService;
 import dbchubreast_web.service.business.ChuTumeurService;
 import dbchubreast_web.service.form.FormTraitementService;
+import dbchubreast_web.service.updater.UpdaterTypeTraitement;
 import dbchubreast_web.validator.FormTraitementValidator;
 
 @Controller
@@ -76,6 +77,9 @@ public class TraitementController extends BaseController {
 
 	@Autowired
 	private FormTraitementValidator formTraitementValidator;
+	
+	@Autowired
+	private UpdaterTypeTraitement updaterTypeTraitement;
 
 	@Autowired
 	private AppLogService logService;
@@ -88,11 +92,9 @@ public class TraitementController extends BaseController {
 		logService.log("Affichage de traitements du patient " + idPatient);
 
 		ChuPatient patient = patientService.find(idPatient);
-		List<ChuTraitement> listTraitements = traitementService.listByIdPatient(idPatient);
-		List<ChuTumeur> listTumeurs = tumeurService.find(idPatient);
-
 		model.addAttribute("patient", patient);
-		model.addAttribute("listTraitements", listTraitements);
+		
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(idPatient, "traitements");
 		model.addAttribute("listTumeurs", listTumeurs);
 
 		return "traitement/list";
@@ -110,9 +112,7 @@ public class TraitementController extends BaseController {
 		if (idPatient != null) {
 			ChuPatient patient = patientService.find(idPatient);
 			model.addAttribute("patient", patient);
-			List<ChuTraitement> listTraitements = traitementService.listByIdPatient(idPatient);
-			model.addAttribute("listTraitements", listTraitements);
-			List<ChuTumeur> listTumeurs = tumeurService.find(idPatient);
+			List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(idPatient, "traitements");
 			model.addAttribute("listTumeurs", listTumeurs);
 		}
 
@@ -136,7 +136,7 @@ public class TraitementController extends BaseController {
 		model.addAttribute("patient", patient);
 
 		// Tumeurs
-		List<ChuTumeur> listTumeurs = tumeurService.find(patient.getIdPatient());
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatient(patient.getIdPatient());
 		model.addAttribute("listTumeurs", listTumeurs);
 
 		// Traitements
@@ -291,7 +291,9 @@ public class TraitementController extends BaseController {
 		model.addAttribute("traitement", traitement);
 
 		if (button!=null && button.equals("delete")) {
+			ChuTumeur tumeur = traitement.getChuPhaseTumeur().getChuTumeur();
 			traitementService.delete(traitement);
+			updaterTypeTraitement.update(tumeur);
 			redirectAttributes.addFlashAttribute("css", "success");
 			redirectAttributes.addFlashAttribute("msg", "Le traitement " + idTraitement + " a été supprimé !");
 			logService.log("Suppression du traitement " + idTraitement);
@@ -318,7 +320,7 @@ public class TraitementController extends BaseController {
 		model.addAttribute("listTraitements", listTraitements);
 
 		// Tumeurs
-		List<ChuTumeur> listTumeurs = tumeurService.find(formTraitement.getIdPatient());
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatient(formTraitement.getIdPatient());
 		model.addAttribute("listTumeurs", listTumeurs);
 
 		// Tumeur pre-selectionnee si unique

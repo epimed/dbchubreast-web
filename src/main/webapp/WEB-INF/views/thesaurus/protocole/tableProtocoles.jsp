@@ -19,7 +19,6 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr class="info">
-					<th>#ID</th>
 					<th>Code</th>
 					<th>Nom</th>
 					<th>Actions</th>
@@ -29,7 +28,6 @@
 
 			<c:forEach var="protocole" items="${methode.chuProtocoleTraitements}">
 				<tr>
-					<td>${protocole.idProtocole}</td>
 					<td>${protocole.code}</td>
 					<td>${protocole.nom}<c:if
 							test="${not empty protocole.chuComposantTraitements}">
@@ -37,7 +35,7 @@
 							<c:forEach var="composant"
 								items="${protocole.chuComposantTraitements}" varStatus="loop">
 								<span class="text-info"><small>${composant.nomInternational} ${composant.nomCommercial}<c:if
-										test="${!loop.last}">, </c:if></small></span>
+										test="${!loop.last}">+ </c:if></small></span>
 							</c:forEach>
 						</c:if>
 					</td>

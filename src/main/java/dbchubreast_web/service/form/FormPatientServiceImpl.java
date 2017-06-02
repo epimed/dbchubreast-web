@@ -92,7 +92,7 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 		}
 
 		// === Linked actions ===
-		List<ChuTumeur> listTumeurs = tumeurDao.findWithDependencies(patient.getIdPatient());
+		List<ChuTumeur> listTumeurs = tumeurDao.listByIdPatientWithDependencies(patient.getIdPatient(), "tumeurs");
 
 		// === Survival ===
 		updaterSurvival.update(listTumeurs);

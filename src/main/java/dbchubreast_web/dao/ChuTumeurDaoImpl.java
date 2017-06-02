@@ -31,7 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 import dbchubreast_web.entity.ChuEvolution;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 import dbchubreast_web.entity.ChuTopographie;
+import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.entity.ChuTumeur;
 
 @Transactional
@@ -93,7 +96,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		catch (NoResultException ex) {
 			return null;
 		}
-		
+
 	}
 
 	/** ================================================= */
@@ -112,7 +115,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	/** ================================================= */
 
-	public List<ChuTumeur> find(String idPatient) {
+	public List<ChuTumeur> listByIdPatient(String idPatient) {
 
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
@@ -126,16 +129,26 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	/** ================================================= */
 
-	public List<ChuTumeur> findWithDependencies(String idPatient) {
+	public List<ChuTumeur> listByIdPatientWithDependencies(String idPatient, String dependency) {
 
-		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
-		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
-		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
-		Join<ChuTumeur, ChuPatient> patient = root.join("chuPatient");
-		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
-		criteria.orderBy(builder.asc(root.get("idTumeur")));
-		List<ChuTumeur> list =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
-		this.populateDependencies(list);
+		List<ChuTumeur> list =  this.listByIdPatient(idPatient);
+
+		if (dependency!=null && dependency.equals("tumeurs")) {
+			this.populateDependencies(list);
+		}
+		
+		if (dependency!=null && dependency.equals("phases")) {
+			this.populatePhases(list);
+		}
+
+		if (dependency!=null && dependency.equals("prelevements")) {
+			this.populatePrelevements(list);
+		}
+		
+		if (dependency!=null && dependency.equals("traitements")) {
+			this.populateTraitements(list);
+		}
+
 		return list;
 	}
 
@@ -150,7 +163,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		Join<ChuTumeur, ChuPatient> patient = root.join("chuPatient");
 		Join<ChuTumeur, ChuEvolution> evolution = root.join("chuEvolution");
 		Join<ChuTumeur, ChuTopographie> topographie = root.join("chuTopographie");
-		
+
 		criteria.select(root).where(
 				builder.or(
 						builder.like(builder.lower(topographie.get("idTopographie")), "%" + text + "%"),
@@ -161,7 +174,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 						builder.like(builder.lower(patient.get("rcp")), "%" + text + "%")
 						)
 				);
-		
+
 		criteria.orderBy(builder.asc(root.get("idTumeur")));
 		List<ChuTumeur> list =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
@@ -171,7 +184,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	/** ================================================= */
 
 	public List<ChuTumeur> list() {
-		
+
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuTumeur> criteria = builder.createQuery(ChuTumeur.class);
 		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
@@ -222,4 +235,72 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	}
 
 	/** ================================================= */
+	
+	private void populatePhases(List<ChuTumeur> list) {
+		for (ChuTumeur tumeur : list) {
+			this.populateDependencies(tumeur);
+			if (tumeur != null) {
+				Hibernate.initialize(tumeur.getChuPhaseTumeurs());
+				for (ChuPhaseTumeur phase : tumeur.getChuPhaseTumeurs()) {
+					Hibernate.initialize(phase.getChuTypePhase());
+				}
+			}
+		}
+	}
+	
+	
+	/** ================================================= */
+
+	private void populatePrelevements(List<ChuTumeur> list) {
+		for (ChuTumeur tumeur : list) {
+			this.populateDependencies(tumeur);
+
+			if (tumeur != null) {
+				Hibernate.initialize(tumeur.getChuPhaseTumeurs());
+
+				for (ChuPhaseTumeur phase : tumeur.getChuPhaseTumeurs()) {
+					Hibernate.initialize(phase.getChuTypePhase());
+					Hibernate.initialize(phase.getChuPrelevements());
+
+					for (ChuPrelevement prel : phase.getChuPrelevements()) {
+						Hibernate.initialize(prel.getChuMorphologie());
+						Hibernate.initialize(prel.getChuTypePrelevement());
+						Hibernate.initialize(prel.getChuPrelevementBiomarqueurs());
+
+						for (ChuPrelevementBiomarqueur prelBio : prel.getChuPrelevementBiomarqueurs()) {
+							Hibernate.initialize(prelBio.getChuBiomarqueur());
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/** ================================================= */
+
+	private void populateTraitements(List<ChuTumeur> list) {
+		for (ChuTumeur tumeur : list) {
+			this.populateDependencies(tumeur);
+
+			if (tumeur != null) {
+				Hibernate.initialize(tumeur.getChuPhaseTumeurs());
+
+				for (ChuPhaseTumeur phase : tumeur.getChuPhaseTumeurs()) {
+					Hibernate.initialize(phase.getChuTypePhase());
+					Hibernate.initialize(phase.getChuTraitements());
+
+					for (ChuTraitement traitement : phase.getChuTraitements()) {
+						Hibernate.initialize(traitement.getChuProtocoleTraitement());
+						Hibernate.initialize(traitement.getChuProtocoleTraitement().getChuComposantTraitements());
+						Hibernate.initialize(traitement.getChuMethodeTraitement());
+						Hibernate.initialize(traitement.getChuTypeTraitement());
+						Hibernate.initialize(traitement.getChuReponse());
+					}
+				}
+			}
+		}
+	}
+	
+	/** ================================================= */
+	
 }

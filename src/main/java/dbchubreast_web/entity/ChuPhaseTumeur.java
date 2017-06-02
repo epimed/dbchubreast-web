@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -207,6 +208,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPhaseTumeur")
+	@OrderBy("datePrelevement")
 	public List<ChuPrelevement> getChuPrelevements() {
 		return this.chuPrelevements;
 	}
@@ -216,6 +218,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPhaseTumeur")
+	@OrderBy("dateDebut")
 	public List<ChuTraitement> getChuTraitements() {
 		return this.chuTraitements;
 	}

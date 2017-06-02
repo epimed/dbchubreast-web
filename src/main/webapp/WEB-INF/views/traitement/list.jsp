@@ -35,9 +35,6 @@
 
 		</div>
 
-		<!-- Bouton ajouter -->
-		<%@ include file="boutonAjouterTraitement.jsp"%>
-
 	</div>
 
 	<!-- Footer -->
