@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dbchubreast_web.entity.AppRole;
@@ -102,7 +103,7 @@ public class AdminController extends BaseController {
 		logger.debug("Supression {}", utilisateur);
 
 		userService.delete(utilisateur);
-		
+
 		// POST/REDIRECT/GET
 		return "redirect:/admin/users";
 	}
@@ -136,27 +137,46 @@ public class AdminController extends BaseController {
 
 	@RequestMapping(value = { "/admin/user/update" }, method = RequestMethod.POST)
 	public String updateUserForm(Model model, 
+			@RequestParam(value = "button", required = false) String button,
 			@ModelAttribute("formUtilisateur") @Valid FormUtilisateur formUtilisateur,
 			BindingResult result,
 			final RedirectAttributes redirectAttributes) {
 
 
-		if (result.hasErrors()) {
-			List<AppRole> listRoles = roleService.list();
-			model.addAttribute("formUtilisateur", formUtilisateur);
-			model.addAttribute("listRoles", listRoles);
-			return "admin/form";
+		// === Bouton "reinitialiser" ===
+
+		if (button != null && button.equals("reset")) {
+			if (formUtilisateur!=null && formUtilisateur.getIdUser()!=null) {
+				return "/admin/user/" + formUtilisateur.getIdUser() + "/update";
+			}
+			return "redirect:/admin/user/add";
 		}
 
-		redirectAttributes.addFlashAttribute("css", "success");
-		if (formUtilisateur.isNew()) {
-			redirectAttributes.addFlashAttribute("msg", "Le nouveau utilisateur a été ajouté avec succès !");
-		} 
-		else {
-			redirectAttributes.addFlashAttribute("msg", "La modification a été effectuée avec succès !");
+
+		// === Bouton "enregistrer" ===
+
+		if (button != null && button.equals("save")) {
+			if (result.hasErrors()) {
+				List<AppRole> listRoles = roleService.list();
+				model.addAttribute("formUtilisateur", formUtilisateur);
+				model.addAttribute("listRoles", listRoles);
+				return "admin/form";
+			}
+			redirectAttributes.addFlashAttribute("css", "success");
+			if (formUtilisateur.isNew()) {
+				redirectAttributes.addFlashAttribute("msg", "Le nouvel utilisateur a été ajouté avec succès !");
+			} 
+			else {
+				redirectAttributes.addFlashAttribute("msg", "La modification a été effectuée avec succès !");
+			}
+			formUtilisateurService.saveOrUpdateForm(formUtilisateur);
 		}
 
-		formUtilisateurService.saveOrUpdateForm(formUtilisateur);
+		// === Bouton "annuler" ===
+
+		if (button!=null && button.equals("cancel")) {
+			return "redirect:/admin/users";
+		}
 
 		// POST/REDIRECT/GET
 		return "redirect:/admin/user/" + formUtilisateur.getIdUser();

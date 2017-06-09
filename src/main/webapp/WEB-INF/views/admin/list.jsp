@@ -21,15 +21,16 @@
 			<h1>Utilisateurs</h1>
 		</div>
 
-		<!-- Results -->
-		<%@ include file="../inc/tableUtilisateurs.jsp"%>
-
 		<div>
-			<p></p>
-
 			<spring:url value="/admin/user/add" var="url" />
-			<button class="btn btn-info" onclick="location.href='${url}'">Ajouter un utilisateur</button>
+			<button class="btn-sm btn-success" onclick="location.href='${url}'">Ajouter
+				un utilisateur</button>
 		</div>
+
+		<!-- Results -->
+		<%@ include file="tableUtilisateurs.jsp"%>
+
+
 
 	</div>
 

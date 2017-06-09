@@ -33,7 +33,7 @@
 						l'information sur les tumeurs du patient</a>, en phase initiale et
 					éventuellement en rechutes</li>
 				<li><a href="${pageContext.request.contextPath}/prelevement">Renseigner les prélèvements et les biomarqueurs</a></li>
-				<li>Renseigner les traitements</li>
+				<li><a href="${pageContext.request.contextPath}/traitement">Renseigner les traitements</a></li>
 				<li>Exporter les données en format Excel : <a
 					href="${pageContext.request.contextPath}/download/patients">patients</a>,
 					<a

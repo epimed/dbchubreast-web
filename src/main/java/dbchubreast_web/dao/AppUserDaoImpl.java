@@ -21,6 +21,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -90,9 +91,15 @@ public class AppUserDaoImpl extends BaseDao implements AppUserDao {
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<AppUser> criteria = builder.createQuery(AppUser.class);
 		Root<AppUser> root = criteria.from(AppUser.class);
-		root.fetch("appRoles");
 		criteria.select(root);
-		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		criteria.orderBy(builder.asc(root.get("idUser")));
+		List<AppUser> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		
+		for (AppUser user : list) {
+			Hibernate.initialize(user.getAppRoles());
+		}
+		
+		return list;
 	}
 
 	/** ================================================= */
@@ -110,7 +117,6 @@ public class AppUserDaoImpl extends BaseDao implements AppUserDao {
 	/** ================================================= */
 	
 	public void delete(AppUser user) {
-		
 		user.getAppRoles().clear();
 		sessionFactory.getCurrentSession().delete(user);
 	}

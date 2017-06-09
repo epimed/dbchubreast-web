@@ -136,7 +136,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		if (dependency!=null && dependency.equals("tumeurs")) {
 			this.populateDependencies(list);
 		}
-		
+
 		if (dependency!=null && dependency.equals("phases")) {
 			this.populatePhases(list);
 		}
@@ -144,7 +144,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		if (dependency!=null && dependency.equals("prelevements")) {
 			this.populatePrelevements(list);
 		}
-		
+
 		if (dependency!=null && dependency.equals("traitements")) {
 			this.populateTraitements(list);
 		}
@@ -235,7 +235,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	}
 
 	/** ================================================= */
-	
+
 	private void populatePhases(List<ChuTumeur> list) {
 		for (ChuTumeur tumeur : list) {
 			this.populateDependencies(tumeur);
@@ -247,8 +247,8 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 			}
 		}
 	}
-	
-	
+
+
 	/** ================================================= */
 
 	private void populatePrelevements(List<ChuTumeur> list) {
@@ -275,7 +275,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 			}
 		}
 	}
-	
+
 	/** ================================================= */
 
 	private void populateTraitements(List<ChuTumeur> list) {
@@ -291,7 +291,9 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 					for (ChuTraitement traitement : phase.getChuTraitements()) {
 						Hibernate.initialize(traitement.getChuProtocoleTraitement());
-						Hibernate.initialize(traitement.getChuProtocoleTraitement().getChuComposantTraitements());
+						if (traitement.getChuProtocoleTraitement()!=null) {
+							Hibernate.initialize(traitement.getChuProtocoleTraitement().getChuComposantTraitements());
+						}
 						Hibernate.initialize(traitement.getChuMethodeTraitement());
 						Hibernate.initialize(traitement.getChuTypeTraitement());
 						Hibernate.initialize(traitement.getChuReponse());
@@ -300,7 +302,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 			}
 		}
 	}
-	
+
 	/** ================================================= */
-	
+
 }

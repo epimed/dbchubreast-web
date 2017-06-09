@@ -102,8 +102,9 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 						builder.equal(phaseTumeur.get("idPhase"), idPhaseTumeur)
 						)
 				);
-		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
-		
+		List<ChuPrelevementBiomarqueur> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(list);
+		return list;
 	}
 
 	/** ================================================= */
@@ -170,6 +171,7 @@ public class ChuPrelevementBiomarqueurDaoImpl extends BaseDao implements ChuPrel
 	private void populateDependencies(ChuPrelevementBiomarqueur prelBio) {
 		if (prelBio != null) {
 			Hibernate.initialize(prelBio.getChuPrelevement());
+			Hibernate.initialize(prelBio.getChuPrelevement().getChuTypePrelevement());
 			Hibernate.initialize(prelBio.getChuBiomarqueur());
 		}
 	}

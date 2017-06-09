@@ -115,16 +115,8 @@
 
 
 
-			<!-- Button -->
-
-			<p></p>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<p></p>
-					<button type="submit" class="btn-lg btn-primary pull-right">Enregistrer</button>
-				</div>
-			</div>
+			<!-- Buttons -->
+			<%@ include file="../inc/boutonsFormulaire.jsp"%>
 
 
 		</form:form>

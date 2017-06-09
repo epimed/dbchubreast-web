@@ -60,8 +60,7 @@ public class DownloadController extends BaseController {
 		
 		Table table = null;
 
-		if (key != null && key.equals("biomarqueurs")) {
-			
+		if (key != null && key.equals("biomarqueurs")) {	
 			table = exporterBiomarqueur.export();
 		}
 		

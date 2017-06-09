@@ -41,7 +41,7 @@ public class ExporterPatient extends AbstractExporter {
 			// ===== Patient =====
 
 			table.addToTable(i, "id_patient", patient.getIdPatient());
-			// table.addToTable(i, "id_encrypted", patient.getIdEncrypted());
+			table.addToTable(i, "tk", patient.getTk());
 			table.addToTable(i, "rcp", patient.getRcp());
 			table.addToTable(i, "nom", patient.getNom());
 			table.addToTable(i, "prenom", patient.getPrenom());

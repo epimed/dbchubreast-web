@@ -35,7 +35,7 @@
 							<c:forEach var="composant"
 								items="${protocole.chuComposantTraitements}" varStatus="loop">
 								<span class="text-info"><small>${composant.nomInternational} ${composant.nomCommercial}<c:if
-										test="${!loop.last}">+ </c:if></small></span>
+										test="${!loop.last}"> + </c:if></small></span>
 							</c:forEach>
 						</c:if>
 					</td>

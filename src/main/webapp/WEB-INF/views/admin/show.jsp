@@ -67,9 +67,21 @@
 			</div>
 		</div>
 
+		<p></p>
+
 		<div>
-			<spring:url value="/admin/user/${utilisateur.idUser}/update" var="url" />
-			<button class="btn btn-primary" onclick="location.href='${url}'">Modifier</button>
+			<spring:url value="/admin/user/${utilisateur.idUser}/update" var="urlUpdate" />
+			<button class="btn-sm btn-primary" onclick="location.href='${urlUpdate}'">Modifier</button>
+			
+			<spring:url value="/admin/user/${utilisateur.idUser}/delete" var="urlDelete" />
+			<button class="btn-sm btn-danger" onclick="location.href='${urlDelete}'">Supprimer</button>
+		</div>
+		
+		<p></p>
+		
+		<div>
+			<spring:url value="/admin/users" var="urlList" />
+			<button class="btn-sm btn-info" onclick="location.href='${urlList}'">Consulter la liste d'utilisateurs</button>
 		</div>
 
 	</div>

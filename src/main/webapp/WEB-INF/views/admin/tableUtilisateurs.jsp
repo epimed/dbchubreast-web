@@ -3,7 +3,6 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Nom</th>
 				<th>Prénom</th>
 				<th>Email</th>
@@ -17,25 +16,32 @@
 
 		<c:forEach var="utilisateur" items="${listUtilisateurs}">
 			<tr>
-				<td><a
-					href="${pageContext.request.contextPath}/admin/user/${utilisateur.idUser}">${utilisateur.idUser}</a></td>
 				<td>${utilisateur.lastName}</td>
 				<td>${utilisateur.firstName}</td>
 				<td>${utilisateur.email}</td>
 				<td>${utilisateur.login}</td>
 				<td>${utilisateur.enabled}</td>
 				<td><c:forEach var="role" items="${utilisateur.appRoles}">
-				${role.idRole} - ${role.name}<br />
+				${role.idRole}<br />
 					</c:forEach></td>
 
 				<td><spring:url
+						value="/admin/user/${utilisateur.idUser}" var="showUrl" />
+					<button class="btn-sm btn-info"
+						onclick="location.href='${showUrl}'">Consulter</button> 
+						
+						
+						
+					<spring:url
 						value="/admin/user/${utilisateur.idUser}/update" var="updateUrl" />
-					<spring:url value="/admin/user/${utilisateur.idUser}/delete" var="deleteUrl" />
-					<button class="btn btn-primary"
-						onclick="location.href='${updateUrl}'">Modifier</button>
-					<button class="btn btn-danger"
-						onclick="location.href='${deleteUrl}'">Supprimer</button>
-						</td>
+					<button class="btn-sm btn-primary"
+						onclick="location.href='${updateUrl}'">Modifier</button> 
+						
+						
+						<spring:url
+						value="/admin/user/${utilisateur.idUser}/delete" var="deleteUrl" />
+					<button class="btn-sm btn-danger"
+						onclick="location.href='${deleteUrl}'">Supprimer</button></td>
 			</tr>
 		</c:forEach>
 

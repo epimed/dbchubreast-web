@@ -80,10 +80,13 @@
 						<div class="col-sm-10">
 							<div class="checkbox">
 								<c:forEach var="composant" items="${listComposants}">
-									<label> <form:checkbox path="listIdComposants"
-											value="${composant.idComposant}" />
-										${composant.nomInternational} <b>${composant.nomCommercial}</b>
-									</label>
+									<div class="col-sm-5">
+										<label> <form:checkbox path="listIdComposants"
+												value="${composant.idComposant}" />
+											${composant.nomInternational} <b>${composant.nomCommercial}</b>
+										</label>
+									</div>
+
 								</c:forEach>
 							</div>
 							<form:errors path="listIdComposants" />
