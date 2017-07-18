@@ -73,7 +73,12 @@
 
 			<div class="row">
 				<label class="col-sm-2">Statut à la dernière nouvelle</label>
-				<div class="col-sm-10">${tumeur.chuEvolution.code} ${tumeur.chuEvolution.nom}</div>
+				<div class="col-sm-10">${tumeur.chuEvolution.code}
+					${tumeur.chuEvolution.nom}
+					<c:if test="${tumeur.chuEvolution.idEvolution==5}">
+						(${patient.causeDeces})
+					</c:if>
+				</div>
 			</div>
 
 			<div class="row">

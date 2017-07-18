@@ -131,15 +131,11 @@
 				<label class="col-sm-2 control-label">Site de prélèvement</label>
 				<div class="col-sm-4">
 					<form:input class="form-control" path="sitePrelevement" type="text" list="listSitesPrelevement"/>
-					<datalist id="listSitesPrelevement">
+						<datalist id="listSitesPrelevement">
 							<option value="Adénopathie locorégionale (axillaire, sus ou sous claviculaire)" />
-							<option value="Adénopathie autre (à distance) : tumeurs d'emblée métastatiques" />
-							<option value="Métastase hépatique" />
-							<option value="Métastase autre de l'appareil digestif" />
-							<option value="Métastase osseuse" />
-							<option value="Métastase cérébrale" />
-							<option value="Métastase surrénalienne" />
-							<option value="Métastase cutanée ou sous-cutanée ou des parties molles" />
+							<c:forEach var="metastase" items="${listMetastases}">
+								<option value="Métastases ${metastase.nom}" />
+							</c:forEach>
 						</datalist>
 					<form:errors path="sitePrelevement" />
 				</div>

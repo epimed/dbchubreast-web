@@ -272,7 +272,7 @@ public class PrelevementController extends BaseController {
 				.list(prelevement.getIdPrelevement());
 		model.addAttribute("listPrelevementBiomarqueurs", listPrelevementBiomarqueurs);
 	}
-
+	
 	/** ====================================================================================== */
 
 	private void populateAddSampleForm(FormPrelevement formPrelevement, Model model) {
@@ -299,6 +299,13 @@ public class PrelevementController extends BaseController {
 			if (formPrelevement.getIdPhase() == null && listPhases != null && listPhases.size() == 1) {
 				formPrelevement.setIdPhase(listPhases.get(0).getIdPhase());
 			}
+			
+			// Metastases
+			if (formPrelevement.getIdPhase() != null) {
+				ChuPhaseTumeur phase =  phaseTumeurService.findWithDependencies(formPrelevement.getIdPhase());
+				model.addAttribute("listMetastases", phase.getChuMetastases());
+			}
+			
 		}
 
 		// Types de prelevements

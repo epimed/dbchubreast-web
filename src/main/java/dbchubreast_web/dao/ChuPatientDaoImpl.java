@@ -175,6 +175,7 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 		.where(
 				builder.or(
 						builder.like(builder.lower(root.get("nom")), "%" + text + "%"),
+						builder.like(builder.lower(root.get("nomNaissance")), "%" + text + "%"),
 						builder.like(builder.lower(root.get("prenom")), "%" + text + "%"),
 						builder.like(builder.lower(root.get("rcp")), "%" + text + "%"),
 						builder.like(builder.lower(root.get("tk")), "%" + text + "%"),

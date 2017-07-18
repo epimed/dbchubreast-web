@@ -26,6 +26,8 @@ public class FormPatient extends BaseService implements IForm {
 	@Length(max = 255, message = "255 caractères au maximum")
 	private String nom;
 
+	private String nomNaissance;
+
 	@NotNull(message = "Ne peut pas être vide")
 	private Date dateNaissance;
 
@@ -143,6 +145,14 @@ public class FormPatient extends BaseService implements IForm {
 	}
 
 	
+
+	public String getNomNaissance() {
+		return nomNaissance;
+	}
+
+	public void setNomNaissance(String nomNaissance) {
+		this.nomNaissance = nomNaissance;
+	}
 
 	@Override
 	public String toString() {

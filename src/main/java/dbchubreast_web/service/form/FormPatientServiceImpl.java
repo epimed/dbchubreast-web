@@ -62,7 +62,12 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 
 		String nom = form.getNom();
 		if (nom != null) {
-			patient.setNom(nom.toUpperCase());
+			patient.setNom(nom.toUpperCase().trim());
+		}
+		
+		String nomNaissance = form.getNomNaissance();
+		if (nomNaissance != null) {
+			patient.setNomNaissance(nomNaissance.toUpperCase().trim());
 		}
 
 		String prenom = form.getPrenom();
@@ -112,6 +117,7 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 			form.setRcp(patient.getRcp());
 			form.setPrenom(patient.getPrenom());
 			form.setNom(patient.getNom());
+			form.setNomNaissance(patient.getNomNaissance());
 			form.setSexe(patient.getSexe());
 			form.setDateNaissance(patient.getDateNaissance());
 			form.setDateDeces(patient.getDateDeces());

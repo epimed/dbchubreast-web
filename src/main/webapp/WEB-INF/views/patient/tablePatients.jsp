@@ -20,7 +20,12 @@
 					href="${pageContext.request.contextPath}/patient/${patient.idPatient}">${patient.idPatient}</a></td>
 				<td>${patient.tk}</td>
 				<td>${patient.rcp}</td>
-				<td>${patient.nom}</td>
+				<td>${patient.nom}<c:if
+						test="${ not empty patient.nomNaissance}">
+						<br />
+						<span class="text-info"><small>${patient.nomNaissance}</small></span>
+					</c:if>
+				</td>
 				<td>${patient.prenom}</td>
 
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
@@ -34,7 +39,8 @@
 						value="/patient/${patient.idPatient}/update" var="updateUrl" />
 					<button class="btn-sm btn-primary"
 						onclick="location.href='${updateUrl}'">Modifier</button> <spring:url
-						value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}" var="deleteUrl" />
+						value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}"
+						var="deleteUrl" />
 					<button class="btn-sm btn-danger"
 						onclick="location.href='${deleteUrl}'">Supprimer</button></td>
 

@@ -135,8 +135,6 @@ public class FormPrelevement extends BaseService implements IForm {
 		this.idPatient = idPatient;
 	}
 
-	
-	
 	public String getTk() {
 		return tk;
 	}

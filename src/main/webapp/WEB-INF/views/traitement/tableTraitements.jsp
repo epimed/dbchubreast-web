@@ -63,16 +63,20 @@
 					<c:forEach var="traitement" items="${listTraitements}">
 
 						<tr>
-							<td><fmt:formatDate pattern="dd/MM/yyyy"
-									value="${traitement.dateDebut}" /></td>
+							<td>
+								<fmt:formatDate pattern="dd/MM/yyyy" value="${traitement.dateDebut}" />
+								<c:if test="${not empty traitement.dateFin}">
+								<span class="text-info"><small><br/>terminé le <fmt:formatDate pattern="dd/MM/yyyy" value="${traitement.dateFin}" /></small></span>
+								</c:if>
+							</td>
 							<td>${traitement.chuMethodeTraitement.nom}<span
 								class="text-info"><small> <c:if
 											test="${not empty traitement.chuTypeTraitement}">
 
-											</br> traitement
+											<br/> traitement
 											${traitement.chuTypeTraitement.nom} 
 								</c:if> <c:if test="${not empty traitement.chuReponse}">
-											</br>
+											<br/>
 									réponse : ${traitement.chuReponse.nom}
 								</c:if>
 								</small> </span>

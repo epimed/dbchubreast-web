@@ -45,8 +45,12 @@
 
 		<div class="row">
 			<label class="col-sm-2">Nom</label>
-			<div class="col-sm-10">${patient.nom}</div>
+			<div class="col-sm-10">${patient.nom} <c:if test="${ not empty patient.nomNaissance}">
+			(nom de naissance ${patient.nomNaissance})</c:if>
+			</div>
 		</div>
+
+		
 
 		<div class="row">
 			<label class="col-sm-2">Sexe</label>
@@ -96,12 +100,14 @@
 				var="urlUpdate" />
 			<button class="btn-sm btn-primary"
 				onclick="location.href='${urlUpdate}'">Modifier</button>
-				
-				<spring:url
-						value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}" var="deleteUrl" />
-					<button class="btn-sm btn-danger"
-						onclick="location.href='${deleteUrl}'">Supprimer</button></td>
-				
+
+			<spring:url
+				value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}"
+				var="deleteUrl" />
+			<button class="btn-sm btn-danger"
+				onclick="location.href='${deleteUrl}'">Supprimer</button>
+			</td>
+
 		</div>
 
 		<!-- Boutons consulter -->

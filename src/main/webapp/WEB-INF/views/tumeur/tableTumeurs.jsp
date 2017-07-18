@@ -16,17 +16,12 @@
 		<c:forEach var="tumeur" items="${listTumeurs}">
 			<tr>
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
-						value="${tumeur.dateDiagnostic}" />
-						
-						<c:if test="${not empty tumeur.tripleNegative and tumeur.tripleNegative}">
-						
-						<span class="text-danger"><small></br>
-										triple negative</small></span>
-						
-						</c:if>
-						
-						<c:if
-						test="${not empty tumeur.chuPhaseTumeurs}">
+						value="${tumeur.dateDiagnostic}" /> <c:if
+						test="${not empty tumeur.tripleNegative and tumeur.tripleNegative}">
+
+						<span class="text-danger"><small></br> triple negative</small></span>
+
+					</c:if> <c:if test="${not empty tumeur.chuPhaseTumeurs}">
 						<c:forEach var="phase" items="${tumeur.chuPhaseTumeurs}">
 							<c:if
 								test="${not empty phase.chuTypePhase and phase.chuTypePhase.idTypePhase==2}">
@@ -47,8 +42,11 @@
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
 						value="${tumeur.dateEvolution}" /> <c:if
 						test="${not empty tumeur.chuEvolution}">
-						<span class="text-info"><small></br>${tumeur.chuEvolution.nom}
+						<span class="text-info"><small><br/>${tumeur.chuEvolution.nom}
 						</small></span>
+						<c:if test="${tumeur.chuEvolution.idEvolution==5}">
+							<span class="text-info"><small><br/>${patient.causeDeces}</small></span>
+						</c:if>
 					</c:if></td>
 
 				<td><spring:url value="/tumeur/${tumeur.idTumeur}"

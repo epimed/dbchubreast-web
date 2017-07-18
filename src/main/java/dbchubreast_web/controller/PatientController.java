@@ -194,7 +194,7 @@ public class PatientController extends BaseController {
 		ChuPatient patient = patientService.find(idPatient);
 		model.addAttribute("patient", patient);
 
-		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(patient.getIdPatient(), "tumeurs");
+		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(patient.getIdPatient(), "phases");
 		model.addAttribute("listTumeurs", listTumeurs);
 
 		String redirectPath = "redirect:/patients";

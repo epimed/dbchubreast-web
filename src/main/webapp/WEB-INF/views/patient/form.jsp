@@ -75,6 +75,17 @@
 					</div>
 				</div>
 			</spring:bind>
+			
+			<spring:bind path="nomNaissance">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-2 control-label">Nom de naissance (si différent)</label>
+					<div class="col-10">
+						<form:input path="nomNaissance" type="text" class="form-control " id="nomNaissance"
+							placeholder="NOM DE NAISSANCE" />
+						<form:errors path="nomNaissance" class="control-label" />
+					</div>
+				</div>
+			</spring:bind>
 
 			<spring:bind path="sexe">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
