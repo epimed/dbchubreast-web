@@ -111,6 +111,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		tumeur.setIdTumeur(form.getIdTumeur());
 		tumeur.setDateDiagnostic(form.getDateDiagnostic());
+		tumeur.setConsentement(form.getConsentement());
 
 		// Age diagnostic
 
@@ -251,6 +252,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		formTumeurInitiale.setIdTopographie(
 				tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getIdTopographie());
 		formTumeurInitiale.setCote(tumeur.getCote());
+		formTumeurInitiale.setConsentement(tumeur.getConsentement());
 
 		// === Evolution ===
 		formTumeurInitiale.setDateEvolution(tumeur.getDateEvolution());

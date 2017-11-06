@@ -44,7 +44,6 @@ public class ChuPatient implements java.io.Serializable {
 	private String statutBrca;
 	private Date dateDeces;
 	private String causeDeces;
-	private Boolean consentement;
 	private List<ChuAntecedentGeneral> chuAntecedentGenerals = new ArrayList<ChuAntecedentGeneral>(0);
 	private List<ChuAdresse> chuAdresses = new ArrayList<ChuAdresse>(0);
 	private List<ChuTumeur> chuTumeurs = new ArrayList<ChuTumeur>(0);
@@ -59,7 +58,7 @@ public class ChuPatient implements java.io.Serializable {
 	public ChuPatient(String idPatient, ChuAntecedentGyneco chuAntecedentGyneco, ChuModeVie chuModeVie,
 			ChuProfession chuProfession, ChuStatutMarital chuStatutMarital, String tk, String rcp, String nom,
 			String prenom, String nomNaissance, Date dateNaissance, String sexe, Double imc20Ans,
-			Integer scoreCharlsonCumule, String statutBrca, Date dateDeces, String causeDeces, Boolean consentement,
+			Integer scoreCharlsonCumule, String statutBrca, Date dateDeces, String causeDeces, 
 			List<ChuAntecedentGeneral> chuAntecedentGenerals, List<ChuAdresse> chuAdresses,
 			List<ChuTumeur> chuTumeurs) {
 		super();
@@ -80,7 +79,6 @@ public class ChuPatient implements java.io.Serializable {
 		this.statutBrca = statutBrca;
 		this.dateDeces = dateDeces;
 		this.causeDeces = causeDeces;
-		this.consentement = consentement;
 		this.chuAntecedentGenerals = chuAntecedentGenerals;
 		this.chuAdresses = chuAdresses;
 		this.chuTumeurs = chuTumeurs;
@@ -247,15 +245,6 @@ public class ChuPatient implements java.io.Serializable {
 		this.causeDeces = causeDeces;
 	}
 
-	@Column(name = "consentement")
-	public Boolean getConsentement() {
-		return this.consentement;
-	}
-
-	public void setConsentement(Boolean consentement) {
-		this.consentement = consentement;
-	}
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPatient")
 	public List<ChuAntecedentGeneral> getChuAntecedentGenerals() {
 		return this.chuAntecedentGenerals;
@@ -312,6 +301,6 @@ public class ChuPatient implements java.io.Serializable {
 	public String toString() {
 		return "ChuPatient [idPatient=" + idPatient + ", tk=" + tk + ", rcp=" + rcp + ", nom=" + nom + ", prenom="
 				+ prenom + ", dateNaissance=" + dateNaissance + ", sexe=" + sexe + ", statutBrca=" + statutBrca
-				+ ", dateDeces=" + dateDeces + ", causeDeces=" + causeDeces + ", consentement=" + consentement + "]";
+				+ ", dateDeces=" + dateDeces + ", causeDeces=" + causeDeces + "]";
 	}
 }

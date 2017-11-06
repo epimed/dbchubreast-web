@@ -23,6 +23,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -67,7 +68,7 @@ public class ChuProtocoleTraitementDaoImpl extends BaseDao implements ChuProtoco
 		Join<ChuProtocoleTraitement, ChuMethodeTraitement> methode = root.join("chuMethodeTraitement");
 		this.fetchDependencies(root);
 		criteria.select(root);
-		criteria.orderBy(builder.asc(methode.get("idMethode")), builder.asc(root.get("nom")));
+		criteria.orderBy(builder.asc(methode.get("idMethode")), builder.asc(root.get("code")));
 		List<ChuProtocoleTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		return list;
 	}
@@ -79,12 +80,12 @@ public class ChuProtocoleTraitementDaoImpl extends BaseDao implements ChuProtoco
 		CriteriaQuery<ChuProtocoleTraitement> criteria = builder.createQuery(ChuProtocoleTraitement.class);
 		Root<ChuProtocoleTraitement> root = criteria.from(ChuProtocoleTraitement.class);
 		Join<ChuProtocoleTraitement, ChuMethodeTraitement> methode = root.join("chuMethodeTraitement");
-		this.fetchDependencies(root);
 		criteria.select(root).where(
 				builder.equal(methode.get("idMethode"), idMethode)
 				);
-		criteria.orderBy(builder.asc(root.get("nom")));
+		criteria.orderBy(builder.asc(root.get("code")));
 		List<ChuProtocoleTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		populateDependencies(list);
 		return list;
 	}
 	
@@ -98,7 +99,7 @@ public class ChuProtocoleTraitementDaoImpl extends BaseDao implements ChuProtoco
 		criteria.select(protocoles).where(
 				builder.equal(composant.get("idComposant"), idComposant)
 				);
-		criteria.orderBy(builder.asc(protocoles.get("nom")));
+		criteria.orderBy(builder.asc(protocoles.get("code")));
 		List<ChuProtocoleTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		return list;
 	}
@@ -133,6 +134,24 @@ public class ChuProtocoleTraitementDaoImpl extends BaseDao implements ChuProtoco
 	private void fetchDependencies(Root<ChuProtocoleTraitement> root) {
 		root.fetch("chuMethodeTraitement", JoinType.INNER);
 		root.fetch("chuComposantTraitements", JoinType.LEFT);
+	}
+
+	/** ================================================= */
+	
+
+	private void populateDependencies(List<ChuProtocoleTraitement> list) {
+		for (ChuProtocoleTraitement protocole : list) {
+			this.populateDependencies(protocole);
+		}
+	}
+
+	/** ================================================= */
+
+	private void populateDependencies(ChuProtocoleTraitement protocole) {
+		if (protocole != null) {
+			Hibernate.initialize(protocole.getChuMethodeTraitement());
+			Hibernate.initialize(protocole.getChuComposantTraitements());
+		}
 	}
 
 	/** ================================================= */

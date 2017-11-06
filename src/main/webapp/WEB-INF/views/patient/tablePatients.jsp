@@ -42,7 +42,14 @@
 						value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}"
 						var="deleteUrl" />
 					<button class="btn-sm btn-danger"
-						onclick="location.href='${deleteUrl}'">Supprimer</button></td>
+						onclick="location.href='${deleteUrl}'">Supprimer</button>
+						
+						<spring:url value="/pdf/patient/${patient.idPatient}"
+						var="pdfUrl" />
+						<button class="btn-sm btn-default"
+						onclick="location.href='${pdfUrl}'">PDF</button>
+						
+						</td>
 
 
 			</tr>

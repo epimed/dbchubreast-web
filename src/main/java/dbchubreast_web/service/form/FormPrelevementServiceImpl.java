@@ -160,7 +160,10 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 		FormPrelevement form = new FormPrelevement();
 
 		form.setIdPrelevement(prelevement.getIdPrelevement());
-		form.setIdMorphologie(prelevement.getChuMorphologie().getIdMorphologie());
+
+		if (prelevement.getChuMorphologie()!=null) {
+			form.setIdMorphologie(prelevement.getChuMorphologie().getIdMorphologie());
+		}
 		form.setIdTypePrelevement(prelevement.getChuTypePrelevement().getIdTypePrelevement());
 		form.setTypeHistologique(prelevement.getTypeHistologique());
 		form.setAssociationCis(prelevement.getAssociationCis());

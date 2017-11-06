@@ -82,6 +82,39 @@
 			</div>
 
 			<div class="row">
+				<label class="col-sm-2">Profondeur</label>
+				<div class="col-sm-10">
+					<c:if
+						test="${not empty listPhasesInitiales and not empty listPhasesInitiales[0].profondeur}">
+				${listPhasesInitiales[0].profondeur}
+				</c:if>
+				</div>
+			</div>
+
+			<div class="row">
+				<label class="col-sm-2">Stade TNM et taille (mm)</label>
+				<div class="col-sm-10">
+					<c:if
+						test="${not empty listPhasesInitiales and not empty listPhasesInitiales[0].chuTnms}">
+						<c:forEach var="tnm" items="${listPhasesInitiales[0].chuTnms}">
+						${tnm.t} &nbsp; ${tnm.n} &nbsp; ${tnm.m} &nbsp; Taille (${tnm.type})=${tnm.taille}&nbsp;
+					</c:forEach>
+
+					</c:if>
+				</div>
+			</div>
+
+			<div class="row">
+				<label class="col-sm-2">Consentement</label>
+				<div class="col-sm-10">
+					<c:if
+						test="${not empty tumeur.consentement and tumeur.consentement}">oui</c:if>
+					<c:if
+						test="${not empty tumeur.consentement and not tumeur.consentement}">non</c:if>
+				</div>
+			</div>
+
+			<div class="row">
 				<label class="col-sm-2">Triple negative</label>
 				<div class="col-sm-10">
 					<c:if

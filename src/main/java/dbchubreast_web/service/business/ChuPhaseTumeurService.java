@@ -38,6 +38,8 @@ public interface ChuPhaseTumeurService {
 	public List<ChuPhaseTumeur> listWithDependencies(Integer idTumeur);
 
 	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase);
+	
+	public List<Object> listChronoPrelevementsTraitements(Integer idPhase); 
 
 	public void save(ChuPhaseTumeur phaseTumeur);
 

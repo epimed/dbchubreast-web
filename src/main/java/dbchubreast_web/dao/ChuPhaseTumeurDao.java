@@ -40,6 +40,8 @@ public interface ChuPhaseTumeurDao {
 
 	public List<ChuPhaseTumeur> list(Integer idTumeur, Integer idTypePhase);
 
+	public List<Object> listChronoPrelevementsTraitements(Integer idPhase); 
+	
 	public void save(ChuPhaseTumeur phaseTumeur);
 
 	public void update(ChuPhaseTumeur phaseTumeur);

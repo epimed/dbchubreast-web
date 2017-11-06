@@ -100,7 +100,7 @@
 						<form:option value="" label="--- Sélectionner ---" />
 						<c:forEach var="topo" items="${listTopographies}">
 							<form:option value="${topo.idTopographie}"
-								label="${topo.idTopographie} - ${topo.nomFr} / ${topo.nomEn}" />
+								label="${topo.idTopographie} - ${topo.nomFr}" />
 						</c:forEach>
 					</form:select>
 					<form:errors path="idTopographie" class="control-label" />
@@ -151,7 +151,8 @@
 
 			<!-- Statut -->
 			<div class="form-group">
-				<label class="col-sm-2 control-label">Statut à la dernière nouvelle</label>
+				<label class="col-sm-2 control-label">Statut à la dernière
+					nouvelle</label>
 				<div class="col-sm-10">
 					<c:choose>
 						<c:when
@@ -191,13 +192,13 @@
 			<!-- cTNM -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">cTNM</label>
-				
+
 				<div class="col-sm-1">
 					cT
 					<form:input class="form-control" path="cT" type="text" />
-					<form:errors path="cT" class="text-danger"/>
+					<form:errors path="cT" class="text-danger" />
 				</div>
-				
+
 				<div class="col-sm-1">
 					cN
 					<form:input class="form-control" path="cN" type="text" />
@@ -215,7 +216,8 @@
 				</div>
 				<div class="col-sm-5">
 					<span id="helpBlock" class="help-block">En cas de nodules,
-						noter plusieurs tailles séparées par le caractère <code>/</code>, par exemple <code>10/5</code>.
+						noter plusieurs tailles séparées par le caractère <code>/</code>,
+						par exemple <code>10/5</code>.
 					</span>
 				</div>
 			</div>
@@ -223,13 +225,13 @@
 			<!-- pTNM -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">pTNM</label>
-				
+
 				<div class="col-sm-1">
 					pT
 					<form:input class="form-control" path="pT" type="text" />
 					<form:errors path="pT" class="text-danger" />
 				</div>
-				
+
 				<div class="col-sm-1">
 					pN
 					<form:input class="form-control" path="pN" type="text" />
@@ -247,7 +249,8 @@
 				</div>
 				<div class="col-sm-5">
 					<span id="helpBlock" class="help-block">En cas de nodules,
-						noter plusieurs tailles séparées par le caractère <code>/</code>, par exemple <code>10/5</code>.
+						noter plusieurs tailles séparées par le caractère <code>/</code>,
+						par exemple <code>10/5</code>.
 					</span>
 				</div>
 			</div>
@@ -265,6 +268,22 @@
 					<form:errors path="listIdMetastases" />
 				</div>
 			</div>
+
+			<!-- Consentement -->
+			<spring:bind path="consentement">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-sm-2 control-label">Consentement</label>
+					<div class="col-sm-10">
+						<label class="radio-inline"> <form:radiobutton
+								path="consentement" value="true" />oui
+						</label> <label class="radio-inline"> <form:radiobutton
+								path="consentement" value="false" />non
+						</label> <br />
+						<form:errors path="consentement" class="control-label" />
+					</div>
+				</div>
+			</spring:bind>
+
 
 			<!-- Remarque -->
 			<div class="form-group">

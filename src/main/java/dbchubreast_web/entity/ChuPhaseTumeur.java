@@ -199,6 +199,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPhaseTumeur")
+	@OrderBy("type DESC")
 	public List<ChuTnm> getChuTnms() {
 		return this.chuTnms;
 	}

@@ -14,6 +14,8 @@
 package dbchubreast_web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,18 +28,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
 import dbchubreast_web.service.business.AppLogService;
 import dbchubreast_web.service.exporter.ExporterBiomarqueur;
 import dbchubreast_web.service.exporter.ExporterPatient;
 import dbchubreast_web.service.exporter.ExporterPrelevement;
 import dbchubreast_web.service.exporter.Table;
 import dbchubreast_web.service.util.FileService;
+import dbchubreast_web.service.util.PdfService;
 
 @Controller
 public class DownloadController extends BaseController {
 
 	@Autowired
 	private FileService fileService;
+
+	@Autowired
+	private PdfService pdfService;
 
 	@Autowired
 	private ExporterPatient exporterPatient;
@@ -47,27 +56,27 @@ public class DownloadController extends BaseController {
 
 	@Autowired
 	private ExporterPrelevement exporterPrelevement;
-	
+
 	@Autowired
 	private AppLogService logService;
-	
-	
+
+
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/download/{key}", method = RequestMethod.GET)
 	public void downloadAllPatients(Model model, @PathVariable String key, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		
+
 		Table table = null;
 
 		if (key != null && key.equals("biomarqueurs")) {	
 			table = exporterBiomarqueur.export();
 		}
-		
+
 		if (key != null && key.equals("prelevements")) {
 			table = exporterPrelevement.export();
 		} 
-		
+
 		if (key != null && key.equals("patients")) {
 			table = exporterPatient.export();
 		}
@@ -75,12 +84,38 @@ public class DownloadController extends BaseController {
 		if (table==null) {
 			table = new Table(1);
 		}
-		
+
 		String fileName = fileService.generateFileName("DB_CHU_BREAST_" + key, "xlsx");
 
 		logService.log("Téléchargement de " + key + ", fichier généré " + fileName);
-		
+
 		this.generateResponse(response, table, fileName, key);
+	}
+
+	/** ====================================================================================== */
+
+	@RequestMapping(value = "/pdf/patient/{idPatient}", method = RequestMethod.GET)
+	public void downloadPdf(Model model, @PathVariable String idPatient, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+
+		String fileName = "fiche_patient_"  + idPatient + ".pdf";
+		response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+		response.setContentType("application/pdf");
+
+		PdfWriter writer = new PdfWriter(response.getOutputStream());
+		PdfDocument pdfDoc = new PdfDocument(writer);
+		Document document = new Document(pdfDoc);
+		
+		
+		pdfService.createHeaderFooter(pdfDoc, document);
+		
+		List<String> listIdPatients = new ArrayList<String>();
+		listIdPatients.add(idPatient);
+		pdfService.createPdf(listIdPatients, document, "confidentielle");
+		// pdfService.createPdf(listIdPatients, document, "publique");
+		document.close();
+		response.flushBuffer();
+
 	}
 
 	/**

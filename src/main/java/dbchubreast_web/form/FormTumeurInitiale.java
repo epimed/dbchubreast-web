@@ -46,6 +46,8 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 	
 	@Length(max = 50, message = "50 caractères au maximum")
 	private String pTaille;
+	
+	private Boolean consentement;
 
 	/** ========================================================================== */
 
@@ -196,13 +198,21 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 		this.dateDeces = dateDeces;
 	}
 
+	public Boolean getConsentement() {
+		return consentement;
+	}
+
+	public void setConsentement(Boolean consentement) {
+		this.consentement = consentement;
+	}
+
 	@Override
 	public String toString() {
 		return "FormTumeurInitiale [dateDeces=" + dateDeces + ", ageDiagnostic=" + ageDiagnostic + ", cote=" + cote
 				+ ", idTopographie=" + idTopographie + ", dateEvolution=" + dateEvolution + ", idEvolution="
 				+ idEvolution + ", natureDiagnostic=" + natureDiagnostic + ", profondeur=" + profondeur + ", cT=" + cT
 				+ ", cN=" + cN + ", cM=" + cM + ", cTaille=" + cTaille + ", pT=" + pT + ", pN=" + pN + ", pM=" + pM
-				+ ", pTaille=" + pTaille + "]";
+				+ ", pTaille=" + pTaille + ", consentement=" + consentement + "]";
 	}
 
 	/** ====================================================================================== */

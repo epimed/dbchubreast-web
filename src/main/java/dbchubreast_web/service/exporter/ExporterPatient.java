@@ -52,7 +52,6 @@ public class ExporterPatient extends AbstractExporter {
 					patient.getDateDeces() == null ? null : dateFormat.format(patient.getDateDeces()));
 			table.addToTable(i, "cause_deces", patient.getCauseDeces());
 			table.addToTable(i, "statut_brca", patient.getStatutBrca());
-			table.addToTable(i, "consentement", patient.getConsentement());
 		}
 
 		return table;

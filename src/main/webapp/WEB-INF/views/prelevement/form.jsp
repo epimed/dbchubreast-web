@@ -154,7 +154,7 @@
 						<form:option value="" label="--- Sélectionner ---" />
 						<c:forEach var="morpho" items="${listMorphologies}">
 							<form:option value="${morpho.idMorphologie}"
-								label="${morpho.idMorphologie} - ${morpho.nomFr} / ${morpho.nomEn}" />
+								label="${morpho.idMorphologie} - ${morpho.nomFr}" />
 						</c:forEach>
 					</form:select>
 					<form:errors path="idMorphologie" class="control-label" />

@@ -81,6 +81,12 @@ public class ChuPhaseTumeurServiceImpl extends BaseService implements ChuPhaseTu
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement) {
 		return phaseTumeurDao.findByIdPrelevementWithDependencies(idPrelevement);
 	}
+	
+	/** =================================================================== */
+	
+	public List<Object> listChronoPrelevementsTraitements(Integer idPhase) {
+		return phaseTumeurDao.listChronoPrelevementsTraitements(idPhase);
+	}
 
 	/** =================================================================== */
 

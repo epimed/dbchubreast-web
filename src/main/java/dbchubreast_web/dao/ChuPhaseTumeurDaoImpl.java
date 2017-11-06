@@ -17,6 +17,7 @@ package dbchubreast_web.dao;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -40,6 +41,29 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	
+	/** ================================================= */
+	
+	@SuppressWarnings("unchecked")
+	public List<Object> listChronoPrelevementsTraitements(Integer idPhase) {
+	
+		String sql = "select * from (" 
+				+ " (select id_prelevement, date_prelevement as date, 'prelevement' as type"
+				+ " from db_chu_breast.chu_prelevement where id_phase=" 
+				+ idPhase + ")"
+				+ " union"
+				+ "(select id_traitement, date_debut as date, 'traitement' as type"
+				+ " from db_chu_breast.chu_traitement where id_phase=" 
+				+ idPhase +")"
+				+ ") t" 
+				+ " order by date";
+		
+		Query query = sessionFactory.getCurrentSession().createNativeQuery(sql);
+		
+		return query.getResultList();
+		
+	}
+	
 	/** ================================================= */
 
 	public List<ChuPhaseTumeur> list() {
@@ -82,6 +106,7 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		return list;
 	}
 
+	
 	/** ================================================= */
 
 	public ChuPhaseTumeur find(Integer idPhase) {
@@ -202,7 +227,9 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 					));
 			criteria.orderBy(builder.asc(root.get("dateDiagnostic")));
 			
-			return sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
+			ChuPhaseTumeur result = sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
+			this.populateDependencies(result);	
+			return  result;
 		
 		}
 		catch (NoResultException ex) {

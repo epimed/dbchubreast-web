@@ -83,16 +83,6 @@
 			<div class="col-sm-10">${patient.statutBrca}</div>
 		</div>
 
-		<div class="row">
-			<label class="col-sm-2">Consentement</label>
-			<div class="col-sm-10">
-				<c:if
-					test="${not empty patient.consentement and patient.consentement}">oui</c:if>
-				<c:if
-					test="${not empty patient.consentement and not patient.consentement}">non</c:if>
-			</div>
-		</div>
-
 		<p></p>
 
 		<div>
@@ -106,7 +96,11 @@
 				var="deleteUrl" />
 			<button class="btn-sm btn-danger"
 				onclick="location.href='${deleteUrl}'">Supprimer</button>
-			</td>
+				
+				<spring:url value="/pdf/patient/${patient.idPatient}"
+						var="pdfUrl" />
+						<button class="btn-sm btn-default"
+						onclick="location.href='${pdfUrl}'">PDF</button>
 
 		</div>
 

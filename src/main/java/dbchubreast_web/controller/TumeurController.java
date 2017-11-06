@@ -375,7 +375,7 @@ public class TumeurController extends BaseController {
 
 		List<String> listIdGroupeTopo = new ArrayList<String>();
 		listIdGroupeTopo.add("C50");
-		listIdGroupeTopo.add("C51");
+		// listIdGroupeTopo.add("C51");
 
 		List<ChuTopographie> listTopographies = topographieService.list(listIdGroupeTopo);
 		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatient(patient.getIdPatient());

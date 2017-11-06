@@ -83,7 +83,6 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 		patient.setDateDeces(form.getDateDeces());
 		patient.setCauseDeces(form.getCauseDeces());
 		patient.setStatutBrca(form.getStatutBrca());
-		patient.setConsentement(form.getConsentement());
 
 		// New patient
 		if (patient.getIdPatient() == null) {
@@ -123,7 +122,6 @@ public class FormPatientServiceImpl extends BaseService implements FormPatientSe
 			form.setDateDeces(patient.getDateDeces());
 			form.setCauseDeces(patient.getCauseDeces());
 			form.setStatutBrca(patient.getStatutBrca());
-			form.setConsentement(patient.getConsentement());
 		}
 		return form;
 	}

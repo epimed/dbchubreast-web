@@ -111,7 +111,7 @@
 							<form:option value="" label="--- Sélectionner ---" />
 							<c:forEach var="protocole" items="${listProtocoles}">
 								<form:option value="${protocole.idProtocole}"
-									label="${protocole.nom} - ${protocole.code}" />
+									label="${protocole.nom}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idProtocole" class="control-label" />
