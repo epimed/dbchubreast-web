@@ -35,9 +35,9 @@ import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.form.FormBiomarqueur;
 import dbchubreast_web.form.FormPrelevement;
 import dbchubreast_web.service.BaseService;
+import dbchubreast_web.service.updater.UpdaterCategorie;
 import dbchubreast_web.service.updater.UpdaterNodule;
 import dbchubreast_web.service.updater.UpdaterStatutBiomarqueur;
-import dbchubreast_web.service.updater.UpdaterTripleNegative;
 
 @Service
 public class FormPrelevementServiceImpl extends BaseService implements FormPrelevementService {
@@ -67,7 +67,7 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 	private UpdaterStatutBiomarqueur updaterStatutBiomarqueur;
 
 	@Autowired
-	private UpdaterTripleNegative updaterTripleNegative;
+	private UpdaterCategorie updaterCategorie;
 
 	@Autowired
 	private UpdaterNodule updaterNodule;
@@ -143,8 +143,8 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 				.list(prelevement.getIdPrelevement());
 		updaterStatutBiomarqueur.update(listPrelevementBiomarqueurs);
 
-		// === Update triple negative ===
-		updaterTripleNegative.update(prelevement);
+		// === Update triple negative et categorie  ===
+		updaterCategorie.update(prelevement);
 
 		// === Update nodules ===
 		updaterNodule.update(prelevement);

@@ -28,5 +28,6 @@ public interface ChuPrelevementDao {
 	public void save(ChuPrelevement prelevement);
 	public void update(ChuPrelevement prelevement);
 	public void saveOrUpdate(ChuPrelevement prelevement);
+	public void delete(ChuPrelevement prelevement);
 	public void populateDependencies(List<ChuPrelevement> list);
 }

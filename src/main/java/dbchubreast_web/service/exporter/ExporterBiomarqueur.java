@@ -73,6 +73,8 @@ public class ExporterBiomarqueur extends AbstractExporter {
 			table.addToTable(i, "cote", tumeur.getCote());
 			table.addToTable(i, "triple_negative",
 					tumeur.getTripleNegative() == null ? null : tumeur.getTripleNegative().toString());
+			table.addToTable(i, "categorie",
+					tumeur.getCategorie() == null ? null : tumeur.getCategorie());
 			table.addToTable(i, "dfs_months", tumeur.getDfsMonths() == null ? null : tumeur.getDfsMonths().toString());
 			table.addToTable(i, "os_months", tumeur.getOsMonths() == null ? null : tumeur.getOsMonths().toString());
 			table.addToTable(i, "relapsed", tumeur.getRelapsed() == null ? null : tumeur.getRelapsed().toString());
@@ -85,12 +87,10 @@ public class ExporterBiomarqueur extends AbstractExporter {
 			table.addToTable(i, "brca_statut", patient.getStatutBrca());
 
 			for (int j = 0; j < biomarqueurs.size(); j++) {
-				ChuPrelevementBiomarqueur b = selectOneElement(prelevementBiomarqueurDao
+				ChuPrelevementBiomarqueur b = selectSurgery(prelevementBiomarqueurDao
 						.list(phaseInitiale.getIdPhase(), biomarqueurs.get(j).getIdBiomarqueur()));
-				;
+				
 				if (b != null) {
-					// System.out.println(b.getChuBiomarqueur().getNom() + ":\t"
-					// + b);
 					table.addToTable(i, b.getChuBiomarqueur().getIdBiomarqueur() + "_valeur", b.getValeur());
 					table.addToTable(i, b.getChuBiomarqueur().getIdBiomarqueur() + "_statut", b.getStatut());
 				}
@@ -108,33 +108,18 @@ public class ExporterBiomarqueur extends AbstractExporter {
 	 * @throws IncoherenceException
 	 */
 
-	public ChuPrelevementBiomarqueur selectOneElement(List<ChuPrelevementBiomarqueur> list) {
+	public ChuPrelevementBiomarqueur selectSurgery(List<ChuPrelevementBiomarqueur> list) {
 
-		if (list == null || list.size() == 0) {
-			return null;
-		}
-
-		if (list.size() > 1) {
-
-			/*
-			 * System.err.println("List has more than 2 elements: "); for
-			 * (ChuPrelevementBiomarqueur b : list) {
-			 * System.err.println(b.getChuPrelevement().getChuTypePrelevement().
-			 * getNom() + ":\t" + b ); }
-			 */
-
-			// take surgery sample
-			int i = 0;
-			while (i < list.size()) {
-				if (list.get(i).getChuPrelevement().getChuTypePrelevement().getIdTypePrelevement().equals(3)) {
-					return list.get(i);
-				}
-
-				i++;
+		int i = 0;
+		boolean isFound = false;
+		while (!isFound && i < list.size()) {
+			if (list.get(i).getChuPrelevement().getChuTypePrelevement().getIdTypePrelevement().equals(3)) {
+				return list.get(i);
 			}
+			i++;
 		}
 
-		return list.get(0);
+		return null;
 
 	}
 

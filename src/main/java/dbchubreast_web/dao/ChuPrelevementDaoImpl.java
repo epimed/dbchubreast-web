@@ -44,7 +44,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 	/** ================================================= */
 
 	public ChuPrelevement find(Integer idPrelevement) {
-		
+
 		try {
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 			CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
@@ -57,7 +57,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 		catch (NoResultException ex) {
 			return null;
 		}
-		
+
 	}
 
 	/** ================================================= */
@@ -86,7 +86,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
 		return list;
-		
+
 	}
 
 	/** ================================================= */
@@ -103,29 +103,29 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(list);
 		return list;
-		
+
 	}
 
 	/** ================================================= */
 
 	public List<ChuPrelevement> listByIdPatient(String idPatient) {
-		
+
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
-		
+
 		Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
 		Join<ChuPrelevement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
 		Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
 		Join<ChuTumeur, ChuPatient> patient = tumeur.join("chuPatient");
-		
+
 		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
 		criteria.orderBy(builder.asc(root.get("datePrelevement")), builder.asc(root.get("idPrelevement")));
-		
+
 		List<ChuPrelevement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
-		
+
 		this.populateDependencies(list);
 		return list;
-		
+
 	}
 
 	/** ================================================= */
@@ -145,6 +145,13 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 	public void saveOrUpdate(ChuPrelevement prelevement) {
 		sessionFactory.getCurrentSession().saveOrUpdate(prelevement);
 	}
+
+	/** ================================================= */
+
+	public void delete(ChuPrelevement prelevement) {
+		sessionFactory.getCurrentSession().delete(prelevement);
+	}
+
 
 	/** ================================================= */
 

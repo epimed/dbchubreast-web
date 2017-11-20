@@ -22,12 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.business.ChuTumeurService;
 
 @Controller
 public class HomeController extends BaseController {
 
 	@Autowired
 	private ChuPatientService patientService;
+	
+	@Autowired
+	private ChuTumeurService tumeurService;
 
 	/** ====================================================================================== */
 
@@ -36,6 +40,9 @@ public class HomeController extends BaseController {
 		
 		Long nbPatients = patientService.count();
 		model.addAttribute("nbPatients", nbPatients);
+		
+		Long nbTumeurs = tumeurService.count();
+		model.addAttribute("nbTumeurs", nbTumeurs);
 		
 		return "index";
 	}

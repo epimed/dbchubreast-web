@@ -18,14 +18,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dbchubreast_web.dao.ChuPrelevementBiomarqueurDao;
 import dbchubreast_web.dao.ChuPrelevementDao;
 import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.entity.ChuPrelevementBiomarqueur;
 
 @Service
 public class ChuPrelevementServiceImpl implements ChuPrelevementService {
 
 	@Autowired
 	private ChuPrelevementDao prelevementDao;
+
+	@Autowired
+	private ChuPrelevementBiomarqueurDao prelevementBiomarqueurDao;
 
 	public ChuPrelevement find(Integer idPrelevement) {
 		return prelevementDao.find(idPrelevement);
@@ -51,6 +56,14 @@ public class ChuPrelevementServiceImpl implements ChuPrelevementService {
 		prelevementDao.update(prelevement);
 	}
 
+	public void delete(ChuPrelevement prelevement) {
+		List<ChuPrelevementBiomarqueur> listPrelBio = prelevementBiomarqueurDao.list(prelevement.getIdPrelevement());
+		for (ChuPrelevementBiomarqueur prelBio: listPrelBio) {
+			prelevementBiomarqueurDao.delete(prelBio);
+		}
+		prelevementDao.delete(prelevement);
+	}
+	
 	public void saveOrUpdate(ChuPrelevement prelevement) {
 		prelevementDao.saveOrUpdate(prelevement);
 	}

@@ -33,4 +33,6 @@ public interface ChuPrelevementService {
 	public void update(ChuPrelevement prelevement);
 
 	public void saveOrUpdate(ChuPrelevement prelevement);
+	
+	public void delete(ChuPrelevement prelevement);
 }

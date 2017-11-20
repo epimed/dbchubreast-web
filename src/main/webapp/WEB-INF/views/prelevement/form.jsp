@@ -80,14 +80,16 @@
 					<div class="col-sm-10">
 						<form:select class="form-control" path="idPhase"
 							onchange="this.form.submit()">
+							
 							<form:option value="" label="--- Sélectionner ---" />
-							<c:forEach var="phase" items="${listPhases}">
+							
+							<c:forEach var="phase" items="${listPhases}" varStatus="loop">
 							
 							<fmt:formatDate pattern="dd/MM/yyyy"
 									value="${phase.dateDiagnostic}" var="datePhase" />
 							
 								<form:option value="${phase.idPhase}"
-									label="[ID ${phase.idPhase}] ${datePhase} - ${phase.chuTypePhase.nom}" />
+									label="[ID ${phase.idPhase}] ${datePhase} - ${phase.chuTypePhase.nom} - ${loop.index}" />
 							</c:forEach>
 						</form:select>
 						<form:errors path="idPhase" class="control-label" />

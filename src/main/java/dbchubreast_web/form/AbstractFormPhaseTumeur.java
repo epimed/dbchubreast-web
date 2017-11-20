@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
 import dbchubreast_web.service.BaseService;
 
 public abstract class AbstractFormPhaseTumeur extends BaseService implements IForm {
@@ -15,6 +17,30 @@ public abstract class AbstractFormPhaseTumeur extends BaseService implements IFo
 
 	protected Integer idPhase;
 	protected Integer idTypePhase;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String cT;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String cN;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String cM;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String cTaille;
+
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String pT;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String pN;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String pM;
+	
+	@Length(max = 50, message = "50 caractères au maximum")
+	private String pTaille;
 
 	protected String remarque;
 
@@ -60,6 +86,70 @@ public abstract class AbstractFormPhaseTumeur extends BaseService implements IFo
 		this.idTypePhase = idTypePhase;
 	}
 
+	public String getcT() {
+		return cT;
+	}
+
+	public void setcT(String cT) {
+		this.cT = cT;
+	}
+
+	public String getcN() {
+		return cN;
+	}
+
+	public void setcN(String cN) {
+		this.cN = cN;
+	}
+
+	public String getcM() {
+		return cM;
+	}
+
+	public void setcM(String cM) {
+		this.cM = cM;
+	}
+
+	public String getcTaille() {
+		return cTaille;
+	}
+
+	public void setcTaille(String cTaille) {
+		this.cTaille = cTaille;
+	}
+
+	public String getpT() {
+		return pT;
+	}
+
+	public void setpT(String pT) {
+		this.pT = pT;
+	}
+
+	public String getpN() {
+		return pN;
+	}
+
+	public void setpN(String pN) {
+		this.pN = pN;
+	}
+
+	public String getpM() {
+		return pM;
+	}
+
+	public void setpM(String pM) {
+		this.pM = pM;
+	}
+
+	public String getpTaille() {
+		return pTaille;
+	}
+
+	public void setpTaille(String pTaille) {
+		this.pTaille = pTaille;
+	}
+
 	public String getRemarque() {
 		return remarque;
 	}
@@ -67,7 +157,7 @@ public abstract class AbstractFormPhaseTumeur extends BaseService implements IFo
 	public void setRemarque(String remarque) {
 		this.remarque = remarque;
 	}
-
+	
 	public List<Integer> getListIdMetastases() {
 		return listIdMetastases;
 	}

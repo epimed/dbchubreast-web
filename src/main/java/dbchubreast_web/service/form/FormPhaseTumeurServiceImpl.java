@@ -79,7 +79,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 	@Autowired
 	private UpdaterSurvival updaterSurvival;
-	
+
 	@Autowired
 	private UpdaterNodule updaterNodule;
 
@@ -156,7 +156,6 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		cTnm.setN(form.getcN());
 		cTnm.setM(form.getcM());
 		cTnm.setTaille(form.getcTaille());
-		// phaseTumeur.getChuTnms().add(cTnm);
 
 		// === pTNM ===
 
@@ -170,7 +169,6 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		pTnm.setN(form.getpN());
 		pTnm.setM(form.getpM());
 		pTnm.setTaille(form.getpTaille());
-		// phaseTumeur.getChuTnms().add(pTnm);
 
 		// === Metastases ===
 
@@ -225,14 +223,7 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		// ====== UPDATE DEPENDENCIES =====
 
-		// === Survival ===
-		List<ChuTumeur> listTumeurs = new ArrayList<ChuTumeur>();
-		listTumeurs.add(tumeur);
-		updaterSurvival.update(listTumeurs);
-
-
-		// === Update nodules ===
-		updaterNodule.update(phaseTumeur);
+		this.updateDependencies(tumeur, phaseTumeur);
 	}
 
 	/** =================================================================== */
@@ -324,6 +315,29 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		}
 
 
+		// === cTNM ===
+
+		ChuTnm cTnm = tnmDao.find(phase.getIdPhase(), "c");
+		if (cTnm == null) {
+			cTnm = new ChuTnm();
+		}
+		form.setcT(cTnm.getT());
+		form.setcN(cTnm.getN());
+		form.setcM(cTnm.getM());
+		form.setcTaille(cTnm.getTaille());
+
+		// === pTNM ===
+
+		ChuTnm pTnm = tnmDao.find(phase.getIdPhase(), "p");
+		if (pTnm == null) {
+			pTnm = new ChuTnm();
+		}
+		form.setpT(pTnm.getT());
+		form.setpN(pTnm.getN());
+		form.setpM(pTnm.getM());
+		form.setpTaille(pTnm.getTaille());
+
+
 		// === Metastases ===
 
 		List<ChuMetastase> listMetastases = metastaseDao.list(phase.getIdPhase());
@@ -367,6 +381,35 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 
 		phaseTumeur.setChuPerformanceStatus(performanceStatusDao.find(form.getIdPs()));
 
+
+		// === cTNM ===
+
+		ChuTnm cTnm = tnmDao.find(phaseTumeur.getIdPhase(), "c");
+		if (cTnm == null) {
+			cTnm = new ChuTnm();
+			cTnm.setType("c");
+			cTnm.setChuPhaseTumeur(phaseTumeur);
+		}
+		cTnm.setT(form.getcT());
+		cTnm.setN(form.getcN());
+		cTnm.setM(form.getcM());
+		cTnm.setTaille(form.getcTaille());
+
+
+		// === pTNM ===
+
+		ChuTnm pTnm = tnmDao.find(phaseTumeur.getIdPhase(), "p");
+		if (pTnm == null) {
+			pTnm = new ChuTnm();
+			pTnm.setType("p");
+			pTnm.setChuPhaseTumeur(phaseTumeur);
+		}
+		pTnm.setT(form.getpT());
+		pTnm.setN(form.getpN());
+		pTnm.setM(form.getpM());
+		pTnm.setTaille(form.getpTaille());
+
+
 		// === Metastases ===
 
 		this.addMetastases(phaseTumeur, form.getListIdMetastases());
@@ -377,11 +420,48 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 			// Save new
 			phaseTumeurDao.save(phaseTumeur);
 			form.setIdPhase(phaseTumeur.getIdPhase());
+
+			if (!this.isEmptyTnm(cTnm)) {
+				logger.debug("Saving cTnm {}", cTnm);
+				tnmDao.save(cTnm);
+			}
+			if (!this.isEmptyTnm(pTnm)) {
+				logger.debug("Saving pTnm {}", pTnm);
+				tnmDao.save(pTnm);
+			}
 		} else {
 			// update existing
 			phaseTumeurDao.saveOrUpdate(phaseTumeur);
-		}
 
+			if (!this.isEmptyTnm(cTnm)) {
+				tnmDao.saveOrUpdate(cTnm);
+			}
+
+			if (!this.isEmptyTnm(pTnm)) {
+				tnmDao.saveOrUpdate(pTnm);
+			}
+		}
+		
+		// ====== UPDATE DEPENDENCIES =====
+
+		this.updateDependencies(tumeur, phaseTumeur);
+
+	}
+
+	/** =================================================================== */
+	
+	private void updateDependencies(ChuTumeur tumeur, ChuPhaseTumeur phaseTumeur) {
+		
+		// ====== UPDATE DEPENDENCIES =====
+
+		// === Survival ===
+		List<ChuTumeur> listTumeurs = new ArrayList<ChuTumeur>();
+		listTumeurs.add(tumeur);
+		updaterSurvival.update(listTumeurs);
+
+
+		// === Update nodules ===
+		updaterNodule.update(phaseTumeur);
 	}
 
 	/** =================================================================== */

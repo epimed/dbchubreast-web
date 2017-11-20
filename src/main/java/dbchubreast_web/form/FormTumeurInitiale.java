@@ -22,30 +22,6 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 	
 	@Length(max = 50, message = "50 caractères au maximum")
 	private String profondeur;
-
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String cT;
-	
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String cN;
-	
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String cM;
-	
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String cTaille;
-
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String pT;
-	
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String pN;
-	
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String pM;
-	
-	@Length(max = 50, message = "50 caractères au maximum")
-	private String pTaille;
 	
 	private Boolean consentement;
 
@@ -126,70 +102,6 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 		this.profondeur = profondeur;
 	}
 
-	public String getcT() {
-		return cT;
-	}
-
-	public void setcT(String cT) {
-		this.cT = cT;
-	}
-
-	public String getcN() {
-		return cN;
-	}
-
-	public void setcN(String cN) {
-		this.cN = cN;
-	}
-
-	public String getcM() {
-		return cM;
-	}
-
-	public void setcM(String cM) {
-		this.cM = cM;
-	}
-
-	public String getcTaille() {
-		return cTaille;
-	}
-
-	public void setcTaille(String cTaille) {
-		this.cTaille = cTaille;
-	}
-
-	public String getpT() {
-		return pT;
-	}
-
-	public void setpT(String pT) {
-		this.pT = pT;
-	}
-
-	public String getpN() {
-		return pN;
-	}
-
-	public void setpN(String pN) {
-		this.pN = pN;
-	}
-
-	public String getpM() {
-		return pM;
-	}
-
-	public void setpM(String pM) {
-		this.pM = pM;
-	}
-
-	public String getpTaille() {
-		return pTaille;
-	}
-
-	public void setpTaille(String pTaille) {
-		this.pTaille = pTaille;
-	}
-
 	public Date getDateDeces() {
 		return dateDeces;
 	}
@@ -210,9 +122,8 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 	public String toString() {
 		return "FormTumeurInitiale [dateDeces=" + dateDeces + ", ageDiagnostic=" + ageDiagnostic + ", cote=" + cote
 				+ ", idTopographie=" + idTopographie + ", dateEvolution=" + dateEvolution + ", idEvolution="
-				+ idEvolution + ", natureDiagnostic=" + natureDiagnostic + ", profondeur=" + profondeur + ", cT=" + cT
-				+ ", cN=" + cN + ", cM=" + cM + ", cTaille=" + cTaille + ", pT=" + pT + ", pN=" + pN + ", pM=" + pM
-				+ ", pTaille=" + pTaille + ", consentement=" + consentement + "]";
+				+ idEvolution + ", natureDiagnostic=" + natureDiagnostic + ", profondeur=" + profondeur + 
+				", consentement=" + consentement + "]";
 	}
 
 	/** ====================================================================================== */

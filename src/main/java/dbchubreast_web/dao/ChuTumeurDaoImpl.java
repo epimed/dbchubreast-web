@@ -218,6 +218,22 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 
 	/** ================================================= */
 
+	public Long count() {
+
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+			Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
+			criteria.select(builder.count(root));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
+	}
+	/** ================================================= */
+
 	private void populateDependencies(ChuTumeur tumeur) {
 		if (tumeur != null) {
 			Hibernate.initialize(tumeur.getChuEvolution());

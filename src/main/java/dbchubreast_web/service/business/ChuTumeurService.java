@@ -39,4 +39,6 @@ public interface ChuTumeurService {
 	public void save(ChuTumeur tumeur);
 
 	public void update(ChuTumeur tumeur);
+	
+	public Long count();
 }

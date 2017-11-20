@@ -41,6 +41,7 @@ public class ChuTumeur implements java.io.Serializable {
 	private Boolean relapsed;
 	private Boolean dead;
 	private Boolean consentement;
+	private String categorie;
 	private List<ChuPhaseTumeur> chuPhaseTumeurs = new ArrayList<ChuPhaseTumeur>(0);
 
 	public ChuTumeur() {
@@ -215,6 +216,16 @@ public class ChuTumeur implements java.io.Serializable {
 		this.consentement = consentement;
 	}
 	
+	@Column(name = "categorie", length = 100)
+	public String getCategorie() {
+		return this.categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
+	}
+	
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuTumeur")
 	@OrderBy("idPhase")
 	public List<ChuPhaseTumeur> getChuPhaseTumeurs() {
@@ -255,7 +266,7 @@ public class ChuTumeur implements java.io.Serializable {
 		return "ChuTumeur [idTumeur=" + idTumeur + ", cote=" + cote + ", dateDiagnostic=" + dateDiagnostic
 				+ ", ageDiagnostic=" + ageDiagnostic + ", dateEvolution=" + dateEvolution + ", tripleNegative="
 				+ tripleNegative + ", dfsMonths=" + dfsMonths + ", osMonths=" + osMonths + ", relapsed=" + relapsed
-				+ ", dead=" + dead + ", consentement=" + consentement + "]";
+				+ ", dead=" + dead + ", consentement=" + consentement +  ", categorie=" + categorie + "]";
 	}
 	
 	

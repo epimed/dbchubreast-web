@@ -70,5 +70,9 @@ public class ChuTumeurServiceImpl implements ChuTumeurService {
 	public void update(ChuTumeur tumeur) {
 		tumeurDao.update(tumeur);
 	}
+	
+	public Long count() {
+		return tumeurDao.count();
+	}
 
 }

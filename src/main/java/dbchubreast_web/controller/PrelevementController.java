@@ -48,6 +48,7 @@ import dbchubreast_web.service.business.ChuTumeurService;
 import dbchubreast_web.service.business.ChuTypePhaseService;
 import dbchubreast_web.service.business.ChuTypePrelevementService;
 import dbchubreast_web.service.form.FormPrelevementService;
+import dbchubreast_web.service.updater.UpdaterCategorie;
 import dbchubreast_web.validator.FormPrelevementValidator;
 
 @Controller
@@ -85,6 +86,9 @@ public class PrelevementController extends BaseController {
 
 	@Autowired
 	private FormPrelevementValidator formPrelevementValidator;
+	
+	@Autowired
+	private UpdaterCategorie updaterCategorie;
 
 	@Autowired
 	private AppLogService logService;
@@ -264,6 +268,47 @@ public class PrelevementController extends BaseController {
 		return "redirect:/prelevement/" + formPrelevement.getIdPrelevement();
 
 	}
+	
+	/** ====================================================================================== */
+
+	@RequestMapping(value = { "/prelevement/{idPrelevement}/delete" }, method = {RequestMethod.GET, RequestMethod.POST})
+	public String deletePrelevement(Model model, 
+			@PathVariable Integer idPrelevement, 
+			@RequestParam(value = "button", required = false) String button,
+			final RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+
+		
+
+		// Patient
+		ChuPatient patient = patientService.findByIdPrelevement(idPrelevement);
+		model.addAttribute("patient", patient);
+
+		// Prelevements
+		List<ChuPrelevement> listPrelevements = prelevementService.listByIdPatient(patient.getIdPatient());
+		model.addAttribute("listPrelevements", listPrelevements);
+
+		// Prelevement
+		ChuPrelevement prelevement = prelevementService.find(idPrelevement);
+		model.addAttribute("prelevement", prelevement);
+
+		if (button!=null && button.equals("delete")) {
+			ChuTumeur tumeur = prelevement.getChuPhaseTumeur().getChuTumeur();
+			prelevementService.delete(prelevement);
+			updaterCategorie.update(tumeur);
+			redirectAttributes.addFlashAttribute("css", "success");
+			redirectAttributes.addFlashAttribute("msg", "Le prelevement " + idPrelevement + " a été supprimé !");
+			logService.log("Suppression du prélèvement " + idPrelevement);
+			return "redirect:/patient/" + patient.getIdPatient() + "/prelevements";
+		}
+
+		if (button!=null && button.equals("cancel")) {
+			return "redirect:/patient/" + patient.getIdPatient() + "/prelevements";
+		}
+
+		return "prelevement/delete";
+	}
+
 
 	/** ====================================================================================== */
 

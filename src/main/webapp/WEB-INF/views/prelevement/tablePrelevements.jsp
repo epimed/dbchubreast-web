@@ -86,7 +86,15 @@
 									value="/prelevement/${prel.idPrelevement}/update"
 									var="updateUrl" />
 								<button class="btn-sm btn-primary"
-									onclick="location.href='${updateUrl}'">Modifier</button></td>
+									onclick="location.href='${updateUrl}'">Modifier</button>
+									
+									<spring:url
+						value="/prelevement/${prel.idPrelevement}/delete"
+						var="deleteUrl" />
+					<button class="btn-sm btn-danger"
+						onclick="location.href='${deleteUrl}'">Supprimer</button>
+									
+									</td>
 						</tr>
 						<tr>
 							<td colspan="6" bgcolor="#F2F2F2"><c:forEach var="prelBio"

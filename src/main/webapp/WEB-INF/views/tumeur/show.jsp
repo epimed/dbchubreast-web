@@ -97,7 +97,7 @@
 					<c:if
 						test="${not empty listPhasesInitiales and not empty listPhasesInitiales[0].chuTnms}">
 						<c:forEach var="tnm" items="${listPhasesInitiales[0].chuTnms}">
-						${tnm.t} &nbsp; ${tnm.n} &nbsp; ${tnm.m} &nbsp; Taille (${tnm.type})=${tnm.taille}&nbsp;
+						${tnm.t} &nbsp; ${tnm.n} &nbsp; ${tnm.m} &nbsp; ${tnm.type} Taille=${tnm.taille}&nbsp;
 					</c:forEach>
 
 					</c:if>

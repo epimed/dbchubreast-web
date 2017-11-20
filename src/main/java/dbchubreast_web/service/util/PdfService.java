@@ -59,7 +59,7 @@ public class PdfService {
 
 	@Autowired
 	private ChuPrelevementBiomarqueurDao prelevementBiomarqueurDao;
-	
+
 	@Autowired 
 	private ChuTraitementDao traitementDao;
 
@@ -263,16 +263,16 @@ public class PdfService {
 
 	public void addRechutes(ChuTumeur tumeur, Document document) {
 
-		
+
 
 		List<ChuPhaseTumeur> listRechutes = phaseTumeurDao.list(tumeur.getIdTumeur(), 2);
 
 		for (int i=0; i<listRechutes.size(); i++) {
-			
+
 			this.addEmptyLines(document, 1);
 			Paragraph p = new Paragraph("Rechute " + (i+1)).setBold();
 			document.add(p);
-			
+
 			ChuPhaseTumeur rechute = listRechutes.get(i);
 
 			Table table = new Table(new float[] {1, 1});
@@ -284,12 +284,30 @@ public class PdfService {
 			String locale = rechute.getLocale()==null ? "" : rechute.getLocale()==true ? "oui" : "non";
 			table.addCell("Rechute locale : " + locale);
 
+
+
+			// === TNM ==
+
+			ChuTnm cTnm = tnmDao.find(rechute.getIdPhase(), "c");
+			table.addCell("cTNM : " + this.generateTextTnm(cTnm));
+
+			String textCtaille = cTnm==null ? "" : cTnm.getTaille()==null ? "" : cTnm.getTaille();
+			table.addCell("c Taille (mm) : " + textCtaille);
+
+			ChuTnm pTnm = tnmDao.find(rechute.getIdPhase(), "p");
+			table.addCell("pTNM : " + this.generateTextTnm(pTnm));
+
+			String textPtaille = pTnm==null ? "" : pTnm.getTaille()==null ? "" : pTnm.getTaille();
+			table.addCell("p Taille (mm) : " + textPtaille);
+
+			// === PS ===
 			Cell cell = new Cell(1,2);
 			ChuPerformanceStatus ps = rechute.getChuPerformanceStatus();
-			String textPs = ps==null ? "" : ps.getIdPs() + " - " + ps.getDescription();
+			String textPs = ps==null ? "" : ps.getIdPs() + "" ; // + " - " + ps.getDescription();
 			cell.add("PS : " + textPs);
 			table.addCell(cell);
-			
+
+
 			// === Metastases ===
 			this.addMetastases(rechute.getIdPhase(), table);
 
@@ -308,7 +326,7 @@ public class PdfService {
 				this.addEmptyLines(document, 1);
 				document.add(new Paragraph ("Remarque : " + remarque));
 			}
-			
+
 			// === Prelevements, traitements ===
 			this.addPrelevementTraitements(rechute, document);
 
@@ -376,9 +394,9 @@ public class PdfService {
 	}
 
 	/** ====================================================================================== */
-	
+
 	public void addTraitement(ChuTraitement traitement, Document document) {
-		
+
 		this.addEmptyLines(document, 1);
 
 
@@ -395,59 +413,59 @@ public class PdfService {
 		if (traitement.getChuMethodeTraitement()!=null) {
 			title = title + " - " + traitement.getChuMethodeTraitement().getNom();
 		}
-				
+
 		Text text = new Text(title);
 		text.setBold();
 		p.add(text);
-		
+
 		// === Protocole ===
 		if (traitement.getChuProtocoleTraitement()!=null) {
 			String protocole = "Protocole : " + traitement.getChuProtocoleTraitement().getNom();
 			p.add("\n" + protocole);
 		}
-		
+
 		// === Date fin ===
 		if (traitement.getDateFin()!=null) {
 			String dateFin = "Date de fin : " + dateFormat.format(traitement.getDateFin());
 			p.add("\n" + dateFin);
 		}
-		
+
 		// === Dose ===
 		if (traitement.getDose()!=null) {
 			String dose = "Dose : " + traitement.getDose();
 			p.add("\n" + dose);
 		}
-		
+
 		// === Nb cures ===
 		if (traitement.getNbCures()!=null) {
 			String nbCures = "Nombre de cures : " + traitement.getNbCures();
 			p.add("\n" + nbCures);
 		}
-		
+
 		// === GG sentinelle ===
 		if (traitement.getGgSentinelle()!=null) {
 			String ggSentinelle = "Technique de ganglion sentinelle : " + (traitement.getGgSentinelle() ? "oui" : "non");
 			p.add("\n" + ggSentinelle);
 		}
-		
+
 		// === Reponse ===
 		if (traitement.getChuReponse()!=null) {
 			String reponse = "Réponse : " + traitement.getChuReponse().getNom();
 			p.add("\n" + reponse);
 		}
-		
+
 		// === Remarque ===
 		if (traitement.getRemarque()!=null) {
 			p.add("\n" + traitement.getRemarque());
 		}
-		
+
 		document.add(p);
-		
+
 	}
-	
-	
+
+
 	/** ====================================================================================== */
-	
+
 
 	public void addPrelevement(ChuPrelevement prelevement, Document document) {
 		this.addEmptyLines(document, 1);
@@ -463,18 +481,18 @@ public class PdfService {
 		if (prelevement.getChuTypePrelevement()!=null) {
 			title = title + " - " + prelevement.getChuTypePrelevement().getNom();
 		}
-		
+
 		Text text = new Text(title);
 		text.setBold();
 		p.add(text);
 
-		
+
 		// === Site ===
 		if (prelevement.getSitePrelevement()!=null) {
 			String site = "Site : " + prelevement.getSitePrelevement();
 			p.add("\n" + site);
 		}
-		
+
 
 		// === Morphologie ===
 		if (prelevement.getChuMorphologie()!=null) {
@@ -487,7 +505,7 @@ public class PdfService {
 			}
 			p.add("\n" + morpho);
 		}
-		
+
 		// === Histologie ===
 		if (prelevement.getTypeHistologique()!=null) {
 			String histo = "Histologie : " + prelevement.getTypeHistologique();
@@ -499,11 +517,11 @@ public class PdfService {
 			String cis = "Association CIS : " + (prelevement.getAssociationCis() ? "oui" : "non");
 			p.add("\n" + cis);
 		}
-		
+
 		// === Biomarqueurs ===
-		
+
 		List<ChuPrelevementBiomarqueur> listPB = prelevementBiomarqueurDao.list(prelevement.getIdPrelevement());
-		
+
 		if (listPB!=null && !listPB.isEmpty()) {
 			String bio = "";
 			for (int i=0; i<listPB.size(); i++) {
@@ -571,9 +589,9 @@ public class PdfService {
 
 
 	}
-	
+
 	/** ====================================================================================== */
-	
+
 	public String generateTextTnm(ChuTnm tnm) {
 
 		String text = "";

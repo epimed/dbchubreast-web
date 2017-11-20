@@ -19,6 +19,9 @@
 
 		<!-- Fil d'Ariane -->
 		<%@ include file="../inc/filAriane.jsp"%>
+		
+		<!-- Dismissible alert -->
+		<%@ include file="../inc/dismissibleAlert.jsp"%>
 
 		<div>
 

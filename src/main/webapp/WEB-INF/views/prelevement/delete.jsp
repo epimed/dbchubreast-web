@@ -20,8 +20,16 @@
 		<!-- Fil d'Ariane -->
 		<%@ include file="../inc/filAriane.jsp"%>
 
-		<!-- Dismissible alert -->
-		<%@ include file="../inc/dismissibleAlert.jsp"%>
+		<c:if test="${not empty msg}">
+			<p></p>
+			<div class="alert alert-${css} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>${msg}</strong>
+			</div>
+		</c:if>
 
 
 		<div>
@@ -29,7 +37,8 @@
 			<!-- H1 Patient -->
 			<%@ include file="../inc/h1Patient.jsp"%>
 
-			<h2>Détail du prélèvement</h2>
+			<h2>Souhaitez-vous supprimer définitivement le prélèvement
+				suivant ?</h2>
 
 			<br />
 
@@ -101,42 +110,26 @@
 				<div class="col-sm-10">${prelevement.associationCis}</div>
 			</div>
 
-			<!-- Biomarqueurs -->
 
-			<c:if test="${not empty listPrelevementBiomarqueurs}">
-				<h3>Biomarqueurs:</h3>
-				<c:forEach var="prelBio" items="${listPrelevementBiomarqueurs}">
+			<p></p>
 
-					<div class="row">
-						<label class="col-sm-2">${prelBio.chuBiomarqueur.nom}</label>
-						<div class="col-sm-10">
-							<c:out value="${prelBio.valeur}" />
-							<c:if test="${ not empty prelBio.statut}">(${prelBio.statut})</c:if>
-						</div>
-					</div>
+			<form:form class="form-horizontal" method="post"
+				modelAttribute="formTraitement"
+				action="${pageContext.request.contextPath}/prelevement/${prelevement.idPrelevement}/delete">
 
-				</c:forEach>
-			</c:if>
-			
+				<!-- Buttons -->
+
+				<button type="submit" class="btn btn-danger" name="button"
+					value="delete">Supprimer</button>
+
+				<button type="submit" class="btn btn-default" name="button"
+					value="cancel">Annuler</button>
+
+
+			</form:form>
+
+
 		</div>
-
-		<p></p>
-		<div>
-			<spring:url value="/prelevement/${prelevement.idPrelevement}/update"
-				var="updateUrl" />
-			<button class="btn-sm btn-primary" onclick="location.href='${updateUrl}'">Modifier</button>
-			
-			<spring:url value="/prelevement/${prelevement.idPrelevement}/delete"
-					var="deleteUrl" />
-				<button class="btn-sm btn-danger"
-					onclick="location.href='${deleteUrl}'">Supprimer</button>
-					
-		</div>
-
-		<!-- Boutons consulter -->
-		<%@ include file="../inc/boutonsConsulter.jsp"%>
-
-
 	</div>
 
 	<!-- Footer -->
