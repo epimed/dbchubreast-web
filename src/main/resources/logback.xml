@@ -20,15 +20,11 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="org.hibernate" level="warn" additivity="false">
+	<logger name="org.hibernate" level="info" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="org.mongodb" level="warn" additivity="false">
-		<appender-ref ref="STDOUT" />
-	</logger>
-
-	<logger name="dbchubreast_web" level="warn" additivity="false">
+	<logger name="dbchubreast_web" level="debug" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
