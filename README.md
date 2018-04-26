@@ -1,2 +1,2 @@
-# dbchubreast-web
-Web application for DB_CHU_BREAST database
+# probreast-web-prod
+Web application for PROBREAST in production
