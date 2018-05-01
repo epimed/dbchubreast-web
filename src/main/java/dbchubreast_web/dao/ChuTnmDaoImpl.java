@@ -14,6 +14,8 @@
 
 package dbchubreast_web.dao;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -37,6 +39,7 @@ public class ChuTnmDaoImpl extends BaseDao implements ChuTnmDao {
 	private SessionFactory sessionFactory;
 
 	/** ================================================= */
+
 	public ChuTnm find(Integer idPhase, String type) {
 
 		try {
@@ -60,6 +63,20 @@ public class ChuTnmDaoImpl extends BaseDao implements ChuTnmDao {
 
 	/** ================================================= */
 
+	public List<ChuTnm> find(Integer idPhase) {
+
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTnm> criteria = builder.createQuery(ChuTnm.class);
+			Root<ChuTnm> root = criteria.from(ChuTnm.class);
+			Join<ChuTnm, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+			criteria.select(root).where(builder.equal(phase.get("idPhase"), idPhase));
+			List<ChuTnm> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+			return list;
+		
+	}
+
+	/** ================================================= */
+
 	public void save(ChuTnm tnm) {
 		sessionFactory.getCurrentSession().save(tnm);
 	}
@@ -77,5 +94,11 @@ public class ChuTnmDaoImpl extends BaseDao implements ChuTnmDao {
 	}
 
 	/** ================================================= */
+
+	public void delete(ChuTnm tnm) {
+		sessionFactory.getCurrentSession().delete(tnm);
+	}
+
+	/** ===============================================*/
 
 }

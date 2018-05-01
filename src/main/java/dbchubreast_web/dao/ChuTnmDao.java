@@ -14,14 +14,19 @@
 
 package dbchubreast_web.dao;
 
+import java.util.List;
+
 import dbchubreast_web.entity.ChuTnm;
 
 public interface ChuTnmDao {
 	public ChuTnm find(Integer idPhase, String type);
-
+	public List<ChuTnm> find(Integer idPhase);
+	
 	public void save(ChuTnm tnm);
 
 	public void update(ChuTnm tnm);
 
 	public void saveOrUpdate(ChuTnm tnm);
+	
+	public void delete(ChuTnm tnm);	
 }

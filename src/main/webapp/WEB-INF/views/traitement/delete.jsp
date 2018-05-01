@@ -141,23 +141,20 @@
 
 			</c:if>
 
-			<p></p>
+				<form:form class="form-horizontal" method="post"
+					modelAttribute="formTraitement"
+					action="${pageContext.request.contextPath}/traitement/${traitement.idTraitement}/delete">
 
-			<form:form class="form-horizontal" method="post"
-				modelAttribute="formTraitement"
-				action="${pageContext.request.contextPath}/traitement/${traitement.idTraitement}/delete">
+					<!-- Buttons -->
 
-				<!-- Buttons -->
+					<button type="submit" class="btn btn-danger" name="button"
+						value="delete">Supprimer</button>
 
-				<button type="submit" class="btn btn-danger" name="button"
-					value="delete">Supprimer</button>
-
-				<button type="submit" class="btn btn-default" name="button"
-					value="cancel">Annuler</button>
+					<button type="submit" class="btn btn-default" name="button"
+						value="cancel">Annuler</button>
 
 
-			</form:form>
-
+				</form:form>
 
 		</div>
 	</div>

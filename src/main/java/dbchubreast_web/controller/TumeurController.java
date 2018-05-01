@@ -35,7 +35,9 @@ import dbchubreast_web.entity.ChuMetastase;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuPerformanceStatus;
 import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuPrelevement;
 import dbchubreast_web.entity.ChuTopographie;
+import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.form.FormPhaseRechute;
 import dbchubreast_web.form.FormTumeurInitiale;
@@ -45,7 +47,9 @@ import dbchubreast_web.service.business.ChuMetastaseService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuPerformanceStatusService;
 import dbchubreast_web.service.business.ChuPhaseTumeurService;
+import dbchubreast_web.service.business.ChuPrelevementService;
 import dbchubreast_web.service.business.ChuTopographieService;
+import dbchubreast_web.service.business.ChuTraitementService;
 import dbchubreast_web.service.business.ChuTumeurService;
 import dbchubreast_web.service.form.FormPhaseTumeurService;
 import dbchubreast_web.validator.FormPhaseRechuteValidator;
@@ -59,6 +63,12 @@ public class TumeurController extends BaseController {
 
 	@Autowired
 	private ChuTumeurService tumeurService;
+
+	@Autowired
+	private ChuTraitementService traitementService;
+
+	@Autowired
+	private ChuPrelevementService prelevementService;
 
 	@Autowired
 	private ChuPhaseTumeurService phaseTumeurService;
@@ -88,6 +98,58 @@ public class TumeurController extends BaseController {
 	private AppLogService logService;
 
 	/** ====================================================================================== */
+
+
+	@RequestMapping(value = { "/rechute/{idPhase}/delete" }, method =  {RequestMethod.GET, RequestMethod.POST})
+	public String deleteRechute(Model model, 
+			@PathVariable Integer idPhase, 
+			@RequestParam(value = "button", required = false) String button,
+			final RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+
+		//Tumeur
+		ChuTumeur tumeur = tumeurService.findByIdPhaseWithDependencies(idPhase);
+		model.addAttribute("tumeur", tumeur);
+
+		//Phase tumeur
+		ChuPhaseTumeur phaseTumeur = phaseTumeurService.find(idPhase); 
+		model.addAttribute("phase", phaseTumeur);
+
+		// Patient
+		ChuPatient patient = patientService.find(tumeur.getIdTumeur());
+		model.addAttribute("patient", patient);
+
+		// Prelevements
+		List<ChuPrelevement> listPrelevements = prelevementService.listByIdPhase(idPhase);
+		model.addAttribute("listPrelevements", listPrelevements);
+
+		// Traitements 
+		List<ChuTraitement> listTraitements = traitementService.listByIdPhase(idPhase);
+		model.addAttribute("listTraitements", listTraitements);
+
+		if (button!=null && button.equals("delete")) {
+			
+			if (phaseTumeur.getChuTypePhase().getIdTypePhase() == 2) {
+				phaseTumeurService.deleteWithDependencies(phaseTumeur);
+				redirectAttributes.addFlashAttribute("css", "success");
+				redirectAttributes.addFlashAttribute("msg", "La rechute " + idPhase + " a été supprimé !");
+			}	
+			else {
+				redirectAttributes.addFlashAttribute("css", "error");
+				redirectAttributes.addFlashAttribute("msg", "La phase de tumeur " + idPhase + " ne peut pas être supprimée");
+			}
+			return "redirect:/tumeur/" + tumeur.getIdTumeur()+"/";
+			
+		}
+
+		else if (button!=null && button.equals("cancel")) {
+			return "redirect:/tumeur/" + tumeur.getIdTumeur()+"/";
+		}
+
+		else {
+			return "tumeur/deleteRechute";
+		}
+	}
 
 
 	/** ====================================================================================== */
@@ -245,12 +307,12 @@ public class TumeurController extends BaseController {
 				formPhaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
 			}
 		}
-		
+
 		// === Bouton "annuler" ===
 
-				if (button != null && button.equals("cancel")) {
-					return "redirect:/patient/" +  formTumeurInitiale.getIdPatient() + "/tumeurs";
-				}
+		if (button != null && button.equals("cancel")) {
+			return "redirect:/patient/" +  formTumeurInitiale.getIdPatient() + "/tumeurs";
+		}
 
 
 		// POST/REDIRECT/GET

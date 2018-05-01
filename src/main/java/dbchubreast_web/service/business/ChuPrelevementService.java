@@ -25,6 +25,7 @@ public interface ChuPrelevementService {
 	public List<ChuPrelevement> listByIdPhase(Integer idPhase);
 
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur);
+	public ChuPrelevement findDernierPrelevement(Integer idTumeur);
 
 	public List<ChuPrelevement> listByIdPatient(String idPatient);
 

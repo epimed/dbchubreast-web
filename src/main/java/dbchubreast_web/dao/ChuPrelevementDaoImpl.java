@@ -59,6 +59,7 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 		}
 
 	}
+	
 
 	/** ================================================= */
 
@@ -106,6 +107,23 @@ public class ChuPrelevementDaoImpl extends BaseDao implements ChuPrelevementDao 
 
 	}
 
+	/** ================================================= */
+	public ChuPrelevement findDernierPrelevement(Integer idTumeur) {
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPrelevement> criteria = builder.createQuery(ChuPrelevement.class);
+			Root<ChuPrelevement> root = criteria.from(ChuPrelevement.class);
+			Join<ChuPrelevement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+			Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
+			criteria.select(root).where(builder.equal(tumeur.get("idTumeur"), idTumeur));
+			criteria.orderBy(builder.desc(root.get("datePrelevement")), builder.desc(root.get("idPrelevement")));
+			return sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	/** ================================================= */
 
 	public List<ChuPrelevement> listByIdPatient(String idPatient) {

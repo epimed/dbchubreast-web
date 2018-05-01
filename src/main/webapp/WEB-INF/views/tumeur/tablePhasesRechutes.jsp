@@ -37,6 +37,10 @@
 					<button class="btn-sm btn-primary"
 						onclick="location.href='${updateUrl}'">Modifier</button>
 						
+				<spring:url value="/rechute/${phase.idPhase}/delete"
+						var="deleteUrl" />
+					<button class="btn-sm btn-danger"
+						onclick="location.href='${deleteUrl}'">Supprimer</button>
 				
 				<spring:url value="/patient/${patient.idPatient}/prelevement/add?idTumeur=${tumeur.idTumeur}&idPhase=${phase.idPhase}"
 						var="addPrelUrl" />
@@ -48,6 +52,7 @@
 					<button class="btn-sm btn-success"
 						onclick="location.href='${addTraitUrl}'">Ajouter un traitement</button>
 						
+				
 						
 				</td>
 			</tr>

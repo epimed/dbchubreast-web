@@ -43,6 +43,10 @@ public class ChuPrelevementServiceImpl implements ChuPrelevementService {
 	public List<ChuPrelevement> listByIdTumeur(Integer idTumeur) {
 		return prelevementDao.listByIdTumeur(idTumeur);
 	}
+	
+	public ChuPrelevement findDernierPrelevement(Integer idTumeur) {
+		return prelevementDao.findDernierPrelevement(idTumeur);
+	}
 
 	public List<ChuPrelevement> listByIdPatient(String idPatient) {
 		return prelevementDao.listByIdPatient(idPatient);

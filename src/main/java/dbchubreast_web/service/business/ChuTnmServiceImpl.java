@@ -13,6 +13,8 @@
  */
 package dbchubreast_web.service.business;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,23 @@ public class ChuTnmServiceImpl implements ChuTnmService {
 	@Autowired
 	private ChuTnmDao tnmDao;
 
+	/** ========================================================== */
+	
 	public ChuTnm find(Integer idPhase, String type) {
 		return tnmDao.find(idPhase, type);
 	}
+	
+	/** ========================================================== */
+	
+	public List<ChuTnm> find(Integer idPhase) {
+		return tnmDao.find(idPhase);
+	}
+	
+	/** ========================================================== */
+	
+	public void delete(ChuTnm tnm) {
+		tnmDao.delete(tnm);
+	}
 
+	/** ========================================================== */
 }

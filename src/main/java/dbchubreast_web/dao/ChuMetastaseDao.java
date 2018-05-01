@@ -26,4 +26,5 @@ public interface ChuMetastaseDao {
 	public List<ChuMetastase> list(List<Integer> listIdMetastases);
 
 	public List<ChuMetastase> list(Integer idPhaseTumeur);
+	
 }

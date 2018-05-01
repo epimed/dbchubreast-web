@@ -13,8 +13,12 @@
  */
 package dbchubreast_web.service.business;
 
+import java.util.List;
+
 import dbchubreast_web.entity.ChuTnm;
 
 public interface ChuTnmService {
 	public ChuTnm find(Integer idPhase, String type);
+	public List<ChuTnm> find(Integer idPhase);
+	public void delete(ChuTnm tnm);
 }

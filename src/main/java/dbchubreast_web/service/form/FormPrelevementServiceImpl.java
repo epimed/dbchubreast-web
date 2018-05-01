@@ -38,6 +38,7 @@ import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.updater.UpdaterCategorie;
 import dbchubreast_web.service.updater.UpdaterNodule;
 import dbchubreast_web.service.updater.UpdaterStatutBiomarqueur;
+import dbchubreast_web.service.updater.UpdaterSurvival;
 
 @Service
 public class FormPrelevementServiceImpl extends BaseService implements FormPrelevementService {
@@ -71,6 +72,9 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 
 	@Autowired
 	private UpdaterNodule updaterNodule;
+	
+	@Autowired
+	private UpdaterSurvival updaterSurvival;
 
 	/** ====================================================================== */
 
@@ -149,6 +153,12 @@ public class FormPrelevementServiceImpl extends BaseService implements FormPrele
 		// === Update nodules ===
 		updaterNodule.update(prelevement);
 
+		// === Update survival ===
+		ChuTumeur tumeur = tumeurDao.find(form.getIdTumeur());
+		List<ChuTumeur> listTumeurs = new ArrayList<ChuTumeur>();
+		listTumeurs.add(tumeur);
+		updaterSurvival.update(listTumeurs);
+		
 	}
 
 	/** ====================================================================== */

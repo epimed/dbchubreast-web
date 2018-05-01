@@ -46,4 +46,6 @@ public interface ChuPhaseTumeurService {
 	public void update(ChuPhaseTumeur phaseTumeur);
 
 	public void saveOrUpdate(ChuPhaseTumeur phaseTumeur);
+	
+	public void deleteWithDependencies(ChuPhaseTumeur phaseTumeur);
 }

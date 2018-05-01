@@ -41,12 +41,12 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	
+
 	/** ================================================= */
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Object> listChronoPrelevementsTraitements(Integer idPhase) {
-	
+
 		String sql = "select * from (" 
 				+ " (select id_prelevement, date_prelevement as date, 'prelevement' as type"
 				+ " from db_chu_breast.chu_prelevement where id_phase=" 
@@ -57,13 +57,13 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 				+ idPhase +")"
 				+ ") t" 
 				+ " order by date";
-		
+
 		Query query = sessionFactory.getCurrentSession().createNativeQuery(sql);
-		
+
 		return query.getResultList();
-		
+
 	}
-	
+
 	/** ================================================= */
 
 	public List<ChuPhaseTumeur> list() {
@@ -74,7 +74,7 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		criteria.select(root);
 		criteria.orderBy(builder.asc(root.get("idPhase")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
-		
+
 	}
 
 	/** ================================================= */
@@ -95,7 +95,7 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		criteria.select(root).where(builder.equal(root.get("chuTumeur").get("idTumeur"), idTumeur));
 		criteria.orderBy(builder.asc(root.get("dateDiagnostic")), builder.asc(root.get("idPhase")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
-		
+
 	}
 
 	/** ================================================= */
@@ -106,11 +106,11 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		return list;
 	}
 
-	
+
 	/** ================================================= */
 
 	public ChuPhaseTumeur find(Integer idPhase) {
-		
+
 		try {
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 			CriteriaQuery<ChuPhaseTumeur> criteria = builder.createQuery(ChuPhaseTumeur.class);
@@ -121,24 +121,24 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		catch (NoResultException ex) {
 			return null;
 		}
-		
+
 	}
 
-	
+
 	/** ================================================= */
 
 	public ChuPhaseTumeur findWithDependencies(Integer idPhase) {
 
-			ChuPhaseTumeur result = this.find(idPhase);
-			this.populateDependencies(result);
-			return result;
+		ChuPhaseTumeur result = this.find(idPhase);
+		this.populateDependencies(result);
+		return result;
 	}
 
-	
+
 	/** ================================================= */
 
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement) {
-		
+
 		try {
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 			CriteriaQuery<ChuPhaseTumeur> criteria = builder.createQuery(ChuPhaseTumeur.class);
@@ -170,15 +170,15 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 				builder.and(
 						builder.equal(tumeur.get("idTumeur"), idTumeur),
 						builder.equal(typePhase.get("idTypePhase"), idTypePhase)
-				));
-		
+						));
+
 		criteria.orderBy(builder.asc(root.get("dateDiagnostic")), builder.asc(root.get("idPhase")));
 		List<ChuPhaseTumeur> result =  sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		this.populateDependencies(result);
 		return result;
 	}
 
-	
+
 	/** ================================================= */
 
 	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur) {
@@ -189,15 +189,15 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 			Root<ChuPhaseTumeur> root = criteria.from(ChuPhaseTumeur.class);
 			Join<ChuPhaseTumeur, ChuTumeur> tumeur = root.join("chuTumeur");
 			Join<ChuPhaseTumeur, ChuTypePhase> typePhase = root.join("chuTypePhase");
-			
+
 			criteria.select(root)
 			.where(
 					builder.and(
 							builder.equal(tumeur.get("idTumeur"), idTumeur),
 							builder.equal(typePhase.get("idTypePhase"), 2)
-					));
+							));
 			criteria.orderBy(builder.asc(root.get("dateDiagnostic")));
-			
+
 			ChuPhaseTumeur result =  sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
 			this.populateDependencies(result);
 			return result;
@@ -218,19 +218,19 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 			Root<ChuPhaseTumeur> root = criteria.from(ChuPhaseTumeur.class);
 			Join<ChuPhaseTumeur, ChuTumeur> tumeur = root.join("chuTumeur");
 			Join<ChuPhaseTumeur, ChuTypePhase> typePhase = root.join("chuTypePhase");
-			
+
 			criteria.select(root)
 			.where(
 					builder.and(
 							builder.equal(tumeur.get("idTumeur"), idTumeur),
 							builder.equal(typePhase.get("idTypePhase"), 1)
-					));
+							));
 			criteria.orderBy(builder.asc(root.get("dateDiagnostic")));
-			
+
 			ChuPhaseTumeur result = sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
 			this.populateDependencies(result);	
 			return  result;
-		
+
 		}
 		catch (NoResultException ex) {
 			return null;
@@ -256,7 +256,13 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 		sessionFactory.getCurrentSession().saveOrUpdate(phaseTumeur);
 	}
 
-	
+	/** ================================================= */
+
+	public void delete(ChuPhaseTumeur phaseTumeur) {
+		sessionFactory.getCurrentSession().delete(phaseTumeur);
+	}
+
+
 	/** ================================================= */
 
 	private void populateDependencies(List<ChuPhaseTumeur> list) {

@@ -47,5 +47,7 @@ public interface ChuPhaseTumeurDao {
 	public void update(ChuPhaseTumeur phaseTumeur);
 
 	public void saveOrUpdate(ChuPhaseTumeur phaseTumeur);
+	
+	public void delete(ChuPhaseTumeur phaseTumeur);
 
 }

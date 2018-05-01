@@ -13,12 +13,16 @@
  */
 package dbchubreast_web.service.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTraitement;
+import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.form.FormTraitement;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.business.ChuMethodeTraitementService;
@@ -28,6 +32,7 @@ import dbchubreast_web.service.business.ChuProtocoleTraitementService;
 import dbchubreast_web.service.business.ChuReponseService;
 import dbchubreast_web.service.business.ChuTraitementService;
 import dbchubreast_web.service.business.ChuTumeurService;
+import dbchubreast_web.service.updater.UpdaterSurvival;
 import dbchubreast_web.service.updater.UpdaterTypeTraitement;
 
 @Service
@@ -35,7 +40,7 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 
 	@Autowired
 	private ChuPatientService patientService;
-	
+
 	@Autowired
 	private ChuTumeurService tumeurService;
 
@@ -57,7 +62,8 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 	@Autowired
 	private UpdaterTypeTraitement updaterTypeTraitement;
 
-
+	@Autowired
+	private UpdaterSurvival updaterSurvival;
 
 	/** ====================================================================== */
 
@@ -98,13 +104,17 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 		traitement.setGgSentinelle(form.getGgSentinelle());
 		traitement.setRemarque(form.getRemarque());
 
-
 		traitementService.saveOrUpdate(traitement);
 		form.setIdTraitement(traitement.getIdTraitement());
 
-
-		// === Type traitement ===
+		// === Update type traitement ===
 		updaterTypeTraitement.update(tumeurService.findByIdPhaseWithDependencies(phase.getIdPhase()));
+
+		// === Update survival ===
+		ChuTumeur tumeur = tumeurService.find(form.getIdTumeur());
+		List<ChuTumeur> listTumeurs = new ArrayList<ChuTumeur>();
+		listTumeurs.add(tumeur);
+		updaterSurvival.update(listTumeurs);
 
 	}
 
@@ -125,7 +135,7 @@ public class FormTraitementServiceImpl extends BaseService implements FormTraite
 			if (traitement.getChuProtocoleTraitement()!=null) {
 				form.setIdProtocole(traitement.getChuProtocoleTraitement().getIdProtocole());
 			}
-			
+
 			if (traitement.getChuReponse()!=null) {
 				form.setIdReponse(traitement.getChuReponse().getIdReponse());
 			}

@@ -86,7 +86,7 @@ public class ChuTraitementDaoImpl extends BaseDao implements ChuTraitementDao {
 		return list;
 
 	}
-	
+
 	/** ================================================= */
 
 	public List<ChuTraitement> listByIdProtocole(Integer idProtocole) {
@@ -105,11 +105,11 @@ public class ChuTraitementDaoImpl extends BaseDao implements ChuTraitementDao {
 		return list;
 
 	}
-	
+
 	/** ================================================= */
-	
+
 	public List<ChuTraitement> listByIdTumeur(Integer idTumeur) {
-		
+
 		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
 		CriteriaQuery<ChuTraitement> criteria = builder.createQuery(ChuTraitement.class);
 
@@ -118,6 +118,44 @@ public class ChuTraitementDaoImpl extends BaseDao implements ChuTraitementDao {
 		Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
 
 		criteria.select(root).where(builder.equal(tumeur.get("idTumeur"), idTumeur));
+		criteria.orderBy(builder.asc(root.get("dateDebut")));
+
+		List<ChuTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+
+		this.populateDependencies(list);
+		return list;
+	}
+
+	public ChuTraitement findDernierTraitement(Integer idTumeur) {
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuTraitement> criteria = builder.createQuery(ChuTraitement.class);
+
+			Root<ChuTraitement> root = criteria.from(ChuTraitement.class);
+			Join<ChuTraitement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+			Join<ChuPhaseTumeur, ChuTumeur> tumeur = phase.join("chuTumeur");
+
+			criteria.select(root).where(builder.equal(tumeur.get("idTumeur"), idTumeur));
+			criteria.orderBy(builder.desc(root.get("dateDebut")));
+
+			return sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+	}
+
+	/** ================================================= */
+
+	public List<ChuTraitement> listByIdPhase(Integer idPhase) {
+
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuTraitement> criteria = builder.createQuery(ChuTraitement.class);
+
+		Root<ChuTraitement> root = criteria.from(ChuTraitement.class);
+		Join<ChuTraitement, ChuPhaseTumeur> phase = root.join("chuPhaseTumeur");
+
+		criteria.select(root).where(builder.equal(phase.get("idPhase"), idPhase));
 		criteria.orderBy(builder.asc(root.get("dateDebut")));
 
 		List<ChuTraitement> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
@@ -176,9 +214,9 @@ public class ChuTraitementDaoImpl extends BaseDao implements ChuTraitementDao {
 	public void saveOrUpdate(ChuTraitement traitement) {
 		sessionFactory.getCurrentSession().saveOrUpdate(traitement);
 	}
-	
+
 	/** ================================================= */
-	
+
 	public void delete(ChuTraitement traitement) {
 		sessionFactory.getCurrentSession().delete(traitement);
 	}

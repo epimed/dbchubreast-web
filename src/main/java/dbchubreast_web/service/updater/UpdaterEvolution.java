@@ -57,7 +57,7 @@ public class UpdaterEvolution extends AbstractUpdater {
 					tumeur.setDateEvolution(null);
 				}
 			}
-			
+
 			tumeurDao.update(tumeur);
 		}
 	}

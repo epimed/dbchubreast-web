@@ -44,6 +44,14 @@ public class ChuTraitementServiceImpl extends BaseService implements ChuTraiteme
 		return traitementDao.listByIdTumeur(idTumeur);
 	}
 	
+	public ChuTraitement findDernierTraitement(Integer idTumeur) {
+		return traitementDao.findDernierTraitement(idTumeur);
+	}
+	
+	public List<ChuTraitement> listByIdPhase(Integer idPhase) {
+		return traitementDao.listByIdPhase(idPhase);
+	}
+	
 	public ChuTraitement findChirurgieReference(Integer idTumeur) {
 		return traitementDao.findChirurgieReference(idTumeur);
 	}

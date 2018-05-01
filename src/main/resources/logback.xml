@@ -12,19 +12,19 @@
 		</layout>
 	</appender>
 
-	<logger name="org.springframework" level="info" additivity="false">
+	<logger name="org.springframework" level="warn" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
-	<logger name="org.springframework.security" level="info" additivity="false">
+	<logger name="org.springframework.security" level="warn" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="org.hibernate" level="info" additivity="false">
+	<logger name="org.hibernate" level="warn" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="dbchubreast_web" level="debug" additivity="false">
+	<logger name="dbchubreast_web" level="warn" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 

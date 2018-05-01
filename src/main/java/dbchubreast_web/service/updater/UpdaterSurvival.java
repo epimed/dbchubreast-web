@@ -23,17 +23,37 @@ import org.springframework.stereotype.Service;
 
 import dbchubreast_web.dao.ChuPhaseTumeurDao;
 import dbchubreast_web.dao.ChuTumeurDao;
+import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuPhaseTumeur;
+import dbchubreast_web.entity.ChuPrelevement;
+import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.entity.ChuTumeur;
+import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.business.ChuPrelevementService;
+import dbchubreast_web.service.business.ChuTraitementService;
+import dbchubreast_web.service.util.FormatService;
 
 @Service
 public class UpdaterSurvival extends AbstractUpdater {
 
 	@Autowired
 	private ChuTumeurDao tumeurDao;
+	
+	@Autowired
+	private ChuPatientService patientService;
 
 	@Autowired
 	private ChuPhaseTumeurDao phaseTumeurDao;
+
+	@Autowired 
+	private ChuPrelevementService prelevementService;
+
+	@Autowired 
+	private ChuTraitementService traitementService;
+	
+	@Autowired 
+	private FormatService formatService;
+
 
 	/** ================================================================================= */
 
@@ -47,15 +67,37 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 			Date dateDiagnostic = tumeur.getDateDiagnostic();
 			Date dateEvolution = tumeur.getDateEvolution();
-			Date dateDeces = tumeur.getChuPatient().getDateDeces();
+			ChuPatient patient = patientService.find(tumeur.getIdTumeur());
+			Date dateDeces = patient.getDateDeces();
+
+			// === Rechute ===
+
 			ChuPhaseTumeur phaseRechute = phaseTumeurDao.findFirstRelapse(tumeur.getIdTumeur());
-
 			logger.debug("Phase rechute {}", phaseRechute);
-
 			Date dateRechute = null;
 			if (phaseRechute != null && phaseRechute.getDateDiagnostic() != null) {
 				dateRechute = phaseRechute.getDateDiagnostic();
 			}
+
+			// === Derniere nouvelle ===
+
+			// Si la date de la derniere nouvelle n'est pas remplie
+			// on prend soit la date de deces, soit le dernier prelevement/traitement, soit la date de rechute.
+			// La date de la derniere nouvelle est calculee a la volee a chaque fois, elle n'est pas sauvegardee dans la base.
+			
+			if (dateDeces!=null) {
+				dateEvolution = dateDeces;
+			}
+			else {
+				ChuPrelevement dernierPrelevement = prelevementService.findDernierPrelevement(tumeur.getIdTumeur());
+				ChuTraitement dernierTraitement  = traitementService.findDernierTraitement(tumeur.getIdTumeur());
+				dateEvolution = formatService.getDerniereDate(dateEvolution, dernierPrelevement.getDatePrelevement());
+				dateEvolution = formatService.getDerniereDate(dateEvolution, dernierTraitement.getDateDebut());
+				dateEvolution = formatService.getDerniereDate(dateEvolution, dateRechute);
+			}
+			
+
+			// === Survie ===
 
 			boolean hasSurvival = dateDiagnostic != null
 					&& (dateEvolution != null || dateDeces != null || dateRechute != null);
@@ -64,6 +106,16 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 			logger.debug("dateDiagnostic=" + dateDiagnostic + ", dateEvolution=" + dateEvolution + ", dateDeces="
 					+ dateDeces + ", dateRechute=" + dateRechute);
+			logger.debug("hasSurvival=" + hasSurvival);
+
+			// === Initialisation de la survie ===
+
+			tumeur.setRelapsed(null);
+			tumeur.setDead(null);
+			tumeur.setOsMonths(null);
+			tumeur.setDfsMonths(null);
+
+			// === Calcul de la nouvelle survie si possible ===
 
 			if (hasSurvival) {
 
@@ -84,8 +136,10 @@ public class UpdaterSurvival extends AbstractUpdater {
 				tumeur.setOsMonths(os);
 				tumeur.setDfsMonths(dfs);
 
-				tumeurDao.update(tumeur);
 			}
+
+			tumeurDao.update(tumeur);
+
 		}
 	}
 
@@ -115,6 +169,7 @@ public class UpdaterSurvival extends AbstractUpdater {
 		return survival;
 	}
 
+	
 	/** ================================================================================= */
 
 }
