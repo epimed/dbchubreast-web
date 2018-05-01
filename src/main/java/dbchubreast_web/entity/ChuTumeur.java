@@ -29,7 +29,6 @@ public class ChuTumeur implements java.io.Serializable {
 	private Integer idTumeur;
 	private ChuEvolution chuEvolution;
 	private ChuPatient chuPatient;
-	private ChuTopographie chuTopographie;
 	private String cote;
 	private Date dateDiagnostic;
 	private Double ageDiagnostic;
@@ -52,14 +51,13 @@ public class ChuTumeur implements java.io.Serializable {
 		this.chuPatient = chuPatient;
 	}
 
-	public ChuTumeur(Integer idTumeur, ChuEvolution chuEvolution, ChuPatient chuPatient, ChuTopographie chuTopographie,
+	public ChuTumeur(Integer idTumeur, ChuEvolution chuEvolution, ChuPatient chuPatient, 
 			String cote, Date dateDiagnostic, Double ageDiagnostic, Double imcDiagnostic, Date dateEvolution,
 			Boolean tripleNegative, Double dfsMonths, Double osMonths, Boolean relapsed, Boolean dead,
 			List<ChuPhaseTumeur> chuPhaseTumeurs) {
 		this.idTumeur = idTumeur;
 		this.chuEvolution = chuEvolution;
 		this.chuPatient = chuPatient;
-		this.chuTopographie = chuTopographie;
 		this.cote = cote;
 		this.dateDiagnostic = dateDiagnostic;
 		this.ageDiagnostic = ageDiagnostic;
@@ -103,16 +101,6 @@ public class ChuTumeur implements java.io.Serializable {
 
 	public void setChuPatient(ChuPatient chuPatient) {
 		this.chuPatient = chuPatient;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_topographie")
-	public ChuTopographie getChuTopographie() {
-		return this.chuTopographie;
-	}
-
-	public void setChuTopographie(ChuTopographie chuTopographie) {
-		this.chuTopographie = chuTopographie;
 	}
 
 	@Column(name = "cote", length = 100)

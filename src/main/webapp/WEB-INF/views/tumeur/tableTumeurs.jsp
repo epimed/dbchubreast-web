@@ -6,7 +6,7 @@
 			<tr class="info">
 				<th>Date du diagnostic</th>
 				<th>Age</th>
-				<th>Topographie ICD-O</th>
+				<th>Côté</th>
 				<th>Dernière nouvelle</th>
 				<th>Actions</th>
 
@@ -32,13 +32,7 @@
 						</c:forEach>
 					</c:if></td>
 				<td>${tumeur.ageDiagnostic}</td>
-				<td>${tumeur.chuTopographie.idTopographie}
-					${tumeur.chuTopographie.nomFr} <c:if
-						test="${not empty tumeur.cote}">
-						<span class="text-info"><small></br> côté ${tumeur.cote}
-						</small></span>
-					</c:if>
-				</td>
+				<td>${tumeur.cote}</td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
 						value="${tumeur.dateEvolution}" /> <c:if
 						test="${not empty tumeur.chuEvolution}">

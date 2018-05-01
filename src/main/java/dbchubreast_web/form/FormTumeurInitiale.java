@@ -10,9 +10,12 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 	private Date dateDeces;
 
 	private Double ageDiagnostic;
+	
+	private Double poids;
+	private Double taille;
+	private Double imcDiagnostic;
+	
 	private String cote;
-
-	private String idTopographie;
 
 	private Date dateEvolution;
 	private Integer idEvolution;
@@ -62,14 +65,6 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 		this.cote = cote;
 	}
 
-	public String getIdTopographie() {
-		return idTopographie;
-	}
-
-	public void setIdTopographie(String idTopographie) {
-		this.idTopographie = idTopographie;
-	}
-
 	public Date getDateEvolution() {
 		return dateEvolution;
 	}
@@ -116,6 +111,31 @@ public class FormTumeurInitiale extends AbstractFormPhaseTumeur {
 
 	public void setConsentement(Boolean consentement) {
 		this.consentement = consentement;
+	}
+	
+
+	public Double getPoids() {
+		return poids;
+	}
+
+	public void setPoids(Double poids) {
+		this.poids = poids;
+	}
+
+	public Double getTaille() {
+		return taille;
+	}
+
+	public void setTaille(Double taille) {
+		this.taille = taille;
+	}
+
+	public Double getImcDiagnostic() {
+		return imcDiagnostic;
+	}
+
+	public void setImcDiagnostic(Double imcDiagnostic) {
+		this.imcDiagnostic = imcDiagnostic;
 	}
 
 	@Override

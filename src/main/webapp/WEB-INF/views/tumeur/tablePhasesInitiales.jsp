@@ -7,7 +7,7 @@
 			<tr class="info">
 				<th>ID phase initiale</th>
 				<th>Date</th>
-				<th>Nature de diagnostic</th>
+				<th>Topographie ICD-O</th>
 				<th>Métastases</th>
 				<th>Actions</th>
 			</tr>
@@ -20,7 +20,9 @@
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
 						value="${phase.dateDiagnostic}" /></td>
 
-				<td>${phase.natureDiagnostic}</td>
+				<td>${phase.chuTopographie.idTopographie} 
+					<span class="text-info"><small></br>${phase.chuTopographie.nomFr}</small></span>
+				</td>
 
 				<td><c:forEach var="metastase" items="${phase.chuMetastases}"
 						varStatus="loop">${metastase.nom}<c:if
@@ -45,7 +47,7 @@
 			</tr>
 			<c:if test="${not empty phase.remarque}">
 				<tr>
-					<td colspan="5">${phase.remarque}</td>
+					<td colspan="6">${phase.remarque}</td>
 				</tr>
 			</c:if>
 

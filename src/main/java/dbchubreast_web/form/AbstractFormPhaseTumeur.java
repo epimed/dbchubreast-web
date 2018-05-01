@@ -18,6 +18,8 @@ public abstract class AbstractFormPhaseTumeur extends BaseService implements IFo
 	protected Integer idPhase;
 	protected Integer idTypePhase;
 	
+	protected String idTopographie;
+	
 	@Length(max = 50, message = "50 caractères au maximum")
 	private String cT;
 	
@@ -164,6 +166,15 @@ public abstract class AbstractFormPhaseTumeur extends BaseService implements IFo
 
 	public void setListIdMetastases(List<Integer> listIdMetastases) {
 		this.listIdMetastases = listIdMetastases;
+	}
+	
+
+	public String getIdTopographie() {
+		return idTopographie;
+	}
+
+	public void setIdTopographie(String idTopographie) {
+		this.idTopographie = idTopographie;
 	}
 
 	/** ====================================================================================== */

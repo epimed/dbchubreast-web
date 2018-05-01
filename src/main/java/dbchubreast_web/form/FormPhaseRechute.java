@@ -14,6 +14,7 @@ public class FormPhaseRechute extends AbstractFormPhaseTumeur {
 		this.idTumeur = idTumeur;
 		this.idTypePhase = 2; // phase rechute
 	}
+	
 
 	/** ========================================================================== */
 
@@ -43,16 +44,19 @@ public class FormPhaseRechute extends AbstractFormPhaseTumeur {
 	public boolean isNew() {
 		return this.idPhase == null;
 	}
-
+	
 	/** ====================================================================================== */
+
 
 	@Override
 	public String toString() {
 		return "FormPhaseRechute [idPs=" + idPs + ", locale=" + locale + ", idTumeur=" + idTumeur + ", idPatient="
 				+ idPatient + ", dateDiagnostic=" + dateDiagnostic + ", idPhase=" + idPhase + ", idTypePhase="
-				+ idTypePhase + ", remarque=" + remarque + ", listIdMetastases=" + listIdMetastases + "]";
+				+ idTypePhase + ", idTopographie=" + idTopographie + ", remarque=" + remarque + ", listIdMetastases="
+				+ listIdMetastases + "]";
 	}
 
+	
 	/** ====================================================================================== */
 
 }

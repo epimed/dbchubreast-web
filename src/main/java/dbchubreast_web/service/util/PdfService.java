@@ -65,6 +65,7 @@ public class PdfService {
 
 
 	public static final Color VERY_LIGHT_GRAY = new DeviceRgb(230, 230, 230);
+	public static final Color GRAY = new DeviceRgb(120, 120, 120);
 	public static final Color VERY_LIGHT_PINK = new DeviceRgb(255, 220, 220);
 	public static final Color DARK_PINK = new DeviceRgb(200, 0, 0);
 
@@ -132,7 +133,7 @@ public class PdfService {
 
 			if (tumeur.getTripleNegative()!=null && tumeur.getTripleNegative()==true) {
 				Paragraph tn = new Paragraph ("Triple negative");
-				tn.setFontColor(Color.GRAY);
+				tn.setFontColor(GRAY);
 				document.add(tn);
 			}	
 
@@ -220,8 +221,8 @@ public class PdfService {
 		String profondeur = phaseInitiale.getProfondeur()==null ? "" : phaseInitiale.getProfondeur();
 		table.addCell("Profondeur : " + profondeur);
 
-		String topographie = tumeur.getChuTopographie()==null ? "" : 
-			tumeur.getChuTopographie().getIdTopographie() + " - " + tumeur.getChuTopographie().getNomFr();
+		String topographie = phaseInitiale.getChuTopographie()==null ? "" : 
+			phaseInitiale.getChuTopographie().getIdTopographie() + " - " + phaseInitiale.getChuTopographie().getNomFr();
 		table.addCell("Topographie : " + topographie);
 
 		String cote = tumeur.getCote()==null ? "" : tumeur.getCote();
@@ -284,6 +285,12 @@ public class PdfService {
 			String locale = rechute.getLocale()==null ? "" : rechute.getLocale()==true ? "oui" : "non";
 			table.addCell("Rechute locale : " + locale);
 
+			String topographie = rechute.getChuTopographie()==null ? "" : 
+				rechute.getChuTopographie().getIdTopographie() + " - " + rechute.getChuTopographie().getNomFr();
+			table.addCell("Topographie : " + topographie);
+
+			String cote = tumeur.getCote()==null ? "" : tumeur.getCote();
+			table.addCell("Côté : " + cote);
 
 
 			// === TNM ==

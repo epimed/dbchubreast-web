@@ -67,9 +67,9 @@ public class ExporterBiomarqueur extends AbstractExporter {
 			table.addToTable(i, "id_tumeur", tumeur.getIdTumeur().toString());
 			table.addToTable(i, "age", tumeur.getAgeDiagnostic() == null ? null : tumeur.getAgeDiagnostic().toString());
 			table.addToTable(i, "id_topographie",
-					tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getIdTopographie());
+					phaseInitiale.getChuTopographie() == null ? null : phaseInitiale.getChuTopographie().getIdTopographie());
 			table.addToTable(i, "topographie",
-					tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getNomFr());
+					phaseInitiale.getChuTopographie() == null ? null : phaseInitiale.getChuTopographie().getNomFr());
 			table.addToTable(i, "cote", tumeur.getCote());
 			table.addToTable(i, "triple_negative",
 					tumeur.getTripleNegative() == null ? null : tumeur.getTripleNegative().toString());

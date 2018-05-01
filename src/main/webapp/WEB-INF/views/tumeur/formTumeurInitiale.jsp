@@ -72,6 +72,35 @@
 					</div>
 				</div>
 			</spring:bind>
+			
+			<!-- IMC au diagnostic -->
+			<div class="form-group">
+				<label class="col-sm-2 control-label">IMC au diagnostic</label>
+
+				<div class="col-sm-1">
+					Poids (kg)
+					<form:input class="form-control" path="poids" type="text" />
+					<form:errors path="poids" class="text-danger" />
+				</div>
+
+				<div class="col-sm-1">
+					Taille (m)
+					<form:input class="form-control" path="taille" type="text" />
+					<form:errors path="taille" class="text-danger" />
+				</div>
+				<div class="col-sm-2">
+					IMC
+					<form:input class="form-control" path="imcDiagnostic" type="text" />
+					<form:errors path="imcDiagnostic" class="text-danger" />
+				</div>
+				<div class="col-sm-6">
+					<span id="helpBlock" class="help-block">On peut saisir soit le poids et la taille, soit l'IMC. 
+					Si le poids et la taille sont renseignés, l'IMC sera calculé automatiquement. 
+					Si l'IMC est renseigné, la poids et la taille seront ignorés.
+					</span>
+				</div>
+			</div>
+
 
 			<!-- Nature de diagnostic -->
 			<spring:bind path="natureDiagnostic">

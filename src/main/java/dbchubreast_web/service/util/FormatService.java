@@ -240,6 +240,20 @@ public class FormatService {
 		return null;
 
 	}
+	
+	/** ====================================================================================== */
+
+	public Double calculateImc(Double taille, Double poids) {
+
+		if (taille!=null && poids!=null) {
+			Double imc = poids / (taille * taille);
+			Double roundedImc = Math.round(imc * 10d) / 10d;
+			return roundedImc;
+		}
+
+		return null;
+
+	}
 
 	/** ====================================================================================== */
 

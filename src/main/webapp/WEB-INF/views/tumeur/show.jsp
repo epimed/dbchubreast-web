@@ -51,11 +51,10 @@
 				<label class="col-sm-2">Age au diagnostic</label>
 				<div class="col-sm-10">${tumeur.ageDiagnostic}</div>
 			</div>
-
+			
 			<div class="row">
-				<label class="col-sm-2">Topographie ICD-O</label>
-				<div class="col-sm-10">${tumeur.chuTopographie.idTopographie}
-					- ${tumeur.chuTopographie.nomFr} ${tumeur.chuTopographie.nomEn}</div>
+				<label class="col-sm-2">IMC au diagnostic</label>
+				<div class="col-sm-10">${tumeur.imcDiagnostic}</div>
 			</div>
 
 			<div class="row">
@@ -111,6 +110,13 @@
 						test="${not empty tumeur.consentement and tumeur.consentement}">oui</c:if>
 					<c:if
 						test="${not empty tumeur.consentement and not tumeur.consentement}">non</c:if>
+				</div>
+			</div>
+			
+			<div class="row">
+				<label class="col-sm-2">Catégorie</label>
+				<div class="col-sm-10">
+					${tumeur.categorie}
 				</div>
 			</div>
 

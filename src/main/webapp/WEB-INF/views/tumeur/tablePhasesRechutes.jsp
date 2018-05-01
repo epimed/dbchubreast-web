@@ -7,6 +7,7 @@
 			<tr class="danger">
 				<th>ID phase rechute</th>
 				<th>Date</th>
+				<th>Topographie ICD-O</th>
 				<th>Locale</th>
 				<th>Métastases</th>
 				<th>Actions</th>
@@ -18,6 +19,10 @@
 			<tr>
 				<td>${phase.idPhase}</td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy" value="${phase.dateDiagnostic}" /></td>
+				
+				<td>${phase.chuTopographie.idTopographie} 
+					<span class="text-info"><small></br>${phase.chuTopographie.nomFr}</small></span>
+				</td>
 				
 				<td>
 					<c:if test="${phase.locale}">oui</c:if>

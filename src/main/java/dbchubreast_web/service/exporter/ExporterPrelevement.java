@@ -75,7 +75,7 @@ public class ExporterPrelevement extends AbstractExporter {
 
 			table.addToTable(i, "id_tumeur", tumeur.getIdTumeur());
 			table.addToTable(i, "id_topographie",
-					tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getIdTopographie());
+					phase.getChuTopographie() == null ? null : phase.getChuTopographie().getIdTopographie());
 			table.addToTable(i, "cote", tumeur.getCote());
 			table.addToTable(i, "age_diagnostic", tumeur.getAgeDiagnostic());
 			table.addToTable(i, "date_evolution",
