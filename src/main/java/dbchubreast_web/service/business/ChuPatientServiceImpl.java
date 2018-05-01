@@ -50,6 +50,12 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	}
 	
 	/** ================================================================= */
+	
+	public List<ChuPatient> findAsList(String idPatient) {
+		return patientDao.findAsList(idPatient);
+	}
+	
+	/** ================================================================= */
 
 	public Long count() {
 		return patientDao.count();

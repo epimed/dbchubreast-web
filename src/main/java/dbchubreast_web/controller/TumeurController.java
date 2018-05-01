@@ -135,7 +135,7 @@ public class TumeurController extends BaseController {
 				redirectAttributes.addFlashAttribute("msg", "La rechute " + idPhase + " a été supprimé !");
 			}	
 			else {
-				redirectAttributes.addFlashAttribute("css", "error");
+				redirectAttributes.addFlashAttribute("css", "danger");
 				redirectAttributes.addFlashAttribute("msg", "La phase de tumeur " + idPhase + " ne peut pas être supprimée");
 			}
 			return "redirect:/tumeur/" + tumeur.getIdTumeur()+"/";

@@ -108,6 +108,16 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 		}
 
 	}
+	
+	/** ================================================= */
+
+	public List<ChuPatient> findAsList(String idPatient) {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			criteria.select(root).where(builder.equal(root.get("idPatient"), idPatient));
+			return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+	}
 
 	/** ================================================= */
 

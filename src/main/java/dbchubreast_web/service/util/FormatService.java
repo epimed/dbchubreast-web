@@ -19,7 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Months;
+import org.joda.time.Years;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -240,7 +242,52 @@ public class FormatService {
 		return null;
 
 	}
+
+	/** ====================================================================================== */
+
+	public Integer getPeriodInYears(Date dateBegin, Date dateEnd) {
+
+		DateTime begin = new DateTime(dateBegin);
+		DateTime end = new DateTime(dateEnd);
+
+		if (begin != null && end != null) {
+			return Years.yearsBetween(begin, end).getYears();
+		}
+
+		return null;
+
+	}
 	
+	/** ====================================================================================== */
+
+	public Integer getPeriodInMonths(Date dateBegin, Date dateEnd) {
+
+		DateTime begin = new DateTime(dateBegin);
+		DateTime end = new DateTime(dateEnd);
+
+		if (begin != null && end != null) {
+			return Months.monthsBetween(begin, end).getMonths();
+		}
+
+		return null;
+
+	}
+	
+	/** ====================================================================================== */
+
+	public Integer getPeriodInDays(Date dateBegin, Date dateEnd) {
+
+		DateTime begin = new DateTime(dateBegin);
+		DateTime end = new DateTime(dateEnd);
+
+		if (begin != null && end != null) {
+			return Days.daysBetween(begin, end).getDays();
+		}
+
+		return null;
+
+	}
+
 	/** ====================================================================================== */
 
 	public Double calculateImc(Double taille, Double poids) {
@@ -256,7 +303,6 @@ public class FormatService {
 	}
 
 	/** ====================================================================================== */
-
 
 	public Date getDerniereDate(Date date1, Date date2) {
 
@@ -281,7 +327,6 @@ public class FormatService {
 
 	}
 
-	
 	/** ====================================================================================== */
 
 }

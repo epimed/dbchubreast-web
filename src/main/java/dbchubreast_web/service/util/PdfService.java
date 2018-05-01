@@ -2,6 +2,7 @@ package dbchubreast_web.service.util;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
@@ -87,7 +89,7 @@ public class PdfService {
 	 * @param version : "confidentielle" ou "publique" 
 	 */
 
-	public void createPdf(List<String> listIdPatients, Document document, String version) {
+	public void createPdf(List<String> listIdPatients, Document document, Map<String, List<String>> mapMessages, String version) {
 
 		for (int i=0; i<listIdPatients.size(); i++) {
 
@@ -99,6 +101,11 @@ public class PdfService {
 				// === Identification du patient ===
 				this.addIdPatient(patient, document, version);
 
+				// === Messages de coherence de donnees ===
+				if (mapMessages!=null) {
+					this.addConsistencyMessages(mapMessages.get(patient.getIdPatient()), document);
+				}
+				
 				// === Tumeurs ===
 				this.addTumeurs(patient, document, version);
 
@@ -115,6 +122,45 @@ public class PdfService {
 
 	}
 
+	/** ====================================================================================== */
+
+	public void addConsistencyMessages (List<String> messages, Document document) {
+
+		if (messages!=null && !messages.isEmpty()) {
+
+			this.addEmptyLines(document, 1);
+
+			Table table = new Table(new float[] {1});
+			table.setWidthPercent(100);
+			Cell cell = new Cell();
+
+			Paragraph p = new Paragraph("Vérification de données :");
+			p.setFontColor(DARK_PINK);
+			p.setBold();
+			cell.add(p);
+			cell.add(new Paragraph(""));
+
+			String content = "";
+			for (int i=0; i<messages.size(); i++) {
+				String message = messages.get(i);
+				content = content + "- " + message;
+				if (i<messages.size()-1) {
+					content = content + "\n";
+				}
+			}
+			Paragraph mp = new Paragraph(content);
+			mp.setFontColor(DARK_PINK);
+			cell.add(mp);
+
+			cell.setBackgroundColor(VERY_LIGHT_PINK);
+			cell.setBorder(new SolidBorder(DARK_PINK, 1.0f));
+			table.addCell(cell);
+			document.add(table);
+		}
+
+	}
+
+	
 	/** ====================================================================================== */
 
 	public void addTumeurs(ChuPatient patient, Document document, String version) {

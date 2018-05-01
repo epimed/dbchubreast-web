@@ -31,7 +31,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+
+import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.service.business.AppLogService;
+import dbchubreast_web.service.business.ChuPatientService;
+import dbchubreast_web.service.consistency.ConsistencyService;
 import dbchubreast_web.service.exporter.ExporterBiomarqueur;
 import dbchubreast_web.service.exporter.ExporterPatient;
 import dbchubreast_web.service.exporter.ExporterPrelevement;
@@ -60,6 +64,11 @@ public class DownloadController extends BaseController {
 	@Autowired
 	private AppLogService logService;
 
+	@Autowired
+	private ConsistencyService consistencyService;
+	
+	@Autowired
+	private ChuPatientService patientService;
 
 	/** ====================================================================================== */
 
@@ -111,7 +120,13 @@ public class DownloadController extends BaseController {
 		
 		List<String> listIdPatients = new ArrayList<String>();
 		listIdPatients.add(idPatient);
-		pdfService.createPdf(listIdPatients, document, "confidentielle");
+		
+		List<ChuPatient> listPatients = patientService.findAsList(idPatient);
+		
+		consistencyService.clearMessages();
+		consistencyService.checkConsistency(listPatients);
+		
+		pdfService.createPdf(listIdPatients, document, consistencyService.getMapMessages(), "confidentielle");
 		// pdfService.createPdf(listIdPatients, document, "publique");
 		document.close();
 		response.flushBuffer();

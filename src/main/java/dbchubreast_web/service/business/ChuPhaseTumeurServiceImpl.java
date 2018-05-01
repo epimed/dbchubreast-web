@@ -103,7 +103,13 @@ public class ChuPhaseTumeurServiceImpl extends BaseService implements ChuPhaseTu
 	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur) {
 		return phaseTumeurDao.findFirstRelapse(idTumeur);
 	}
+	
+	/** =================================================================== */
 
+	public List<ChuPhaseTumeur> findRelapses(Integer idTumeur) {
+		return phaseTumeurDao.findRelapses(idTumeur);
+	}
+	
 	/** =================================================================== */
 
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement) {

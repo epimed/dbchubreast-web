@@ -24,6 +24,7 @@ public interface ChuPatientDao {
 	public String getLastIdPatient();
 	public Long count();
 	public ChuPatient find(String idPatient);
+	public List<ChuPatient> findAsList(String idPatient);
 	public ChuPatient find(Integer idTumeur);
 	public ChuPatient findByIdPrelevement(Integer idPrelevement);
 	public ChuPatient findByIdTraitement(Integer idTraitement);

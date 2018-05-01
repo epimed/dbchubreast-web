@@ -26,6 +26,8 @@ public interface ChuPhaseTumeurDao {
 
 	public ChuPhaseTumeur findFirstRelapse(Integer idTumeur);
 
+	public List<ChuPhaseTumeur> findRelapses(Integer idTumeur);
+	
 	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur);
 
 	public ChuPhaseTumeur findByIdPrelevementWithDependencies(Integer idPrelevement);

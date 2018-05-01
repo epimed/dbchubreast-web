@@ -38,7 +38,7 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 	@Autowired
 	private ChuTumeurDao tumeurDao;
-	
+
 	@Autowired
 	private ChuPatientService patientService;
 
@@ -50,7 +50,7 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 	@Autowired 
 	private ChuTraitementService traitementService;
-	
+
 	@Autowired 
 	private FormatService formatService;
 
@@ -84,18 +84,23 @@ public class UpdaterSurvival extends AbstractUpdater {
 			// Si la date de la derniere nouvelle n'est pas remplie
 			// on prend soit la date de deces, soit le dernier prelevement/traitement, soit la date de rechute.
 			// La date de la derniere nouvelle est calculee a la volee a chaque fois, elle n'est pas sauvegardee dans la base.
-			
+
 			if (dateDeces!=null) {
 				dateEvolution = dateDeces;
 			}
 			else {
 				ChuPrelevement dernierPrelevement = prelevementService.findDernierPrelevement(tumeur.getIdTumeur());
 				ChuTraitement dernierTraitement  = traitementService.findDernierTraitement(tumeur.getIdTumeur());
-				dateEvolution = formatService.getDerniereDate(dateEvolution, dernierPrelevement.getDatePrelevement());
-				dateEvolution = formatService.getDerniereDate(dateEvolution, dernierTraitement.getDateDebut());
+				if (dernierPrelevement!=null) {
+					dateEvolution = formatService.getDerniereDate(dateEvolution, dernierPrelevement.getDatePrelevement());
+				}
+				if (dernierTraitement!=null) {
+					dateEvolution = formatService.getDerniereDate(dateEvolution, dernierTraitement.getDateDebut());
+					dateEvolution = formatService.getDerniereDate(dateEvolution, dernierTraitement.getDateFin());
+				}
 				dateEvolution = formatService.getDerniereDate(dateEvolution, dateRechute);
 			}
-			
+
 
 			// === Survie ===
 
@@ -169,7 +174,7 @@ public class UpdaterSurvival extends AbstractUpdater {
 		return survival;
 	}
 
-	
+
 	/** ================================================================================= */
 
 }

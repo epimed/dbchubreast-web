@@ -208,6 +208,31 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 
 	}
 
+
+	/** ================================================= */
+
+	public List<ChuPhaseTumeur> findRelapses(Integer idTumeur) {
+
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPhaseTumeur> criteria = builder.createQuery(ChuPhaseTumeur.class);
+		Root<ChuPhaseTumeur> root = criteria.from(ChuPhaseTumeur.class);
+		Join<ChuPhaseTumeur, ChuTumeur> tumeur = root.join("chuTumeur");
+		Join<ChuPhaseTumeur, ChuTypePhase> typePhase = root.join("chuTypePhase");
+
+		criteria.select(root)
+		.where(
+				builder.and(
+						builder.equal(tumeur.get("idTumeur"), idTumeur),
+						builder.equal(typePhase.get("idTypePhase"), 2)
+						));
+		criteria.orderBy(builder.asc(root.get("dateDiagnostic")));
+
+		List<ChuPhaseTumeur> list = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(list);	
+		return list;
+	}
+
+
 	/** ================================================= */
 
 	public ChuPhaseTumeur findPhaseInitiale(Integer idTumeur) {

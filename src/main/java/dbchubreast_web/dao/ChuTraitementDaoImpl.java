@@ -126,6 +126,8 @@ public class ChuTraitementDaoImpl extends BaseDao implements ChuTraitementDao {
 		return list;
 	}
 
+	/** ================================================= */
+	
 	public ChuTraitement findDernierTraitement(Integer idTumeur) {
 		try {
 			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
