@@ -55,6 +55,21 @@
 					</div>
 				</div>
 			</spring:bind>
+			
+			<!-- Topographie ICD-O -->
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Topographie ICD-O</label>
+				<div class="col-sm-10">
+					<form:select class="form-control" path="idTopographie">
+						<form:option value="" label="--- Sélectionner ---" />
+						<c:forEach var="topo" items="${listTopographies}">
+							<form:option value="${topo.idTopographie}"
+								label="${topo.idTopographie} - ${topo.nomFr}" />
+						</c:forEach>
+					</form:select>
+					<form:errors path="idTopographie" class="control-label" />
+				</div>
+			</div>
 
 			<!-- cTNM -->
 			<div class="form-group">

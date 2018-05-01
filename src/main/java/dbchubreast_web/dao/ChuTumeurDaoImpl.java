@@ -237,7 +237,6 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	private void populateDependencies(ChuTumeur tumeur) {
 		if (tumeur != null) {
 			Hibernate.initialize(tumeur.getChuEvolution());
-			Hibernate.initialize(tumeur.getChuTopographie());
 			Hibernate.initialize(tumeur.getChuPatient());
 		}
 	}

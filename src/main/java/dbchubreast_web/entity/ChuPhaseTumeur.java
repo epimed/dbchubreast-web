@@ -44,6 +44,7 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 	private Boolean metastases;
 	private Boolean nodules;
 	private String remarque;
+	private ChuTopographie chuTopographie;
 	private List<ChuTnm> chuTnms = new ArrayList<ChuTnm>(0);
 	private List<ChuPrelevement> chuPrelevements = new ArrayList<ChuPrelevement>(0);
 	private List<ChuTraitement> chuTraitements = new ArrayList<ChuTraitement>(0);
@@ -198,6 +199,16 @@ public class ChuPhaseTumeur implements java.io.Serializable {
 		this.remarque = remarque;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_topographie")
+	public ChuTopographie getChuTopographie() {
+		return this.chuTopographie;
+	}
+
+	public void setChuTopographie(ChuTopographie chuTopographie) {
+		this.chuTopographie = chuTopographie;
+	}
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPhaseTumeur")
 	@OrderBy("type DESC")
 	public List<ChuTnm> getChuTnms() {

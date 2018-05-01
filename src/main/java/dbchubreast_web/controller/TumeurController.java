@@ -330,8 +330,15 @@ public class TumeurController extends BaseController {
 		ChuTumeur tumeur = tumeurService.find(idTumeur);
 
 		if (tumeur != null) {
+			
 			FormPhaseRechute formPhaseRechute = new FormPhaseRechute(patient.getIdPatient(), tumeur.getIdTumeur());
 
+			// === Pre-remplir la topographie si elle est connue pour la phase initiale ===
+			ChuPhaseTumeur phaseInitiale = phaseTumeurService.findPhaseInitiale(tumeur.getIdTumeur());
+			if (phaseInitiale!=null && phaseInitiale.getChuTopographie()!=null) {
+				formPhaseRechute.setIdTopographie(phaseInitiale.getChuTopographie().getIdTopographie());
+			}
+			
 			model.addAttribute("formPhaseRechute", formPhaseRechute);
 			model.addAttribute("tumeur", tumeur);
 

@@ -60,14 +60,14 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 		if (form.getDateDiagnostic() != null && form.getAgeDiagnostic() != null && patient.getDateNaissance() != null) {
 			Date dateNaissance = patient.getDateNaissance();
 			Double calculatedAge = formatService.calculateAge(dateNaissance, form.getDateDiagnostic());
-			
+
 			logger.debug("Calculated age " + calculatedAge);
 			logger.debug("Form age " + form.getAgeDiagnostic());
-			
+
 			if (calculatedAge != null && Math.abs(calculatedAge - form.getAgeDiagnostic()) > 1) {
 				String message = "L'age saisi " + form.getAgeDiagnostic()
-						+ " ne correspond pas aux dates de naissance et du diagnostic. L'age calculé pour ces dates est "
-						+ calculatedAge + ".";
+				+ " ne correspond pas aux dates de naissance et du diagnostic. L'age calculé pour ces dates est "
+				+ calculatedAge + ".";
 				errors.rejectValue("ageDiagnostic", "Consistency.formTumeurInitiale.ageDiagnostic", message);
 			}
 		}
@@ -98,6 +98,52 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 				String message = "La date de la dernière nouvelle ne peut pas être antérieure à la date du diagnostic !";
 				errors.rejectValue("dateEvolution", "Consistency.formTumeurInitiale.dateEvolution", message);
 			}
+		}
+
+		// === IMC : taille  > 3 m ===
+
+		if (form.getTaille()!=null && form.getTaille()>3.0) {
+			String message = "Vérifiez la valeur. Peut être " + form.getTaille()/100 + " ?";
+			errors.rejectValue("taille", "Consistency.formTumeurInitiale.taille", message);
+		}
+
+		// === IMC : taille  < 0 m ===
+
+		if (form.getTaille()!=null && form.getTaille()<0.0) {
+			String message = "La taille ne peut pas être négative !";
+			errors.rejectValue("taille", "Consistency.formTumeurInitiale.taille", message);
+		}
+
+		// === IMC : poids  > 0, < 500 ===
+
+		if (form.getPoids()!=null && (form.getPoids()<0.0 || form.getPoids()>500.0)) {
+			String message = "Vérifiez la valeur.";
+			errors.rejectValue("poids", "Consistency.formTumeurInitiale.poids", message);
+		}
+
+
+		// === IMC : poids et taille doivent etre saisis ensemble ===
+
+		if (form.getImcDiagnostic()==null) {
+
+			if (form.getTaille()!=null && form.getPoids()==null) {
+				String message = "Poids ?";
+				errors.rejectValue("poids", "Consistency.formTumeurInitiale.poids", message);
+			}
+
+			if (form.getTaille()==null && form.getPoids()!=null) {
+				String message = "Taille ?";
+				errors.rejectValue("taille", "Consistency.formTumeurInitiale.taille", message);
+			}
+
+		}
+		
+		
+		// === IMC ===
+
+		if (form.getImcDiagnostic()!=null && form.getImcDiagnostic()<0.0) {
+			String message = "IMC ne peut pas être négatif";
+			errors.rejectValue("imcDiagnostic", "Consistency.formTumeurInitiale.imcDiagnostic", message);
 		}
 
 	}

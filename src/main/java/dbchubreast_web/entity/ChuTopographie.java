@@ -1,15 +1,12 @@
 package dbchubreast_web.entity;
 // Generated 19 d�c. 2016 13:44:40 by Hibernate Tools 4.3.1.Final
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,7 +24,6 @@ public class ChuTopographie implements java.io.Serializable {
 	private ChuGroupeTopographie chuGroupeTopographie;
 	private String nomFr;
 	private String nomEn;
-	private List<ChuTumeur> chuTumeurs = new ArrayList<ChuTumeur>(0);
 
 	public ChuTopographie() {
 	}
@@ -36,13 +32,11 @@ public class ChuTopographie implements java.io.Serializable {
 		this.idTopographie = idTopographie;
 	}
 
-	public ChuTopographie(String idTopographie, ChuGroupeTopographie chuGroupeTopographie, String nomFr, String nomEn,
-			List<ChuTumeur> chuTumeurs) {
+	public ChuTopographie(String idTopographie, ChuGroupeTopographie chuGroupeTopographie, String nomFr, String nomEn) {
 		this.idTopographie = idTopographie;
 		this.chuGroupeTopographie = chuGroupeTopographie;
 		this.nomFr = nomFr;
 		this.nomEn = nomEn;
-		this.chuTumeurs = chuTumeurs;
 	}
 
 	@Id
@@ -82,15 +76,6 @@ public class ChuTopographie implements java.io.Serializable {
 
 	public void setNomEn(String nomEn) {
 		this.nomEn = nomEn;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuTopographie")
-	public List<ChuTumeur> getChuTumeurs() {
-		return this.chuTumeurs;
-	}
-
-	public void setChuTumeurs(List<ChuTumeur> chuTumeurs) {
-		this.chuTumeurs = chuTumeurs;
 	}
 
 	@Override

@@ -275,6 +275,7 @@ public class ChuPhaseTumeurDaoImpl extends BaseDao implements ChuPhaseTumeurDao 
 
 	private void populateDependencies(ChuPhaseTumeur phase) {
 		if (phase != null) {
+			Hibernate.initialize(phase.getChuTopographie());
 			Hibernate.initialize(phase.getChuMetastases());
 			Hibernate.initialize(phase.getChuTnms());
 			Hibernate.initialize(phase.getChuTypePhase());

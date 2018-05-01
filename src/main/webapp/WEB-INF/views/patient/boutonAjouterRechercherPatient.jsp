@@ -5,7 +5,7 @@
 		un patient</button>
 		
 
-		<form:form class="form-inline pull-right" method="POST" commandName="form"
+		<form:form class="form-inline pull-right" method="POST" modelAttribute="form"
 			action="patient">
 			
 			<div class="form-group">

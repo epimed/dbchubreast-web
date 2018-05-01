@@ -23,7 +23,6 @@
 	<logger name="org.hibernate" level="warn" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-
 	<logger name="dbchubreast_web" level="warn" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>

@@ -123,11 +123,17 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		} else {
 			tumeur.setAgeDiagnostic(form.getAgeDiagnostic());
 		}
+		
+		// IMC diagnostic
+		
+		if (form.getImcDiagnostic()!=null) {
+			tumeur.setImcDiagnostic(form.getImcDiagnostic());
+		}
+		else {
+			tumeur.setImcDiagnostic(formatService.calculateImc(form.getTaille(), form.getPoids()));
+		}
 
 		tumeur.setCote(form.getCote());
-
-		ChuTopographie topographie = topographieDao.find(form.getIdTopographie());
-		tumeur.setChuTopographie(topographie);
 
 		tumeur.setDateEvolution(form.getDateEvolution());
 		ChuEvolution evolution = evolutionDao.find(form.getIdEvolution());
@@ -139,6 +145,9 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		phaseTumeur.setNatureDiagnostic(form.getNatureDiagnostic());
 		phaseTumeur.setProfondeur(form.getProfondeur());
 
+		ChuTopographie topographie = topographieDao.find(form.getIdTopographie());
+		phaseTumeur.setChuTopographie(topographie);
+		
 		// === Type phase ===
 
 		ChuTypePhase typePhase = typePhaseDao.find(form.getIdTypePhase());
@@ -240,8 +249,8 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		formTumeurInitiale.setIdTumeur(tumeur.getIdTumeur());
 		formTumeurInitiale.setDateDiagnostic(tumeur.getDateDiagnostic());
 		formTumeurInitiale.setAgeDiagnostic(tumeur.getAgeDiagnostic());
-		formTumeurInitiale.setIdTopographie(
-				tumeur.getChuTopographie() == null ? null : tumeur.getChuTopographie().getIdTopographie());
+		formTumeurInitiale.setImcDiagnostic(tumeur.getImcDiagnostic());
+		
 		formTumeurInitiale.setCote(tumeur.getCote());
 		formTumeurInitiale.setConsentement(tumeur.getConsentement());
 
@@ -260,6 +269,9 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		formTumeurInitiale.setNatureDiagnostic(phase.getNatureDiagnostic());
 		formTumeurInitiale.setProfondeur(phase.getProfondeur());
 
+		formTumeurInitiale.setIdTopographie(
+				phase.getChuTopographie() == null ? null : phase.getChuTopographie().getIdTopographie());
+		
 		// === cTNM ===
 
 		ChuTnm cTnm = tnmDao.find(phase.getIdPhase(), "c");
@@ -313,6 +325,8 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		if (phase.getChuPerformanceStatus()!=null) {
 			form.setIdPs(phase.getChuPerformanceStatus().getIdPs());
 		}
+		
+		form.setIdTopographie(phase.getChuTopographie() == null ? null : phase.getChuTopographie().getIdTopographie());
 
 
 		// === cTNM ===
@@ -376,7 +390,10 @@ public class FormPhaseTumeurServiceImpl extends BaseService implements FormPhase
 		phaseTumeur.setDateDiagnostic(form.getDateDiagnostic());
 		phaseTumeur.setLocale(form.getLocale());
 		phaseTumeur.setRemarque(form.getRemarque());
-
+		
+		ChuTopographie topographie = topographieDao.find(form.getIdTopographie());
+		phaseTumeur.setChuTopographie(topographie);
+		
 		// === Performance status ===
 
 		phaseTumeur.setChuPerformanceStatus(performanceStatusDao.find(form.getIdPs()));
