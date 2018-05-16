@@ -1,14 +1,17 @@
 package dbchubreast_web.entity;
 // Generated 25 janv. 2017 10:58:08 by Hibernate Tools 4.3.5.Final
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -43,10 +46,15 @@ public class ChuPatient implements java.io.Serializable {
 	private Integer scoreCharlsonCumule;
 	private String statutBrca;
 	private Date dateDeces;
-	private String causeDeces;
+	private String causeDeces; // old, to replace with ChuCauseDeces
+	private ChuCauseDeces chuCauseDeces;
+	private Date dateEvolution; // copy from tumeur.dateEvolution
+	private String remarque;
+	
 	private List<ChuAntecedentGeneral> chuAntecedentGenerals = new ArrayList<ChuAntecedentGeneral>(0);
 	private List<ChuAdresse> chuAdresses = new ArrayList<ChuAdresse>(0);
 	private List<ChuTumeur> chuTumeurs = new ArrayList<ChuTumeur>(0);
+	private List<ChuTumeur> chuTumeursCauseDeces = new ArrayList<ChuTumeur>(0);
 
 	public ChuPatient() {
 	}
@@ -55,10 +63,12 @@ public class ChuPatient implements java.io.Serializable {
 		this.idPatient = idPatient;
 	}
 
+
 	public ChuPatient(String idPatient, ChuAntecedentGyneco chuAntecedentGyneco, ChuModeVie chuModeVie,
 			ChuProfession chuProfession, ChuStatutMarital chuStatutMarital, String tk, String rcp, String nom,
 			String prenom, String nomNaissance, Date dateNaissance, String sexe, Double imc20Ans,
-			Integer scoreCharlsonCumule, String statutBrca, Date dateDeces, String causeDeces, 
+			Integer scoreCharlsonCumule, String statutBrca, Date dateDeces, String causeDeces,
+			dbchubreast_web.entity.ChuCauseDeces chuCauseDeces, Date dateEvolution, String remarque,
 			List<ChuAntecedentGeneral> chuAntecedentGenerals, List<ChuAdresse> chuAdresses,
 			List<ChuTumeur> chuTumeurs) {
 		super();
@@ -79,6 +89,9 @@ public class ChuPatient implements java.io.Serializable {
 		this.statutBrca = statutBrca;
 		this.dateDeces = dateDeces;
 		this.causeDeces = causeDeces;
+		this.chuCauseDeces = chuCauseDeces;
+		this.dateEvolution = dateEvolution;
+		this.remarque = remarque;
 		this.chuAntecedentGenerals = chuAntecedentGenerals;
 		this.chuAdresses = chuAdresses;
 		this.chuTumeurs = chuTumeurs;
@@ -244,6 +257,36 @@ public class ChuPatient implements java.io.Serializable {
 	public void setCauseDeces(String causeDeces) {
 		this.causeDeces = causeDeces;
 	}
+		
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_cause_deces")
+	public ChuCauseDeces getChuCauseDeces() {
+		return this.chuCauseDeces;
+	}
+
+	public void setChuCauseDeces(ChuCauseDeces chuCauseDeces) {
+		this.chuCauseDeces = chuCauseDeces;
+	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "date_evolution", length = 13)
+	public Date getDateEvolution() {
+		return this.dateEvolution;
+	}
+
+	public void setDateEvolution(Date dateEvolution) {
+		this.dateEvolution = dateEvolution;
+	}
+
+	@Column(name = "remarque")
+	public String getRemarque() {
+		return this.remarque;
+	}
+
+	public void setRemarque(String remarque) {
+		this.remarque = remarque;
+	}
+
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPatient")
 	public List<ChuAntecedentGeneral> getChuAntecedentGenerals() {
@@ -271,7 +314,21 @@ public class ChuPatient implements java.io.Serializable {
 	public void setChuTumeurs(List<ChuTumeur> chuTumeurs) {
 		this.chuTumeurs = chuTumeurs;
 	}
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "chu_tumeur_deces", joinColumns = {
+			@JoinColumn(name = "id_patient", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "id_tumeur", nullable = false, updatable = false) })
+	public List<ChuTumeur> getChuTumeursCauseDeces() {
+		return this.chuTumeursCauseDeces;
+	}
 
+	public void setChuTumeursCauseDeces(List<ChuTumeur> chuTumeursCauseDeces) {
+		this.chuTumeursCauseDeces = chuTumeursCauseDeces;
+	}
+
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
