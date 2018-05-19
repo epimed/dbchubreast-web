@@ -13,6 +13,7 @@
  */
 package dbchubreast_web.service.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -35,6 +36,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
@@ -167,9 +169,11 @@ public class FileService {
 		return data;
 	}
 
+
+
 	/** ================================================================================= */
 
-	public String[] extractColumnCsv(Integer columnIndex, List<Object> data) {
+	public List<String> extractColumnCsv(Integer columnIndex, List<Object> data) {
 
 		List<String> column = new ArrayList<String>();
 		for (int i = 0; i < data.size(); i++) {
@@ -178,10 +182,10 @@ public class FileService {
 				column.add(line[columnIndex].trim());
 			}
 		}
-		String[] array = new String[column.size()];
 
-		return column.toArray(array);
+		return column;
 	}
+
 
 	/** ================================================================================= */
 
@@ -348,6 +352,81 @@ public class FileService {
 			logger.debug("XLS error");
 			e.printStackTrace();
 		}
+	}
+
+	/** ====================================================================== */
+
+	public List<String> getCsvHeader (File file, String separator) throws IOException  {
+		List<String> header = new ArrayList<String>();
+		CSVReader reader = new CSVReader(new FileReader(file), separator.toCharArray()[0]);
+		header.addAll(Arrays.asList(reader.readNext()));		
+		reader.close();
+		return header;
+	}
+
+	/** ======================================================================== */
+
+
+	public List<Object> getCsvData (File file, String separator) throws IOException  {
+
+		List<Object> data = new ArrayList<Object>();
+
+		CSVReader reader = new CSVReader(new FileReader(file), separator.toCharArray()[0]);
+
+		// === Skip Header ===
+		reader.readNext();
+
+		// === Load data ===
+		String [] nextLine;
+		while ((nextLine = reader.readNext()) != null) {
+			data.add(nextLine);
+		}
+		reader.close();
+		return data;
+	}
+
+	/** ================================================================================== */
+
+	public List<String> readFile (File file) {
+
+		List<String> result = new ArrayList<String>();
+
+		try {	
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line = br.readLine();
+			while (line != null) {
+				result.add(line.trim());
+				line = br.readLine();
+			}
+			br.close();
+
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+
+	}
+
+
+	/** ================================================================================= */
+
+	public String guessSeparator (File file) throws Exception {
+
+		String [] separators = {";", ","};
+		List<String> list = readFile(file);
+		String sep = separators[0];
+		int maxNb = 0;
+
+		for (String separator : separators) {
+			int nb = StringUtils.countOccurrencesOf(list.get(0), separator);
+			if (nb>maxNb) {
+				sep = separator;
+			}
+		}
+
+		return sep;
 	}
 
 	/** ================================================================================= */

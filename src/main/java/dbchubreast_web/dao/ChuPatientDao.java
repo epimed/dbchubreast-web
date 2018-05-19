@@ -22,6 +22,7 @@ public interface ChuPatientDao {
 
 	public List<ChuPatient> list();
 	public String getLastIdPatient();
+	public List<String> findAllIdPatients();
 	public Long count();
 	public ChuPatient find(String idPatient);
 	public List<ChuPatient> findAsList(String idPatient);

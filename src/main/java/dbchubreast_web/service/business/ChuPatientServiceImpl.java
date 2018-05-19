@@ -56,6 +56,12 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	}
 	
 	/** ================================================================= */
+	
+	public List<String> findAllIdPatients() {
+		return patientDao.findAllIdPatients();
+	}
+	
+	/** ================================================================= */
 
 	public Long count() {
 		return patientDao.count();

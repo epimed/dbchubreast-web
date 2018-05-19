@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -41,7 +41,7 @@ import dbchubreast_web.interceptor.LogInterceptor;
 @EnableWebMvc // <mvc:annotation-driven />
 @Configuration
 @ComponentScan({ "dbchubreast_web" })
-public class AppConfig extends WebMvcConfigurerAdapter {
+public class AppConfig implements WebMvcConfigurer {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
 
@@ -61,8 +61,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	// === Enable file uploading ===
-	@Bean(name = "multipartResolver")
-	public CommonsMultipartResolver multiPartResolver() {
+
+	@Bean(name = "filterMultipartResolver")
+	public CommonsMultipartResolver filterMultipartResolver(){
 		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
 		resolver.setDefaultEncoding(DEFAULT_ENCODING);
 		resolver.setMaxUploadSize(100000000);
