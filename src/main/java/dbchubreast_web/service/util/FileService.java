@@ -37,9 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 
 @Service
 public class FileService {
@@ -113,64 +115,7 @@ public class FileService {
 		return fileName;
 	}
 
-	/** ================================================================================= */
-
-	public File convertToFile(MultipartFile multipartFile) throws Exception {
-
-		String originalFileName = multipartFile.getOriginalFilename();
-
-		// String processedFileName = dateFormat.format(new Date()) + "_" +
-		// flattenToAscii(originalFileName).toLowerCase().replaceAll("[\\p{Space}]","_");
-
-		File file = new File(originalFileName);
-
-		if (file.exists()) {
-			file.delete();
-		}
-		multipartFile.transferTo(file);
-
-		/*
-		 * String path = request.getServletContext().getRealPath("/");
-		 * logger.debug("Context path {}" , path);
-		 * logger.debug("File saved to {}", file.getAbsolutePath());
-		 */
-
-		return file;
-	}
-
-	/** ================================================================================= */
-
-	public List<String> getCsvHeader(File file) throws IOException {
-
-		List<String> header = new ArrayList<String>();
-		CSVReader reader = new CSVReader(new FileReader(file), columnSeparator.toCharArray()[0]);
-		header.addAll(Arrays.asList(reader.readNext()));
-		reader.close();
-		return header;
-	}
-
-	/** ================================================================================= */
-
-	public List<Object> getCsvData(File file) throws IOException {
-
-		List<Object> data = new ArrayList<Object>();
-
-		CSVReader reader = new CSVReader(new FileReader(file), columnSeparator.toCharArray()[0]);
-
-		// === Skip Header ===
-		reader.readNext();
-
-		// === Load data ===
-		String[] nextLine;
-		while ((nextLine = reader.readNext()) != null) {
-			data.add(nextLine);
-		}
-		reader.close();
-		return data;
-	}
-
-
-
+	
 	/** ================================================================================= */
 
 	public List<String> extractColumnCsv(Integer columnIndex, List<Object> data) {
@@ -355,14 +300,24 @@ public class FileService {
 	}
 
 	/** ====================================================================== */
-
+	
 	public List<String> getCsvHeader (File file, String separator) throws IOException  {
+
+		
+		CSVParser parser = new CSVParserBuilder()
+				.withSeparator(separator.toCharArray()[0])
+				.withIgnoreQuotations(true)
+				.build();
+				
+		CSVReader reader = new CSVReaderBuilder(new FileReader(file)).withCSVParser(parser).build();
+		
 		List<String> header = new ArrayList<String>();
-		CSVReader reader = new CSVReader(new FileReader(file), separator.toCharArray()[0]);
 		header.addAll(Arrays.asList(reader.readNext()));		
 		reader.close();
 		return header;
 	}
+	
+	
 
 	/** ======================================================================== */
 
@@ -371,10 +326,17 @@ public class FileService {
 
 		List<Object> data = new ArrayList<Object>();
 
-		CSVReader reader = new CSVReader(new FileReader(file), separator.toCharArray()[0]);
 
-		// === Skip Header ===
-		reader.readNext();
+		CSVParser parser = new CSVParserBuilder()
+				.withSeparator(separator.toCharArray()[0])
+				.withIgnoreQuotations(true)
+				.build();
+				
+		CSVReader reader = new CSVReaderBuilder(new FileReader(file))
+				.withCSVParser(parser)
+				.withSkipLines(1) // skip header
+				.build();
+
 
 		// === Load data ===
 		String [] nextLine;

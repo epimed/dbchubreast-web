@@ -130,8 +130,11 @@ public class FormUploadValidator extends BaseService implements Validator {
 
 	public void checkFileHeader(FormUpload formUpload, Errors errors, FileService fileService) throws FileUploadException, Exception {
 
-		this.file = fileService.convertToFile(formUpload.getFile());
-
+		if (this.file==null) {
+			errors.rejectValue("file", "error.convert", "Le fichier ne peut pas être lu.");
+			throw new FileUploadException();
+		}
+		
 		// === Define separator ===
 
 		String sep = fileService.guessSeparator(file);
@@ -139,9 +142,10 @@ public class FormUploadValidator extends BaseService implements Validator {
 			this.separator = sep;
 		}
 
-
 		this.header = fileService.getCsvHeader(file, this.separator);
 
+		logger.debug("Header {}", header);
+		
 		if (header==null) {
 			errors.rejectValue("file", "error.empty", "Le fichier semble être vide. Vérifiez le contenu et les séparateurs de colonnes.");
 			throw new FileUploadException();
@@ -191,6 +195,12 @@ public class FormUploadValidator extends BaseService implements Validator {
 	public File getFile() {
 		return file;
 	}
+	
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
 
 	public List<Object> getData() {
 		return data;

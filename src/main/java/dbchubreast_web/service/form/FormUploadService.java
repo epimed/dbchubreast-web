@@ -13,6 +13,7 @@
  */
 package dbchubreast_web.service.form;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import dbchubreast_web.form.FormUpload;
 
 public interface FormUploadService {
-	public void saveFileOnDisk(FormUpload formUpload, HttpServletRequest request) throws Exception;
+	public File saveFileOnDisk(FormUpload formUpload, HttpServletRequest request) throws Exception;
 	public void saveOrUpdate(List<String> header, List<Object> data);
 }

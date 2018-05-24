@@ -46,6 +46,7 @@ public class FormUploadServiceImpl implements FormUploadService {
 		List<String> excludeColumns = new ArrayList<String>();
 		excludeColumns.add("id_patient");
 		excludeColumns.add("nom");
+		excludeColumns.add("nom_naissance");
 		excludeColumns.add("prenom");
 		excludeColumns.add("date_naissance");
 
@@ -71,6 +72,7 @@ public class FormUploadServiceImpl implements FormUploadService {
 		// === Create parameters and map to header ===
 
 		for (String itemHeader: header) {
+
 			if (itemHeader!=null && !excludeColumns.contains(itemHeader)) {
 				ChuParameter parameter = parameterService.find(itemHeader);
 				if (parameter==null) {
@@ -133,7 +135,7 @@ public class FormUploadServiceImpl implements FormUploadService {
 
 	/** ========================================================================================================= */
 
-	public void saveFileOnDisk(FormUpload formUpload, HttpServletRequest request)  throws Exception {
+	public File saveFileOnDisk(FormUpload formUpload, HttpServletRequest request)  throws Exception {		
 		if (formUpload!=null && formUpload.getFile()!=null) {
 
 			// String uploadPathString = "E:\\WORK\\ECLIPSE_WORKSPACE\\dbchubreast-web\\src\\main\\webapp\\resources\\uploads\\";
@@ -151,8 +153,11 @@ public class FormUploadServiceImpl implements FormUploadService {
 			String filePath = uploadPath + File.separator + filenameDateFormat.format(new Date()) + "_PROBREAST_clinical_supplement.csv";
 			File dest = new File(filePath);
 			formUpload.getFile().transferTo(dest);
-			// logger.debug("FILE {}", dest.getAbsolutePath());
+			
+			return dest;
+			
 		}
+		return null;
 	}
 
 	/** ========================================================================================================= */

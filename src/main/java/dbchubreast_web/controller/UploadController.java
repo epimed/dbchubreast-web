@@ -13,6 +13,7 @@
  */
 package dbchubreast_web.controller;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +61,8 @@ public class UploadController extends BaseController {
 			) throws Exception {
 
 		
-		formUploadService.saveFileOnDisk(formUpload, request);
+		File file = formUploadService.saveFileOnDisk(formUpload, request);
+		formUploadValidator.setFile(file);
 		formUploadValidator.validate(formUpload, result);
 
 		if (!result.hasErrors()) {
@@ -68,7 +70,7 @@ public class UploadController extends BaseController {
 			List<Object> data = formUploadValidator.getData();
 			formUploadService.saveOrUpdate(normalizedHeader, data);
 			
-			model.addAttribute("message", "Les colonnes suivantes ont été importées avec succès : " + normalizedHeader);
+			model.addAttribute("message", "Le fichier " + formUpload.getFile().getOriginalFilename() + " a été importé avec succes !");
 			model.addAttribute("success", true);
 			
 			return "upload/result";

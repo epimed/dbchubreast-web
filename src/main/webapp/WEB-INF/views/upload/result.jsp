@@ -21,8 +21,7 @@
 	<%@ include file="../inc/dismissibleAlert.jsp"%>
 
 	<div class="container">
-		<h1>Importer un fichier avec des données cliniques
-			supplémentaires</h1>
+		<h1>L'import du fichier est terminé</h1>
 
 		<c:if test="${success}">
 			<p class="text-success">${message}</p>
