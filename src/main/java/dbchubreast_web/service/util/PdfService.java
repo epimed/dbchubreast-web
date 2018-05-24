@@ -20,7 +20,9 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 
 import dbchubreast_web.dao.ChuMetastaseDao;
+import dbchubreast_web.dao.ChuParameterDao;
 import dbchubreast_web.dao.ChuPatientDao;
+import dbchubreast_web.dao.ChuPatientParameterDao;
 import dbchubreast_web.dao.ChuPhaseTumeurDao;
 import dbchubreast_web.dao.ChuPrelevementBiomarqueurDao;
 import dbchubreast_web.dao.ChuPrelevementDao;
@@ -28,7 +30,9 @@ import dbchubreast_web.dao.ChuTnmDao;
 import dbchubreast_web.dao.ChuTraitementDao;
 import dbchubreast_web.dao.ChuTumeurDao;
 import dbchubreast_web.entity.ChuMetastase;
+import dbchubreast_web.entity.ChuParameter;
 import dbchubreast_web.entity.ChuPatient;
+import dbchubreast_web.entity.ChuPatientParameter;
 import dbchubreast_web.entity.ChuPerformanceStatus;
 import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuPrelevement;
@@ -64,6 +68,12 @@ public class PdfService {
 
 	@Autowired 
 	private ChuTraitementDao traitementDao;
+	
+	@Autowired
+	private ChuParameterDao parameterDao;
+	
+	@Autowired
+	private ChuPatientParameterDao patientParameterDao;
 
 
 	public static final Color VERY_LIGHT_GRAY = new DeviceRgb(230, 230, 230);
@@ -105,9 +115,12 @@ public class PdfService {
 				if (mapMessages!=null) {
 					this.addConsistencyMessages(mapMessages.get(patient.getIdPatient()), document);
 				}
-				
+
 				// === Tumeurs ===
 				this.addTumeurs(patient, document, version);
+
+				// === Information supplementaire ===
+				this.addSupplement(patient, document, version);
 
 			}
 			else {
@@ -160,7 +173,7 @@ public class PdfService {
 
 	}
 
-	
+
 	/** ====================================================================================== */
 
 	public void addTumeurs(ChuPatient patient, Document document, String version) {
@@ -640,8 +653,48 @@ public class PdfService {
 			document.add(new Paragraph("Les informations sur l'identité du patient ne sont pas disponibles."));
 		}
 
+	}
+
+	/** ====================================================================================== */
+
+	public void addSupplement(ChuPatient patient, Document document, String version) {
+
+		// === Title ===
+
+		this.addEmptyLines(document, 2);
+
+		Paragraph p = new Paragraph();
+		Text text = new Text("INFORMATION SUPPLEMENTAIRE");
+		text.setBold();
+		p.add(text);
+
+		document.add(p);
+
+		if (version.equals("confidentielle")) {
+
+			Paragraph psup = new Paragraph(); 
+
+			List<ChuParameter> listParameters = parameterDao.list();
+			for (ChuParameter parameter : listParameters) {
+				ChuPatientParameter pp = patientParameterDao.find(patient.getIdPatient(), parameter.getIdParameter());
+				if (pp!=null) {
+					String t =  parameter.getNom() + " : " + pp.getValeur() + "\n";
+					psup.add(t);
+				}
+			}
+
+
+			document.add(psup);
+
+		}
+		else {
+			document.add(new Paragraph("Les informations supplémentaires du patient ne sont pas disponibles en version " + version + "."));
+		}
+
 
 	}
+
+
 
 	/** ====================================================================================== */
 
