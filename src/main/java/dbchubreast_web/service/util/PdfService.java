@@ -1,6 +1,7 @@
 package dbchubreast_web.service.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -659,8 +660,8 @@ public class PdfService {
 
 	public void addSupplement(ChuPatient patient, Document document, String version) {
 
+		
 		// === Title ===
-
 		this.addEmptyLines(document, 2);
 
 		Paragraph p = new Paragraph();
@@ -672,12 +673,22 @@ public class PdfService {
 
 		if (version.equals("confidentielle")) {
 
+			
+			// === Date dernier import ===
+			Date dateDernierImport = patientParameterDao.findDateDernierImport(patient.getIdPatient());
+			Paragraph pDateImport = new Paragraph();
+			pDateImport.add("Date d'import : " + dateFormat.format(dateDernierImport));
+			pDateImport.setFontColor(GRAY);
+			document.add(pDateImport);
+			
+			
+			// === Parameters ===
 			Paragraph psup = new Paragraph(); 
 
 			List<ChuParameter> listParameters = parameterDao.list();
 			for (ChuParameter parameter : listParameters) {
 				ChuPatientParameter pp = patientParameterDao.find(patient.getIdPatient(), parameter.getIdParameter());
-				if (pp!=null) {
+				if (pp!=null && pp.isEnabled()) {
 					String t =  parameter.getNom() + " : " + pp.getValeur() + "\n";
 					psup.add(t);
 				}

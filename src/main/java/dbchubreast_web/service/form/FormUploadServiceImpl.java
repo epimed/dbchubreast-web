@@ -96,6 +96,10 @@ public class FormUploadServiceImpl implements FormUploadService {
 
 				if (patient!=null) {
 
+					// === We disable all previously imported data for this patient ===
+					this.disablePreviouslyImportedData(patient);
+					
+					
 					for (int j=0; j<header.size(); j++) {
 						if (j<line.length) {
 							String key = header.get(j);
@@ -133,6 +137,16 @@ public class FormUploadServiceImpl implements FormUploadService {
 
 	}
 
+	/** ========================================================================================================= */
+	
+	private void disablePreviouslyImportedData(ChuPatient patient) {
+		List<ChuPatientParameter> listData = patientParameterService.findAllByIdPatient(patient.getIdPatient());
+		for (ChuPatientParameter pp: listData) {
+			pp.setEnabled(false);
+			patientParameterService.saveOrUpdate(pp);
+		}
+	}
+	
 	/** ========================================================================================================= */
 
 	public File saveFileOnDisk(FormUpload formUpload, HttpServletRequest request)  throws Exception {		

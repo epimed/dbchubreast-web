@@ -13,6 +13,9 @@
  */
 package dbchubreast_web.service.business;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +32,17 @@ public class ChuPatientParameterServiceImpl implements ChuPatientParameterServic
 	public ChuPatientParameter find(String idPatient, Integer idParameter) {
 		return patientParameterDao.find(idPatient, idParameter);
 	}
+	
+	@Override
+	public List<ChuPatientParameter> findAllByIdPatient(String idPatient) {
+		return patientParameterDao.findAllByIdPatient(idPatient);
+	}
 
+	@Override
+	public Date findDateDernierImport(String idPatient) {
+		return patientParameterDao.findDateDernierImport(idPatient);
+	}
+	
 	@Override
 	public void save(ChuPatientParameter patientParameter) {
 		patientParameterDao.save(patientParameter);
@@ -49,6 +62,8 @@ public class ChuPatientParameterServiceImpl implements ChuPatientParameterServic
 	public void delete(ChuPatientParameter patientParameter) {
 		patientParameterDao.delete(patientParameter);
 	}
+
+
 
 	
 }

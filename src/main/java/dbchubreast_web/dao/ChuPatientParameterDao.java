@@ -14,12 +14,18 @@
 
 package dbchubreast_web.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import dbchubreast_web.entity.ChuPatientParameter;
 
 public interface ChuPatientParameterDao {
 
 	public ChuPatientParameter find(String idPatient, Integer idParameter);
+	public List<ChuPatientParameter> findAllByIdPatient(String idPatient);
 
+	public Date findDateDernierImport(String idPatient);
+	
 	public void save(ChuPatientParameter patientParameter);
 
 	public void update(ChuPatientParameter patientParameter);

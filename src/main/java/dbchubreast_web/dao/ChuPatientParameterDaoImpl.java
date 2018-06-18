@@ -14,6 +14,9 @@
 
 package dbchubreast_web.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -38,6 +41,44 @@ public class ChuPatientParameterDaoImpl extends BaseDao implements ChuPatientPar
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+
+	/** ================================================= */
+	@Override
+	public Date findDateDernierImport(String idPatient) {
+		
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatientParameter> criteria = builder.createQuery(ChuPatientParameter.class);
+			Root<ChuPatientParameter> root = criteria.from(ChuPatientParameter.class);
+			Join<ChuPatientParameter, ChuPatient> patient = root.join("chuPatient");
+			criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
+			
+			criteria.orderBy(builder.desc(root.get("dateImport")));
+
+			ChuPatientParameter pp = sessionFactory.getCurrentSession().createQuery(criteria).setMaxResults(1).getSingleResult();
+			
+			return pp.getDateImport();
+
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
+
+	}
+
+	/** ================================================= */
+
+	public List<ChuPatientParameter> findAllByIdPatient(String idPatient) {
+		CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ChuPatientParameter> criteria = builder.createQuery(ChuPatientParameter.class);
+		Root<ChuPatientParameter> root = criteria.from(ChuPatientParameter.class);
+		Join<ChuPatientParameter, ChuPatient> patient = root.join("chuPatient");
+		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
+		List<ChuPatientParameter> result = sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
+		this.populateDependencies(result);
+		return result;
+	}
 
 	/** ================================================= */
 
@@ -65,7 +106,7 @@ public class ChuPatientParameterDaoImpl extends BaseDao implements ChuPatientPar
 		catch (NoResultException ex) {
 			return null;
 		}
-		
+
 	}
 
 	/** ================================================= */
@@ -92,15 +133,15 @@ public class ChuPatientParameterDaoImpl extends BaseDao implements ChuPatientPar
 		sessionFactory.getCurrentSession().delete(pp);
 	}
 
-	
+
 	/** ================================================= */
-	/*
+
 	private void populateDependencies(List<ChuPatientParameter> list) {
 		for (ChuPatientParameter patientParameter : list) {
 			this.populateDependencies(patientParameter);
 		}
 	}
-	*/
+
 	/** ================================================= */
 
 	private void populateDependencies(ChuPatientParameter patientParameter) {
