@@ -21,7 +21,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.form.FormTumeurInitiale;
+import dbchubreast_web.form.tumeur.FormTumeurInitiale;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.util.FormatService;

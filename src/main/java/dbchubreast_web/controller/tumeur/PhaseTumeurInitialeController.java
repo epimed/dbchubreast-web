@@ -11,7 +11,7 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.controller;
+package dbchubreast_web.controller.tumeur;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,33 +30,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import dbchubreast_web.controller.BaseController;
 import dbchubreast_web.entity.ChuEvolution;
 import dbchubreast_web.entity.ChuMetastase;
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuPerformanceStatus;
 import dbchubreast_web.entity.ChuPhaseTumeur;
-import dbchubreast_web.entity.ChuPrelevement;
 import dbchubreast_web.entity.ChuTopographie;
-import dbchubreast_web.entity.ChuTraitement;
 import dbchubreast_web.entity.ChuTumeur;
-import dbchubreast_web.form.FormPhaseRechute;
-import dbchubreast_web.form.FormTumeurInitiale;
+import dbchubreast_web.form.tumeur.FormTumeurInitiale;
 import dbchubreast_web.service.business.AppLogService;
 import dbchubreast_web.service.business.ChuEvolutionService;
 import dbchubreast_web.service.business.ChuMetastaseService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuPerformanceStatusService;
 import dbchubreast_web.service.business.ChuPhaseTumeurService;
-import dbchubreast_web.service.business.ChuPrelevementService;
 import dbchubreast_web.service.business.ChuTopographieService;
-import dbchubreast_web.service.business.ChuTraitementService;
 import dbchubreast_web.service.business.ChuTumeurService;
-import dbchubreast_web.service.form.FormPhaseTumeurService;
-import dbchubreast_web.validator.FormPhaseRechuteValidator;
+import dbchubreast_web.service.form.tumeur.FormPhaseTumeurInitialeService;
 import dbchubreast_web.validator.FormTumeurInitialeValidator;
 
 @Controller
-public class TumeurController extends BaseController {
+public class PhaseTumeurInitialeController extends BaseController {
 
 	@Autowired
 	private ChuPatientService patientService;
@@ -64,11 +59,6 @@ public class TumeurController extends BaseController {
 	@Autowired
 	private ChuTumeurService tumeurService;
 
-	@Autowired
-	private ChuTraitementService traitementService;
-
-	@Autowired
-	private ChuPrelevementService prelevementService;
 
 	@Autowired
 	private ChuPhaseTumeurService phaseTumeurService;
@@ -86,72 +76,15 @@ public class TumeurController extends BaseController {
 	private ChuPerformanceStatusService performanceStatusService;
 
 	@Autowired
-	private FormPhaseTumeurService formPhaseTumeurService;
+	private FormPhaseTumeurInitialeService formPhaseTumeurInitialeService;
 
 	@Autowired
 	private FormTumeurInitialeValidator formTumeurInitialeValidator;
 
 	@Autowired
-	private FormPhaseRechuteValidator formPhaseRechuteValidator;
-
-	@Autowired
 	private AppLogService logService;
 
-	/** ====================================================================================== */
-
-
-	@RequestMapping(value = { "/rechute/{idPhase}/delete" }, method =  {RequestMethod.GET, RequestMethod.POST})
-	public String deleteRechute(Model model, 
-			@PathVariable Integer idPhase, 
-			@RequestParam(value = "button", required = false) String button,
-			final RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
-
-		//Tumeur
-		ChuTumeur tumeur = tumeurService.findByIdPhaseWithDependencies(idPhase);
-		model.addAttribute("tumeur", tumeur);
-
-		//Phase tumeur
-		ChuPhaseTumeur phaseTumeur = phaseTumeurService.find(idPhase); 
-		model.addAttribute("phase", phaseTumeur);
-
-		// Patient
-		ChuPatient patient = patientService.find(tumeur.getIdTumeur());
-		model.addAttribute("patient", patient);
-
-		// Prelevements
-		List<ChuPrelevement> listPrelevements = prelevementService.listByIdPhase(idPhase);
-		model.addAttribute("listPrelevements", listPrelevements);
-
-		// Traitements 
-		List<ChuTraitement> listTraitements = traitementService.listByIdPhase(idPhase);
-		model.addAttribute("listTraitements", listTraitements);
-
-		if (button!=null && button.equals("delete")) {
-			
-			if (phaseTumeur.getChuTypePhase().getIdTypePhase() == 2) {
-				phaseTumeurService.deleteWithDependencies(phaseTumeur);
-				redirectAttributes.addFlashAttribute("css", "success");
-				redirectAttributes.addFlashAttribute("msg", "La rechute " + idPhase + " a été supprimé !");
-			}	
-			else {
-				redirectAttributes.addFlashAttribute("css", "danger");
-				redirectAttributes.addFlashAttribute("msg", "La phase de tumeur " + idPhase + " ne peut pas être supprimée");
-			}
-			return "redirect:/tumeur/" + tumeur.getIdTumeur()+"/";
-			
-		}
-
-		else if (button!=null && button.equals("cancel")) {
-			return "redirect:/tumeur/" + tumeur.getIdTumeur()+"/";
-		}
-
-		else {
-			return "tumeur/deleteRechute";
-		}
-	}
-
-
+	
 	/** ====================================================================================== */
 
 	@RequestMapping(value = "/patient/{idPatient}/tumeurs", method = RequestMethod.GET)
@@ -239,7 +172,7 @@ public class TumeurController extends BaseController {
 
 		ChuTumeur tumeur = tumeurService.findWithDependencies(idTumeur);
 		ChuPatient patient = tumeur.getChuPatient();
-		FormTumeurInitiale formTumeurInitiale = formPhaseTumeurService.getFormTumeurInitiale(tumeur);
+		FormTumeurInitiale formTumeurInitiale = formPhaseTumeurInitialeService.getFormTumeurInitiale(tumeur);
 
 		model.addAttribute("formTumeurInitiale", formTumeurInitiale);
 
@@ -304,7 +237,7 @@ public class TumeurController extends BaseController {
 							"La modification de la tumeur a été effectuée avec succès !");
 				}
 
-				formPhaseTumeurService.saveOrUpdateForm(formTumeurInitiale);
+				formPhaseTumeurInitialeService.saveOrUpdateForm(formTumeurInitiale);
 			}
 		}
 
@@ -319,125 +252,7 @@ public class TumeurController extends BaseController {
 		return "redirect:/tumeur/" + formTumeurInitiale.getIdTumeur();
 	}
 
-	/** ====================================================================================== */
-
-	@RequestMapping(value = "/tumeur/{idTumeur}/rechute/add", method = RequestMethod.GET)
-	public String showAddRelapseForm(Model model, @PathVariable Integer idTumeur, HttpServletRequest request) {
-
-		logService.log("Affichage d'un formulaire pour ajouter une phase de rechute à la tumeur " + idTumeur);
-
-		ChuPatient patient = patientService.find(idTumeur);
-		ChuTumeur tumeur = tumeurService.find(idTumeur);
-
-		if (tumeur != null) {
-			
-			FormPhaseRechute formPhaseRechute = new FormPhaseRechute(patient.getIdPatient(), tumeur.getIdTumeur());
-
-			// === Pre-remplir la topographie si elle est connue pour la phase initiale ===
-			ChuPhaseTumeur phaseInitiale = phaseTumeurService.findPhaseInitiale(tumeur.getIdTumeur());
-			if (phaseInitiale!=null && phaseInitiale.getChuTopographie()!=null) {
-				formPhaseRechute.setIdTopographie(phaseInitiale.getChuTopographie().getIdTopographie());
-			}
-			
-			model.addAttribute("formPhaseRechute", formPhaseRechute);
-			model.addAttribute("tumeur", tumeur);
-
-			this.populateAddTumorForm(patient, model);
-
-			return "tumeur/formPhaseRechute";
-		}
-
-		// POST/REDIRECT/GET
-		return "redirect:/tumeur";
-	}
-
-	/** ====================================================================================== */
-
-	@RequestMapping(value = "/rechute/{idPhase}/update", method = RequestMethod.GET)
-	public String showUpdateRelapseForm(Model model, @PathVariable Integer idPhase, HttpServletRequest request) {
-
-		logService.log("Affichage d'un formulaire pour modifier la phase de rechute " + idPhase);
-
-		ChuPhaseTumeur phase = phaseTumeurService.findWithDependencies(idPhase);
-		ChuTumeur tumeur = tumeurService.findByIdPhaseWithDependencies(idPhase);
-		ChuPatient patient = patientService.find(tumeur.getIdTumeur());
-		FormPhaseRechute formPhaseRechute = formPhaseTumeurService.getFormPhaseRechute(phase);
-
-		model.addAttribute("tumeur", tumeur);
-		model.addAttribute("formPhaseRechute", formPhaseRechute);
-
-		this.populateAddTumorForm(patient, model);
-
-		return "tumeur/formPhaseRechute";
-	}
-
-	/** ====================================================================================== */
-
-	@RequestMapping(value = "/rechute/update", method = RequestMethod.GET)
-	public String redirectRelapse() {
-		// POST/REDIRECT/GET
-		return "redirect:/tumeur";
-	}
-
-	/** ====================================================================================== */
-
-	@RequestMapping(value = "/rechute/update", method = RequestMethod.POST)
-	public String saveOrUpdateRelapseForm(Model model,
-			@ModelAttribute("formPhaseRechute") @Valid FormPhaseRechute formPhaseRechute, BindingResult result,
-			@RequestParam(value = "button", required = false) String button,
-			final RedirectAttributes redirectAttributes, HttpServletRequest request) {
-
-		// === Bouton "reinitialiser" ===
-
-		if (button != null && button.equals("reset")) {
-			if (formPhaseRechute!=null && formPhaseRechute.getIdPhase()!=null) {
-				return "redirect:/rechute/" + formPhaseRechute.getIdPhase() + "/update";
-			}
-			else {
-				return "redirect:/tumeur/" + formPhaseRechute.getIdTumeur() + "/rechute/add";
-			}
-
-		}
-
-
-		// === Bouton "enregistrer" ===
-
-		if (button != null && button.equals("save")) {
-
-			formPhaseRechuteValidator.validate(formPhaseRechute, result);
-
-			if (result.hasErrors()) {
-				logService.log("Modification échouée de la phase rechute");
-				ChuPatient patient = patientService.find(formPhaseRechute.getIdPatient());
-				ChuTumeur tumeur = tumeurService.find(formPhaseRechute.getIdTumeur());
-				model.addAttribute("formPhaseRechute", formPhaseRechute);
-				model.addAttribute("tumeur", tumeur);
-				this.populateAddTumorForm(patient, model);
-				return "tumeur/formPhaseRechute";
-			} 
-
-			else {
-
-				logService.log("Modification validée de la phase rechute");
-
-				redirectAttributes.addFlashAttribute("css", "success");
-				if (formPhaseRechute.isNew()) {
-					redirectAttributes.addFlashAttribute("msg", "Une nouvelle rechute a été ajoutée avec succès !");
-				} else {
-					redirectAttributes.addFlashAttribute("msg", "La modification de la rechute "
-							+ formPhaseRechute.getIdPhase() + " a été effectuée avec succès !");
-				}
-
-				formPhaseTumeurService.saveOrUpdateForm(formPhaseRechute);
-			}
-		}
-
-
-		// POST/REDIRECT/GET
-		return "redirect:/tumeur/" + formPhaseRechute.getIdTumeur();
-
-	}
-
+	
 	/** ====================================================================================== */
 
 	public void populateAddTumorForm(ChuPatient patient, Model model) {

@@ -11,20 +11,12 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service.form;
+package dbchubreast_web.service.form.tumeur;
 
-import dbchubreast_web.entity.ChuPhaseTumeur;
 import dbchubreast_web.entity.ChuTumeur;
-import dbchubreast_web.form.FormPhaseRechute;
-import dbchubreast_web.form.FormTumeurInitiale;
+import dbchubreast_web.form.tumeur.FormTumeurInitiale;
 
-public interface FormPhaseTumeurService {
-
+public interface FormPhaseTumeurInitialeService {
 	public void saveOrUpdateForm(FormTumeurInitiale form);
-
-	public void saveOrUpdateForm(FormPhaseRechute form);
-
 	public FormTumeurInitiale getFormTumeurInitiale(ChuTumeur tumeur);
-
-	public FormPhaseRechute getFormPhaseRechute(ChuPhaseTumeur phase);
 }

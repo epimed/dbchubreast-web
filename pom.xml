@@ -12,8 +12,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 
-		<!--  <spring.version>4.3.12.RELEASE</spring.version>-->
-		<spring.version>5.0.2.RELEASE</spring.version>
+		<!-- <spring.version>4.3.12.RELEASE</spring.version> -->
+		<spring.version>5.0.7.RELEASE</spring.version>
 		<spring.security.version>4.2.3.RELEASE</spring.security.version>
 
 		<jstl.version>1.2</jstl.version>
@@ -38,6 +38,10 @@
 		<joda.version>2.9.9</joda.version>
 		<itext.version>7.0.5</itext.version>
 		<jaxb.version>2.3.0</jaxb.version>
+
+		<junit.version>5.2.0</junit.version>
+		<mockito.version>2.19.0</mockito.version>
+
 
 	</properties>
 
@@ -214,11 +218,38 @@
 			<version>${itext.version}</version>
 		</dependency>
 
-		<!--  JAXB APIs  -->
+		<!-- JAXB APIs -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.0</version>
+		</dependency>
+
+
+		<!-- TESTING -->
+
+		<!-- JUnit -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spring-Test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

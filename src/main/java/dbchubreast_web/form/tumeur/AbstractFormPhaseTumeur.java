@@ -1,4 +1,4 @@
-package dbchubreast_web.form;
+package dbchubreast_web.form.tumeur;
 // Generated 26 d�c. 2016 14:27:40 by Hibernate Tools 4.3.1.Final
 
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import dbchubreast_web.form.IForm;
 import dbchubreast_web.service.BaseService;
 
 public abstract class AbstractFormPhaseTumeur extends BaseService implements IForm {

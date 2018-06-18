@@ -1,4 +1,4 @@
-package dbchubreast_web.form;
+package dbchubreast_web.form.tumeur;
 // Generated 26 d�c. 2016 14:27:40 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;

@@ -7,6 +7,53 @@
 <!-- Header -->
 <%@ include file="/resources/fragments/header.jsp"%>
 
+
+<script>
+
+window.onload = function() {	
+	
+	<c:choose>
+		<c:when test="${formPhaseRechute.locale}">
+			setVisibility('topographie', true)
+		</c:when>
+		<c:otherwise>
+			setVisibility('topographie', false)
+		</c:otherwise>
+	</c:choose>
+	
+	
+	<c:choose>
+		<c:when test="${formPhaseRechute.metastases}">
+			setVisibility('metastases', true)
+		</c:when>
+		<c:otherwise>
+			setVisibility('metastases', false)
+		</c:otherwise>
+	</c:choose>
+	
+}
+
+
+function showOrHideElement(idElement) {
+    var x = document.getElementById(idElement);
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
+function setVisibility(idElement, isVisible) {	
+	if (isVisible) {
+		document.getElementById(idElement).style.display="block";
+	}
+	else {
+		document.getElementById(idElement).style.display="none";
+	}
+}
+
+</script>
+
 </head>
 
 <body>
@@ -26,12 +73,14 @@
 		<c:choose>
 			<c:when test="${formPhaseRechute['new']}">
 				<h2>
-					Ajouter une rechute <small>à la tumeur ${tumeur.idTumeur}</small>
+					Ajouter une rechute <small>à la tumeur ${tumeur.idTumeur} 
+					diagnostiqué le <fmt:formatDate pattern="dd/MM/yyyy" value="${tumeur.dateDiagnostic}" /></small>
 				</h2>
 			</c:when>
 			<c:otherwise>
 				<h2>
-					Modifier une rechute <small>de la tumeur ${tumeur.idTumeur}</small>
+					Modifier une rechute <small>de la tumeur ${tumeur.idTumeur} 
+					diagnostiqué le <fmt:formatDate pattern="dd/MM/yyyy" value="${tumeur.dateDiagnostic}" /></small>
 				</h2>
 			</c:otherwise>
 		</c:choose>
@@ -43,6 +92,28 @@
 			<form:hidden path="idTumeur" />
 			<form:hidden path="idPatient" />
 			<form:hidden path="idPhase" />
+			<form:hidden path="idTopographieTumeurInitiale" />
+			<form:hidden path="nomTopographieTumeurInitiale" />
+			
+						
+			<!-- Type de rechute -->
+			<spring:bind path="locale">
+				<div class="form-group ${status.error ? 'has-error' : ''}">
+					<label class="col-sm-2 control-label">Type de rechute</label>
+					<div class="col-sm-10">
+						<label class="checkbox-inline"> 
+							<form:checkbox path="locale" onclick="showOrHideElement('topographie')"/>
+							locale
+						</label>
+						<label class="checkbox-inline"> 
+							<form:checkbox path="metastases" onclick="showOrHideElement('metastases')"/>
+							metastatique
+						</label>
+						<form:errors path="metastases"  class="control-label" />
+						
+					</div>
+				</div>
+			</spring:bind>
 
 			<!-- Date de diagnostic -->
 			<spring:bind path="dateDiagnostic">
@@ -56,112 +127,115 @@
 				</div>
 			</spring:bind>
 			
-			<!-- Topographie ICD-O -->
+			<!-- Topographie de la phase initiale -->
 			<div class="form-group">
-				<label class="col-sm-2 control-label">Topographie ICD-O</label>
-				<div class="col-sm-10">
-					<form:select class="form-control" path="idTopographie">
-						<form:option value="" label="--- Sélectionner ---" />
-						<c:forEach var="topo" items="${listTopographies}">
-							<form:option value="${topo.idTopographie}"
-								label="${topo.idTopographie} - ${topo.nomFr}" />
-						</c:forEach>
-					</form:select>
-					<form:errors path="idTopographie" class="control-label" />
+				<label class="col-sm-2 control-label">Topographie de la phase initiale</label>
+				<div class="col-sm-5">
+					<span>${formPhaseRechute.idTopographieTumeurInitiale} - ${formPhaseRechute.nomTopographieTumeurInitiale}</span>	
 				</div>
+			</div>
+			
+			<!-- Topographie de la phase de rechute -->
+			<div id="topographie">
+				<spring:bind path="idTopographie">
+					<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Topographie de la rechute *</label>
+						<div class="col-sm-10">
+							<form:select class="form-control" path="idTopographie">
+								<form:option value="" label="--- Sélectionner ---" />
+								<c:forEach var="topographieRechute" items="${listTopographiesRechute}">
+									<form:option value="${topographieRechute.idTopographie}"
+										label="${topographieRechute.idTopographie} - ${topographieRechute.nomFr}" />
+								</c:forEach>
+							</form:select>
+							<form:errors path="idTopographie" class="control-label" />
+						</div>
+					</div>
+				</spring:bind>
 			</div>
 
 			<!-- cTNM -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">cTNM</label>
-
-				<div class="col-sm-1">
-					cT
-					<form:input class="form-control" path="cT" type="text" />
-					<form:errors path="cT" class="text-danger" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">cTNM de la rechute</label>
+	
+					<div class="col-sm-1">
+						cT
+						<form:input class="form-control" path="cT" type="text" />
+						<form:errors path="cT" class="text-danger" />
+					</div>
+	
+					<div class="col-sm-1">
+						cN
+						<form:input class="form-control" path="cN" type="text" />
+						<form:errors path="cN" class="text-danger" />
+					</div>
+					<div class="col-sm-1">
+						cM
+						<form:input class="form-control" path="cM" type="text" />
+						<form:errors path="cM" class="text-danger" />
+					</div>
+					<div class="col-sm-2">
+						c Taille (mm)
+						<form:input class="form-control" path="cTaille" type="text" />
+						<form:errors path="cTaille" class="text-danger" />
+					</div>
+					<div class="col-sm-5">
+						<span id="helpBlock" class="help-block">En cas de nodules,
+							noter plusieurs tailles séparées par le caractère <code>/</code>,
+							par exemple <code>10/5</code>.
+						</span>
+					</div>
 				</div>
-
-				<div class="col-sm-1">
-					cN
-					<form:input class="form-control" path="cN" type="text" />
-					<form:errors path="cN" class="text-danger" />
+	
+				<!-- pTNM -->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">pTNM de la rechute</label>
+	
+					<div class="col-sm-1">
+						pT
+						<form:input class="form-control" path="pT" type="text" />
+						<form:errors path="pT" class="text-danger" />
+					</div>
+	
+					<div class="col-sm-1">
+						pN
+						<form:input class="form-control" path="pN" type="text" />
+						<form:errors path="pN" class="text-danger" />
+					</div>
+					<div class="col-sm-1">
+						pM
+						<form:input class="form-control" path="pM" type="text" />
+						<form:errors path="pM" class="text-danger" />
+					</div>
+					<div class="col-sm-2">
+						p Taille (mm)
+						<form:input class="form-control" path="pTaille" type="text" />
+						<form:errors path="pTaille" class="text-danger" />
+					</div>
+					<div class="col-sm-5">
+						<span id="helpBlock" class="help-block">En cas de nodules,
+							noter plusieurs tailles séparées par le caractère <code>/</code>,
+							par exemple <code>10/5</code>.
+						</span>
+					</div>
 				</div>
-				<div class="col-sm-1">
-					cM
-					<form:input class="form-control" path="cM" type="text" />
-					<form:errors path="cM" class="text-danger" />
-				</div>
-				<div class="col-sm-2">
-					c Taille (mm)
-					<form:input class="form-control" path="cTaille" type="text" />
-					<form:errors path="cTaille" class="text-danger" />
-				</div>
-				<div class="col-sm-5">
-					<span id="helpBlock" class="help-block">En cas de nodules,
-						noter plusieurs tailles séparées par le caractère <code>/</code>,
-						par exemple <code>10/5</code>.
-					</span>
-				</div>
-			</div>
-
-			<!-- pTNM -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">pTNM</label>
-
-				<div class="col-sm-1">
-					pT
-					<form:input class="form-control" path="pT" type="text" />
-					<form:errors path="pT" class="text-danger" />
-				</div>
-
-				<div class="col-sm-1">
-					pN
-					<form:input class="form-control" path="pN" type="text" />
-					<form:errors path="pN" class="text-danger" />
-				</div>
-				<div class="col-sm-1">
-					pM
-					<form:input class="form-control" path="pM" type="text" />
-					<form:errors path="pM" class="text-danger" />
-				</div>
-				<div class="col-sm-2">
-					p Taille (mm)
-					<form:input class="form-control" path="pTaille" type="text" />
-					<form:errors path="pTaille" class="text-danger" />
-				</div>
-				<div class="col-sm-5">
-					<span id="helpBlock" class="help-block">En cas de nodules,
-						noter plusieurs tailles séparées par le caractère <code>/</code>,
-						par exemple <code>10/5</code>.
-					</span>
-				</div>
-			</div>
-
-			<!-- Locale -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Rechute locale</label>
-				<div class="col-sm-10">
-					<label class="radio-inline"> <form:radiobutton
-							path="locale" value="true" /> oui
-					</label> <label class="radio-inline"> <form:radiobutton
-							path="locale" value="false" /> non
-					</label>
-					<form:errors path="locale" />
-				</div>
-			</div>
 
 			<!-- Metastases -->
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Métastases</label>
-				<div class="col-sm-10">
-					<c:forEach var="metastase" items="${listMetastases}">
-						<label class="checkbox-inline"> <form:checkbox
-								path="listIdMetastases" value="${metastase.idMetastase}" />
-							${metastase.nom}
-						</label>
-					</c:forEach>
-					<form:errors path="listIdMetastases" />
-				</div>
+			<div id="metastases">
+				<spring:bind path="listIdMetastases">
+					<div class="form-group ${status.error ? 'has-error' : ''}">
+						<label class="col-sm-2 control-label">Métastases *</label>
+						<div class="col-sm-10">
+							<c:forEach var="metastase" items="${listMetastases}">
+								<label class="checkbox-inline"> <form:checkbox
+										path="listIdMetastases" value="${metastase.idMetastase}" />
+									${metastase.nom}
+								</label>
+							</c:forEach>
+							<form:errors path="listIdMetastases"  class="control-label"  />
+						</div>
+					</div>
+				</spring:bind>
 			</div>
 
 			<!-- Performance Status -->

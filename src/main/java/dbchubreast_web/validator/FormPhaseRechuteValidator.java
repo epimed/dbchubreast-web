@@ -22,7 +22,7 @@ import org.springframework.validation.Validator;
 
 import dbchubreast_web.entity.ChuPatient;
 import dbchubreast_web.entity.ChuTumeur;
-import dbchubreast_web.form.FormPhaseRechute;
+import dbchubreast_web.form.tumeur.FormPhaseRechute;
 import dbchubreast_web.service.BaseService;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuTumeurService;
@@ -31,7 +31,7 @@ import dbchubreast_web.service.business.ChuTumeurService;
 public class FormPhaseRechuteValidator extends BaseService implements Validator {
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	@Autowired
 	private ChuPatientService patientService;
 
@@ -48,6 +48,7 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator 
 
 		FormPhaseRechute form = (FormPhaseRechute) target;
 
+		
 		ChuPatient patient = patientService.find(form.getIdPatient());
 		ChuTumeur tumeur = tumeurService.find(form.getIdTumeur());
 
