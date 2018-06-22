@@ -58,6 +58,13 @@ public class FormPhaseRechuteValidator extends BaseService implements Validator 
 			String message = "Ne peut pas être vide !";
 			errors.rejectValue("dateDiagnostic", "NotEmpty.formPhaseRechute.dateDiagnostic", message);
 		}
+		
+		// === Si la rechute est locale la topogphie de la rechute doit etre remplie ===
+		if (form.getLocale()!=null && form.getLocale()==true 
+				&& (form.getIdTopographie()==null || form.getIdTopographie().isEmpty())) {
+			String message = "La topographie d'une rechute locale ne peut pas être vide !";
+			errors.rejectValue("idTopographie", "NotEmpty.formPhaseRechute.idTopographie", message);
+		}
 
 		// === Date de diagnostic ne peut pas être avant la date de naissance
 		// ===
