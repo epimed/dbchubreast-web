@@ -50,7 +50,7 @@ public class ExporterPatient extends AbstractExporter {
 					patient.getDateNaissance() == null ? null : dateFormat.format(patient.getDateNaissance()));
 			table.addToTable(i, "date_deces",
 					patient.getDateDeces() == null ? null : dateFormat.format(patient.getDateDeces()));
-			table.addToTable(i, "cause_deces", patient.getCauseDeces());
+			table.addToTable(i, "cause_deces", patient.getChuCauseDeces() == null ? null : patient.getChuCauseDeces().getNom());
 			table.addToTable(i, "statut_brca", patient.getStatutBrca());
 		}
 

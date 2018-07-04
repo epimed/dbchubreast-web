@@ -72,7 +72,7 @@
 					</div>
 				</div>
 			</spring:bind>
-			
+
 			<!-- IMC au diagnostic -->
 			<div class="form-group">
 				<label class="col-sm-2 control-label">IMC au diagnostic</label>
@@ -94,10 +94,10 @@
 					<form:errors path="imcDiagnostic" class="text-danger" />
 				</div>
 				<div class="col-sm-6">
-					<span id="helpBlock" class="help-block">On peut saisir soit le poids et la taille, soit l'IMC. 
-					Si le poids et la taille sont renseignés, l'IMC sera calculé automatiquement. 
-					Si l'IMC est renseigné, la poids et la taille seront ignorés.
-					</span>
+					<span id="helpBlock" class="help-block">On peut saisir soit
+						le poids et la taille, soit l'IMC. Si le poids et la taille sont
+						renseignés, l'IMC sera calculé automatiquement. Si l'IMC est
+						renseigné, la poids et la taille seront ignorés. </span>
 				</div>
 			</div>
 
@@ -154,25 +154,7 @@
 				<div class="form-group ${status.error ? 'has-error' : ''}">
 					<label class="col-sm-2 control-label">Dernière nouvelle</label>
 					<div class="col-sm-10">
-
-						<c:choose>
-
-							<c:when
-								test="${formTumeurInitiale.idEvolution==5  or not empty formTumeurInitiale.dateDeces}">
-
-								<form:hidden path="idEvolution" />
-								<form:hidden path="dateEvolution" />
-								<form:input class="form-control" path="dateEvolution"
-									type="date" disabled="true" />
-							</c:when>
-
-							<c:otherwise>
-								<form:input class="form-control" path="dateEvolution"
-									type="date" />
-							</c:otherwise>
-
-						</c:choose>
-
+						<form:input class="form-control" path="dateEvolution" type="date" />
 						<form:errors path="dateEvolution" class="control-label" />
 					</div>
 				</div>
@@ -183,28 +165,15 @@
 				<label class="col-sm-2 control-label">Statut à la dernière
 					nouvelle</label>
 				<div class="col-sm-10">
-					<c:choose>
-						<c:when
-							test="${formTumeurInitiale.idEvolution==5 or not empty formTumeurInitiale.dateDeces}">
-							<form:select class="form-control" path="idEvolution"
-								disabled="true">
-								<form:option value="" label="--- Sélectionner ---" />
-								<c:forEach var="evolution" items="${listEvolutions}">
-									<form:option value="${evolution.idEvolution}"
-										label="${evolution.idEvolution} - ${evolution.code} - ${evolution.nom}" />
-								</c:forEach>
-							</form:select>
-						</c:when>
-						<c:otherwise>
-							<form:select class="form-control" path="idEvolution">
-								<form:option value="" label="--- Sélectionner ---" />
-								<c:forEach var="evolution" items="${listEvolutions}">
-									<form:option value="${evolution.idEvolution}"
-										label="${evolution.idEvolution} - ${evolution.code} - ${evolution.nom}" />
-								</c:forEach>
-							</form:select>
-						</c:otherwise>
-					</c:choose>
+
+					<form:select class="form-control" path="idEvolution">
+						<form:option value="" label="--- Sélectionner ---" />
+						<c:forEach var="evolution" items="${listEvolutions}">
+							<form:option value="${evolution.idEvolution}"
+								label="${evolution.nom}" />
+						</c:forEach>
+					</form:select>
+
 					<form:errors path="idEvolution" class="control-label" />
 				</div>
 			</div>

@@ -1,11 +1,15 @@
 package dbchubreast_web.form;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import dbchubreast_web.entity.ChuCauseDeces;
+import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.service.BaseService;
 
 public class FormPatient extends BaseService implements IForm {
@@ -39,9 +43,21 @@ public class FormPatient extends BaseService implements IForm {
 	
 	private Date dateDeces;
 	
-	@Length(max = 255, message = "255 caractères au maximum")
-	private String causeDeces;
+	// === Cause deces selectionnee ===
+	private Integer idCauseDeces;
+	
+	// === Liste de causes deces possibles ===
+	private List<ChuCauseDeces> listCausesDeces = new ArrayList<ChuCauseDeces>();
 
+	
+	// === Liste de toutes tumeurs du patient ===
+	private List<ChuTumeur> listTumeurs = new ArrayList<ChuTumeur>();
+	
+	// === Liste des tumeurs qui ont cause le deces ===
+	private List<Integer> listIdTumeursCausesDeces = new ArrayList<Integer>();
+	
+	private String remarque;
+	
 	public FormPatient() {
 		super();
 	}
@@ -118,15 +134,6 @@ public class FormPatient extends BaseService implements IForm {
 		this.dateDeces = dateDeces;
 	}
 
-	public String getCauseDeces() {
-		return causeDeces;
-	}
-
-	public void setCauseDeces(String causeDeces) {
-		this.causeDeces = causeDeces;
-	}
-	
-
 	public String getTk() {
 		return tk;
 	}
@@ -135,7 +142,6 @@ public class FormPatient extends BaseService implements IForm {
 		this.tk = tk;
 	}
 
-	
 
 	public String getNomNaissance() {
 		return nomNaissance;
@@ -144,12 +150,56 @@ public class FormPatient extends BaseService implements IForm {
 	public void setNomNaissance(String nomNaissance) {
 		this.nomNaissance = nomNaissance;
 	}
+	
+	public Integer getIdCauseDeces() {
+		return idCauseDeces;
+	}
+
+	public void setIdCauseDeces(Integer idCauseDeces) {
+		this.idCauseDeces = idCauseDeces;
+	}
+
+	public List<ChuCauseDeces> getListCausesDeces() {
+		return listCausesDeces;
+	}
+
+	public void setListCausesDeces(List<ChuCauseDeces> listCausesDeces) {
+		this.listCausesDeces = listCausesDeces;
+	}
+
+	public List<ChuTumeur> getListTumeurs() {
+		return listTumeurs;
+	}
+
+	public void setListTumeurs(List<ChuTumeur> listTumeurs) {
+		this.listTumeurs = listTumeurs;
+	}
+
+	public List<Integer> getListIdTumeursCausesDeces() {
+		return listIdTumeursCausesDeces;
+	}
+
+	public void setListIdTumeursCausesDeces(List<Integer> listIdTumeursCausesDeces) {
+		this.listIdTumeursCausesDeces = listIdTumeursCausesDeces;
+	}
+
+	public String getRemarque() {
+		return remarque;
+	}
+
+	public void setRemarque(String remarque) {
+		this.remarque = remarque;
+	}
+
+
 
 	@Override
 	public String toString() {
 		return "FormPatient [idPatient=" + idPatient + ", rcp=" + rcp + ", tk=" + tk + ", prenom=" + prenom + ", nom="
-				+ nom + ", dateNaissance=" + dateNaissance + ", sexe=" + sexe + ", statutBrca=" + statutBrca
-				+ ", dateDeces=" + dateDeces + ", causeDeces=" + causeDeces + "]";
+				+ nom + ", nomNaissance=" + nomNaissance + ", dateNaissance=" + dateNaissance + ", sexe=" + sexe
+				+ ", statutBrca=" + statutBrca + ", dateDeces=" + dateDeces + ", idCauseDeces=" + idCauseDeces
+				+ ", listCausesDeces=" + listCausesDeces + ", listTumeurs=" + listTumeurs
+				+ ", listIdTumeursCausesDeces=" + listIdTumeursCausesDeces + ", remarque=" + remarque + "]";
 	}
 
 	/** ====================================================================================== */

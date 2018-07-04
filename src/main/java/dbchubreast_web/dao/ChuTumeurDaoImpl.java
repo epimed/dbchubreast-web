@@ -122,7 +122,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 		Root<ChuTumeur> root = criteria.from(ChuTumeur.class);
 		Join<ChuTumeur, ChuPatient> patient = root.join("chuPatient");
 		criteria.select(root).where(builder.equal(patient.get("idPatient"), idPatient));
-		criteria.orderBy(builder.asc(root.get("idTumeur")));
+		criteria.orderBy(builder.asc(root.get("dateDiagnostic")), builder.asc(root.get("idTumeur")));
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 
 	}
@@ -132,7 +132,7 @@ public class ChuTumeurDaoImpl extends BaseDao implements ChuTumeurDao {
 	public List<ChuTumeur> listByIdPatientWithDependencies(String idPatient, String dependency) {
 
 		List<ChuTumeur> list =  this.listByIdPatient(idPatient);
-
+		
 		if (dependency!=null && dependency.equals("tumeurs")) {
 			this.populateDependencies(list);
 		}

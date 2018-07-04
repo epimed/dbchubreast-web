@@ -11,14 +11,14 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.service.form;
+package dbchubreast_web.service.business;
 
-import dbchubreast_web.entity.ChuPatient;
-import dbchubreast_web.form.FormPatient;
+import java.util.List;
 
-public interface FormPatientService {
+import dbchubreast_web.entity.ChuCauseDeces;
 
-	public void saveOrUpdateForm(FormPatient form);
-	public FormPatient getForm(ChuPatient patient);
-	public void loadLists(FormPatient form);
+public interface ChuCauseDecesService {
+	public ChuCauseDeces find(Integer idCauseDeces);
+	public ChuCauseDeces findByIdPatient(String idPatient);
+	public List<ChuCauseDeces> list();
 }

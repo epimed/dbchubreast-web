@@ -51,6 +51,12 @@ public class ChuPatientServiceImpl implements ChuPatientService {
 	
 	/** ================================================================= */
 	
+	public ChuPatient findByIdPatientWithDependencies(String idPatient) {
+		return patientDao.findByIdPatientWithDependencies(idPatient);
+	}
+	
+	/** ================================================================= */
+	
 	public List<ChuPatient> findAsList(String idPatient) {
 		return patientDao.findAsList(idPatient);
 	}

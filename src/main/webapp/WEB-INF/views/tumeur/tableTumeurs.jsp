@@ -34,13 +34,10 @@
 				<td>${tumeur.ageDiagnostic}</td>
 				<td>${tumeur.cote}</td>
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
-						value="${tumeur.dateEvolution}" /> <c:if
+						value="${patient.dateEvolution}" /> <c:if
 						test="${not empty tumeur.chuEvolution}">
 						<span class="text-info"><small><br/>${tumeur.chuEvolution.nom}
 						</small></span>
-						<c:if test="${tumeur.chuEvolution.idEvolution==5}">
-							<span class="text-info"><small><br/>${patient.causeDeces}</small></span>
-						</c:if>
 					</c:if></td>
 
 				<td><spring:url value="/tumeur/${tumeur.idTumeur}"

@@ -13,6 +13,9 @@
  */
 package dbchubreast_web.service.updater;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +34,6 @@ import dbchubreast_web.entity.ChuTumeur;
 import dbchubreast_web.service.business.ChuPatientService;
 import dbchubreast_web.service.business.ChuPrelevementService;
 import dbchubreast_web.service.business.ChuTraitementService;
-import dbchubreast_web.service.util.FormatService;
 
 @Service
 public class UpdaterSurvival extends AbstractUpdater {
@@ -51,9 +53,6 @@ public class UpdaterSurvival extends AbstractUpdater {
 	@Autowired 
 	private ChuTraitementService traitementService;
 
-	@Autowired 
-	private FormatService formatService;
-
 
 	/** ================================================================================= */
 
@@ -65,10 +64,15 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 			ChuTumeur tumeur = (ChuTumeur) list.get(i);
 
-			Date dateDiagnostic = tumeur.getDateDiagnostic();
-			Date dateEvolution = tumeur.getDateEvolution();
 			ChuPatient patient = patientService.find(tumeur.getIdTumeur());
+
+			Date dateDiagnostic = tumeur.getDateDiagnostic();
+			Date dateEvolution = patient.getDateEvolution();
 			Date dateDeces = patient.getDateDeces();
+
+			List<ChuPhaseTumeur> listRelapses = phaseTumeurDao.findRelapses(tumeur.getIdTumeur());
+			ChuPrelevement dernierPrelevement = prelevementService.findDernierPrelevement(tumeur.getIdTumeur());
+			ChuTraitement dernierTraitement  = traitementService.findDernierTraitement(tumeur.getIdTumeur());
 
 			// === Rechute ===
 
@@ -81,31 +85,41 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 			// === Derniere nouvelle ===
 
-			// Si la date de la derniere nouvelle n'est pas remplie
-			// on prend soit la date de deces, soit le dernier prelevement/traitement, soit la date de rechute.
-			// La date de la derniere nouvelle est calculee a la volee a chaque fois, elle n'est pas sauvegardee dans la base.
+			/*
+			 * Date derniere nouvelle = derniere date connue dans la base pour ce patient.
+			 * Cela peut etre : 
+			 * - date d'evolution
+			 * - date de deces
+			 * - date de la derniere tumeur en phase initiale
+			 * - date de la derniere rechute
+			 * - date du dernier prelevement 
+			 * - date du dernier traitement
+			 */
 
-			if (dateDeces!=null) {
-				dateEvolution = dateDeces;
+			List<Date> collectionDateDerniereNouvelle = new ArrayList<Date>();
+			this.addDateToCollection(collectionDateDerniereNouvelle, dateDiagnostic);
+			this.addDateToCollection(collectionDateDerniereNouvelle, dateEvolution);
+			this.addDateToCollection(collectionDateDerniereNouvelle, dateDeces);
+			for (ChuPhaseTumeur relapse : listRelapses) {
+				this.addDateToCollection(collectionDateDerniereNouvelle, relapse.getDateDiagnostic());
 			}
-			else {
-				ChuPrelevement dernierPrelevement = prelevementService.findDernierPrelevement(tumeur.getIdTumeur());
-				ChuTraitement dernierTraitement  = traitementService.findDernierTraitement(tumeur.getIdTumeur());
-				if (dernierPrelevement!=null) {
-					dateEvolution = formatService.getDerniereDate(dateEvolution, dernierPrelevement.getDatePrelevement());
-				}
-				if (dernierTraitement!=null) {
-					dateEvolution = formatService.getDerniereDate(dateEvolution, dernierTraitement.getDateDebut());
-					dateEvolution = formatService.getDerniereDate(dateEvolution, dernierTraitement.getDateFin());
-				}
-				dateEvolution = formatService.getDerniereDate(dateEvolution, dateRechute);
+			if (dernierPrelevement!=null) {
+				this.addDateToCollection(collectionDateDerniereNouvelle, dernierPrelevement.getDatePrelevement());
 			}
+			if (dernierTraitement!=null) {
+				this.addDateToCollection(collectionDateDerniereNouvelle, dernierTraitement.getDateDebut());
+			}
+
+			Collections.sort(collectionDateDerniereNouvelle, Collections.reverseOrder());
+			System.out.println(collectionDateDerniereNouvelle);
+
+			Date dateDerniereNouvelle = collectionDateDerniereNouvelle.isEmpty() ? null : collectionDateDerniereNouvelle.get(0);
+
 
 
 			// === Survie ===
 
-			boolean hasSurvival = dateDiagnostic != null
-					&& (dateEvolution != null || dateDeces != null || dateRechute != null);
+			boolean hasSurvival = (dateDiagnostic != null) && (dateDerniereNouvelle!= null);
 			boolean dead = (dateDeces != null);
 			boolean relapsed = (phaseRechute != null);
 
@@ -127,7 +141,7 @@ public class UpdaterSurvival extends AbstractUpdater {
 				tumeur.setRelapsed(relapsed);
 				tumeur.setDead(dead);
 
-				Double os = calculateSurvival(dateDiagnostic, dateEvolution);
+				Double os = calculateSurvival(dateDiagnostic, dateDerniereNouvelle);
 				Double dfs = calculateSurvival(dateDiagnostic, dateRechute);
 
 				if (dead) {
@@ -145,6 +159,15 @@ public class UpdaterSurvival extends AbstractUpdater {
 
 			tumeurDao.update(tumeur);
 
+		}
+	}
+
+
+	/** ============================================================================= */
+
+	private void addDateToCollection(Collection<Date> collection, Date date) {
+		if (date!=null) {
+			collection.add(date);
 		}
 	}
 

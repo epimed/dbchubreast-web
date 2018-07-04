@@ -71,7 +71,7 @@ public class FormPrelevementValidator extends BaseService implements Validator {
 		ChuPatient patient = patientService.find(form.getIdPatient());
 		Date dateDeces = patient == null ? null : patient.getDateDeces();
 
-		if (datePrelevement != null && dateDeces != null && datePrelevement.after(dateDeces)) {
+		if (datePrelevement!=null && dateDeces!= null && datePrelevement.after(dateDeces)) {
 			message = "La date de prélèvement ne peut pas être postérieure à la date de décès du patient " + dateFormat.format(dateDeces)
 			+ " !";
 			errors.rejectValue("datePrelevement", "Consistensy.formPrelevement.datePrelevement", message);

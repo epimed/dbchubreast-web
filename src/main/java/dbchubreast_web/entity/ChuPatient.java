@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,9 +47,8 @@ public class ChuPatient implements java.io.Serializable {
 	private Integer scoreCharlsonCumule;
 	private String statutBrca;
 	private Date dateDeces;
-	private String causeDeces; // old, to replace with ChuCauseDeces
 	private ChuCauseDeces chuCauseDeces;
-	private Date dateEvolution; // copy from tumeur.dateEvolution
+	private Date dateEvolution; 
 	private String remarque;
 	
 	private List<ChuAntecedentGeneral> chuAntecedentGenerals = new ArrayList<ChuAntecedentGeneral>(0);
@@ -67,7 +67,7 @@ public class ChuPatient implements java.io.Serializable {
 	public ChuPatient(String idPatient, ChuAntecedentGyneco chuAntecedentGyneco, ChuModeVie chuModeVie,
 			ChuProfession chuProfession, ChuStatutMarital chuStatutMarital, String tk, String rcp, String nom,
 			String prenom, String nomNaissance, Date dateNaissance, String sexe, Double imc20Ans,
-			Integer scoreCharlsonCumule, String statutBrca, Date dateDeces, String causeDeces,
+			Integer scoreCharlsonCumule, String statutBrca, Date dateDeces, 
 			dbchubreast_web.entity.ChuCauseDeces chuCauseDeces, Date dateEvolution, String remarque,
 			List<ChuAntecedentGeneral> chuAntecedentGenerals, List<ChuAdresse> chuAdresses,
 			List<ChuTumeur> chuTumeurs) {
@@ -88,7 +88,6 @@ public class ChuPatient implements java.io.Serializable {
 		this.scoreCharlsonCumule = scoreCharlsonCumule;
 		this.statutBrca = statutBrca;
 		this.dateDeces = dateDeces;
-		this.causeDeces = causeDeces;
 		this.chuCauseDeces = chuCauseDeces;
 		this.dateEvolution = dateEvolution;
 		this.remarque = remarque;
@@ -248,15 +247,6 @@ public class ChuPatient implements java.io.Serializable {
 	public void setDateDeces(Date dateDeces) {
 		this.dateDeces = dateDeces;
 	}
-
-	@Column(name = "cause_deces")
-	public String getCauseDeces() {
-		return this.causeDeces;
-	}
-
-	public void setCauseDeces(String causeDeces) {
-		this.causeDeces = causeDeces;
-	}
 		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cause_deces")
@@ -307,6 +297,7 @@ public class ChuPatient implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chuPatient")
+	@OrderBy("dateDiagnostic")
 	public List<ChuTumeur> getChuTumeurs() {
 		return this.chuTumeurs;
 	}
@@ -358,6 +349,6 @@ public class ChuPatient implements java.io.Serializable {
 	public String toString() {
 		return "ChuPatient [idPatient=" + idPatient + ", tk=" + tk + ", rcp=" + rcp + ", nom=" + nom + ", prenom="
 				+ prenom + ", dateNaissance=" + dateNaissance + ", sexe=" + sexe + ", statutBrca=" + statutBrca
-				+ ", dateDeces=" + dateDeces + ", causeDeces=" + causeDeces + "]";
+				+ ", dateDeces=" + dateDeces + "]";
 	}
 }

@@ -79,7 +79,7 @@ public class ExporterBiomarqueur extends AbstractExporter {
 			table.addToTable(i, "os_months", tumeur.getOsMonths() == null ? null : tumeur.getOsMonths().toString());
 			table.addToTable(i, "relapsed", tumeur.getRelapsed() == null ? null : tumeur.getRelapsed().toString());
 			table.addToTable(i, "dead", tumeur.getDead() == null ? null : tumeur.getDead().toString());
-			table.addToTable(i, "cause_deces", patient.getCauseDeces());
+			table.addToTable(i, "cause_deces", patient.getChuCauseDeces() == null ? null : patient.getChuCauseDeces().getNom());
 			table.addToTable(i, "id_dernier_etat_connu",
 					tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getCode());
 			table.addToTable(i, "dernier_etat_connu",

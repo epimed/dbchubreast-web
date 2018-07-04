@@ -79,10 +79,10 @@ public class ExporterPrelevement extends AbstractExporter {
 			table.addToTable(i, "cote", tumeur.getCote());
 			table.addToTable(i, "age_diagnostic", tumeur.getAgeDiagnostic());
 			table.addToTable(i, "date_evolution",
-					tumeur.getDateEvolution() == null ? null : dateFormat.format(tumeur.getDateEvolution()));
+					patient.getDateEvolution() == null ? null : dateFormat.format(patient.getDateEvolution()));
 			table.addToTable(i, "code_evolution",
 					tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getCode());
-			table.addToTable(i, "cause_deces", patient.getCauseDeces());
+			table.addToTable(i, "cause_deces", patient.getChuCauseDeces() == null ? null : patient.getChuCauseDeces().getNom());
 
 			// ===== Phase de tumeur =====
 

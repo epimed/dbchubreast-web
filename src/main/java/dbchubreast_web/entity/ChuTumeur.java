@@ -33,7 +33,6 @@ public class ChuTumeur implements java.io.Serializable {
 	private Date dateDiagnostic;
 	private Double ageDiagnostic;
 	private Double imcDiagnostic;
-	private Date dateEvolution;
 	private Boolean tripleNegative;
 	private Double dfsMonths;
 	private Double osMonths;
@@ -52,7 +51,7 @@ public class ChuTumeur implements java.io.Serializable {
 	}
 
 	public ChuTumeur(Integer idTumeur, ChuEvolution chuEvolution, ChuPatient chuPatient, 
-			String cote, Date dateDiagnostic, Double ageDiagnostic, Double imcDiagnostic, Date dateEvolution,
+			String cote, Date dateDiagnostic, Double ageDiagnostic, Double imcDiagnostic,
 			Boolean tripleNegative, Double dfsMonths, Double osMonths, Boolean relapsed, Boolean dead,
 			List<ChuPhaseTumeur> chuPhaseTumeurs) {
 		this.idTumeur = idTumeur;
@@ -62,7 +61,6 @@ public class ChuTumeur implements java.io.Serializable {
 		this.dateDiagnostic = dateDiagnostic;
 		this.ageDiagnostic = ageDiagnostic;
 		this.imcDiagnostic = imcDiagnostic;
-		this.dateEvolution = dateEvolution;
 		this.tripleNegative = tripleNegative;
 		this.dfsMonths = dfsMonths;
 		this.osMonths = osMonths;
@@ -138,16 +136,6 @@ public class ChuTumeur implements java.io.Serializable {
 
 	public void setImcDiagnostic(Double imcDiagnostic) {
 		this.imcDiagnostic = imcDiagnostic;
-	}
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "date_evolution", length = 13)
-	public Date getDateEvolution() {
-		return this.dateEvolution;
-	}
-
-	public void setDateEvolution(Date dateEvolution) {
-		this.dateEvolution = dateEvolution;
 	}
 
 	@Column(name = "triple_negative")
@@ -252,7 +240,7 @@ public class ChuTumeur implements java.io.Serializable {
 	@Override
 	public String toString() {
 		return "ChuTumeur [idTumeur=" + idTumeur + ", cote=" + cote + ", dateDiagnostic=" + dateDiagnostic
-				+ ", ageDiagnostic=" + ageDiagnostic + ", dateEvolution=" + dateEvolution + ", tripleNegative="
+				+ ", ageDiagnostic=" + ageDiagnostic  + ", tripleNegative="
 				+ tripleNegative + ", dfsMonths=" + dfsMonths + ", osMonths=" + osMonths + ", relapsed=" + relapsed
 				+ ", dead=" + dead + ", consentement=" + consentement +  ", categorie=" + categorie + "]";
 	}

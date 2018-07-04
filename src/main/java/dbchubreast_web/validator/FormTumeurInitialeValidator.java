@@ -72,8 +72,7 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 			}
 		}
 
-		// === Date de diagnostic ne peut pas être avant la date de naissance
-		// ===
+		// === Date de diagnostic ne peut pas être avant la date de naissance ===
 
 		if (form.getDateDiagnostic() != null && patient.getDateNaissance() != null) {
 			if (form.getDateDiagnostic().before(patient.getDateNaissance())) {
@@ -99,6 +98,16 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 				errors.rejectValue("dateEvolution", "Consistency.formTumeurInitiale.dateEvolution", message);
 			}
 		}
+
+		// === Date d'evolution ne peut etre apres la date de deces ===
+
+		if (form.getDateEvolution() != null && form.getDateDeces() != null) {
+			if (form.getDateEvolution().after(form.getDateDeces())) {
+				String message = "La date de la dernière nouvelle ne peut pas être postéreure à la date de décès !";
+				errors.rejectValue("dateEvolution", "Consistency.formTumeurInitiale.dateEvolution", message);
+			}
+		}
+
 
 		// === IMC : taille  > 3 m ===
 
@@ -137,8 +146,8 @@ public class FormTumeurInitialeValidator extends BaseService implements Validato
 			}
 
 		}
-		
-		
+
+
 		// === IMC ===
 
 		if (form.getImcDiagnostic()!=null && form.getImcDiagnostic()<0.0) {

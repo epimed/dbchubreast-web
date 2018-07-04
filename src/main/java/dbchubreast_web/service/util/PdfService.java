@@ -69,10 +69,10 @@ public class PdfService {
 
 	@Autowired 
 	private ChuTraitementDao traitementDao;
-	
+
 	@Autowired
 	private ChuParameterDao parameterDao;
-	
+
 	@Autowired
 	private ChuPatientParameterDao patientParameterDao;
 
@@ -105,7 +105,7 @@ public class PdfService {
 		for (int i=0; i<listIdPatients.size(); i++) {
 
 			String idPatient = listIdPatients.get(i);
-			ChuPatient patient = patientDao.find(idPatient);
+			ChuPatient patient = patientDao.findByIdPatientWithDependencies(idPatient);
 
 			if (patient!=null) {
 
@@ -228,20 +228,12 @@ public class PdfService {
 		t.setWidthPercent(100);
 
 
-		String derniereNouvelle = tumeur.getDateEvolution()==null ? "" :  dateFormat.format(tumeur.getDateEvolution());
+		String derniereNouvelle = patient.getDateEvolution()==null ? "" :  dateFormat.format(patient.getDateEvolution());
 		t.addCell("Date de la dernière nouvelle : " + derniereNouvelle);
 
 		String statut = tumeur.getChuEvolution()==null ? "" : 
 			tumeur.getChuEvolution().getCode() + " - " + tumeur.getChuEvolution().getNom();
 		t.addCell("Statut : " + statut);
-
-		if (patient.getDateDeces()!=null) {
-			String dateDeces = patient.getDateDeces()==null ? "" : dateFormat.format(patient.getDateDeces());
-			t.addCell("Date de décès : " + dateDeces);
-
-			String causeDeces =  patient.getCauseDeces()==null ? ""  : patient.getCauseDeces();
-			t.addCell("Cause de décès : " + causeDeces);
-		}
 
 		String survieGlobale = tumeur.getOsMonths()==null ?  ""  : tumeur.getOsMonths().toString();
 		t.addCell("Survie globale (mois) : " + survieGlobale);
@@ -383,11 +375,6 @@ public class PdfService {
 			document.add(table);
 
 			// === Remarque ===
-
-			if (rechute.getNumeroRechute()!=null) {
-				document.add(new Paragraph ("Numéro de la rechute = " + rechute.getNumeroRechute())); ;
-			}
-
 			String remarque = rechute.getRemarque();
 			if (remarque!=null && !remarque.isEmpty()) {
 				this.addEmptyLines(document, 1);
@@ -641,6 +628,31 @@ public class PdfService {
 			String dateNaissance = patient.getDateNaissance()==null ? "" : dateFormat.format(patient.getDateNaissance());
 			t.addCell("Date de naissance : " + dateNaissance);
 
+			if (patient.getDateDeces()!=null) {
+				String dateDeces = patient.getDateDeces()==null ? "" : dateFormat.format(patient.getDateDeces());
+				t.addCell("Date de décès : " + dateDeces);
+
+				String causeDeces =  patient.getChuCauseDeces()==null ? ""  : patient.getChuCauseDeces().getNom();
+				t.addCell("Cause de décès : " + causeDeces);
+			}
+			
+			if (patient.getDateDeces()!=null && patient.getChuTumeursCauseDeces()!=null && !patient.getChuTumeursCauseDeces().isEmpty()) {
+				Cell cell = new Cell(1,2);
+				String textTumeursCausesDeces = "";
+				for (ChuTumeur tumeurCauseDeces : patient.getChuTumeursCauseDeces()) {
+					tumeurCauseDeces = tumeurDao.findWithDependencies(tumeurCauseDeces.getIdTumeur());
+					if (!textTumeursCausesDeces.isEmpty()) {
+						textTumeursCausesDeces = textTumeursCausesDeces + ", ";
+					}
+					textTumeursCausesDeces = textTumeursCausesDeces + "tumeur du " 
+					+ dateFormat.format(tumeurCauseDeces.getDateDiagnostic()) 
+					+ " [" +tumeurCauseDeces.getChuEvolution().getNom()+ "]";
+				}
+				cell.add("Tumeurs - causes de décès : " + textTumeursCausesDeces);
+				t.addCell(cell);
+			}
+
+			
 			String rcp = patient.getRcp()==null ? "" :  patient.getRcp();
 			t.addCell("RCP : " + rcp);
 
@@ -660,7 +672,7 @@ public class PdfService {
 
 	public void addSupplement(ChuPatient patient, Document document, String version) {
 
-		
+
 		// === Title ===
 		this.addEmptyLines(document, 2);
 
@@ -673,15 +685,17 @@ public class PdfService {
 
 		if (version.equals("confidentielle")) {
 
-			
+
 			// === Date dernier import ===
 			Date dateDernierImport = patientParameterDao.findDateDernierImport(patient.getIdPatient());
-			Paragraph pDateImport = new Paragraph();
-			pDateImport.add("Date d'import : " + dateFormat.format(dateDernierImport));
-			pDateImport.setFontColor(GRAY);
-			document.add(pDateImport);
-			
-			
+			if (dateDernierImport!=null) {
+				Paragraph pDateImport = new Paragraph();
+				pDateImport.add("Date d'import : " + dateFormat.format(dateDernierImport));
+				pDateImport.setFontColor(GRAY);
+				document.add(pDateImport);
+			}
+
+
 			// === Parameters ===
 			Paragraph psup = new Paragraph(); 
 

@@ -29,7 +29,12 @@
 				<td>${patient.prenom}</td>
 
 				<td><fmt:formatDate pattern="dd/MM/yyyy"
-						value="${patient.dateNaissance}" /></td>
+						value="${patient.dateNaissance}" /> <c:if
+						test="${ not empty patient.dateDeces}">
+						<br />
+						<span class="text-info"><small>Décès le <fmt:formatDate
+									pattern="dd/MM/yyyy" value="${patient.dateDeces}" /></small></span>
+					</c:if></td>
 
 
 				<td><spring:url value="/patient/${patient.idPatient}"
@@ -42,14 +47,10 @@
 						value="/patient/${patient.idPatient}/delete?view=${pageContext.request.servletPath}"
 						var="deleteUrl" />
 					<button class="btn-sm btn-danger"
-						onclick="location.href='${deleteUrl}'">Supprimer</button>
-						
-						<spring:url value="/pdf/patient/${patient.idPatient}"
-						var="pdfUrl" />
-						<button class="btn-sm btn-default"
-						onclick="location.href='${pdfUrl}'">PDF</button>
-						
-						</td>
+						onclick="location.href='${deleteUrl}'">Supprimer</button> <spring:url
+						value="/pdf/patient/${patient.idPatient}" var="pdfUrl" />
+					<button class="btn-sm btn-default"
+						onclick="location.href='${pdfUrl}'">PDF</button></td>
 
 
 			</tr>

@@ -75,7 +75,7 @@
 
 		<div class="row">
 			<label class="col-sm-2">Cause de décès</label>
-			<div class="col-sm-10">${patient.causeDeces}</div>
+			<div class="col-sm-10"><c:if test="${not empty patient.chuCauseDeces}">${patient.chuCauseDeces.nom}</c:if></div>
 		</div>
 
 		<div class="row">

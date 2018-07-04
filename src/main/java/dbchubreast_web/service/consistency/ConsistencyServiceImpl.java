@@ -120,7 +120,7 @@ public class ConsistencyServiceImpl extends BaseService implements ConsistencySe
 		// === Date diagnostic / Date de naissance / Date deces ===
 
 		Date dateDiagnostic = tumeur.getDateDiagnostic();
-		Date dateEvolution = tumeur.getDateEvolution();
+		Date dateEvolution = patient.getDateEvolution();
 		Double ageDiagnostic = tumeur.getAgeDiagnostic();
 		Integer idEvolution = tumeur.getChuEvolution()==null ? null : tumeur.getChuEvolution().getIdEvolution();
 
@@ -154,35 +154,33 @@ public class ConsistencyServiceImpl extends BaseService implements ConsistencySe
 			this.addMessage(patient.getIdPatient(), message);
 		}
 
-		if (dateDeces!=null  && (dateEvolution==null || !dateEvolution.equals(dateDeces) )) {
-			message = "La date de la dernière nouvelle n'est pas cohérente avec la date de décès du patient " 
-					+ dateFormat.format(dateDeces) + " pour la tumeur " + nTumeur;
-			this.addMessage(patient.getIdPatient(), message);
-		}
 
+		// === Derniere nouvelle ===
+		
 		if (idEvolution!=null && dateEvolution==null) {
 			message = "La date de la dernière nouvelle n'est pas renseignée pour la tumeur " +  nTumeur;
 			this.addMessage(patient.getIdPatient(), message);
 		}
 
 		if (dateEvolution!=null && idEvolution==null) {
-			message = "L'état du patient n'est pas renseigné pour la date de la dernière nouvelle " 
+			message = "L'état à la dernière nouvelle n'est pas renseigné pour la date de la dernière nouvelle " 
 					+ dateFormat.format(dateEvolution) + " pour la tumeur " +  nTumeur;
 			this.addMessage(patient.getIdPatient(), message);
 		}
-
-		if (dateDeces!=null && idEvolution!=null && !idEvolution.equals(5)) {
-			message = "L'état du patient à la dernière nouvelle pour la tumeur " +  nTumeur
-					+ " doit être DCD, puisque le patient a décédé le " + dateFormat.format(dateDeces);
+		
+		if (dateDeces!=null && dateEvolution!=null && dateEvolution.after(dateDeces)) {
+			message = "La date de la dernière nouvelle " + dateFormat.format(dateEvolution) 
+				+ " est postérieure à la date de décès " + dateFormat.format(dateDeces);
+			this.addMessage(patient.getIdPatient(), message);
+		}
+		
+		if (dateNaissance!=null && dateEvolution!=null && dateEvolution.before(dateNaissance)) {
+			message = "La date de la dernière nouvelle " + dateFormat.format(dateEvolution) 
+				+ " est antérieure à la date de naissance" + dateFormat.format(dateNaissance);
 			this.addMessage(patient.getIdPatient(), message);
 		}
 
-		if (idEvolution!=null && idEvolution.equals(5) && (dateDeces==null || !dateDeces.equals(dateEvolution))) {
-			message = "L'état du patient à la dernière nouvelle (DCD) n'est pas cohérent avec la date de décès"
-					+ " et/ou la date de la dernière nouvelle pour la tumeur " + nTumeur;
-			this.addMessage(patient.getIdPatient(), message);
-		}
-
+		
 		// === Age au diagnostic ===
 
 		if (dateDiagnostic!=null && dateNaissance!=null && ageDiagnostic==null) {
@@ -438,11 +436,11 @@ public class ConsistencyServiceImpl extends BaseService implements ConsistencySe
 		}
 
 		// === Deces ===
-		if (patient.getDateDeces()!=null && patient.getCauseDeces()==null) {
+		if (patient.getDateDeces()!=null && patient.getChuCauseDeces()==null) {
 			message = "La cause du décès n'est pas renseignée";
 			this.addMessage(patient.getIdPatient(), message);
 		}
-		if (patient.getCauseDeces()!=null && patient.getDateDeces()==null) {
+		if (patient.getChuCauseDeces()!=null && patient.getDateDeces()==null) {
 			message = "La date de décès n'est pas renseignée";
 			this.addMessage(patient.getIdPatient(), message);
 		}
@@ -468,6 +466,4 @@ public class ConsistencyServiceImpl extends BaseService implements ConsistencySe
 
 	/** ====================================================================================== */
 
-
-	/** =================================================================================== */
 }

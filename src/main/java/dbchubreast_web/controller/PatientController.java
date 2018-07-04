@@ -94,7 +94,7 @@ public class PatientController extends BaseController {
 
 		logService.log("Affichage du patient " + idPatient);
 
-		ChuPatient patient = patientService.find(idPatient);
+		ChuPatient patient = patientService.findByIdPatientWithDependencies(idPatient);
 
 
 		if (patient == null) {
@@ -125,7 +125,7 @@ public class PatientController extends BaseController {
 
 		logService.log("Affichage d'un formulaire pour modifier le patient " + idPatient);
 
-		ChuPatient patient = patientService.find(idPatient);
+		ChuPatient patient = patientService.findByIdPatientWithDependencies(idPatient);
 
 		if (patient == null) {
 			return "redirect:/patient";
@@ -158,9 +158,13 @@ public class PatientController extends BaseController {
 		if (button != null && button.equals("save")) {
 
 			formPatientValidator.validate(formPatient, result);
+			
+			logger.debug("Enregistrer {}", formPatient);
 
 			if (result.hasErrors()) {
 				logService.log("Modification échouée de patient");
+				formPatientService.loadLists(formPatient);
+				model.addAttribute("formPatient", formPatient);
 				return "patient/form";
 			}
 
@@ -191,7 +195,7 @@ public class PatientController extends BaseController {
 			final RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 		
-		ChuPatient patient = patientService.find(idPatient);
+		ChuPatient patient = patientService.findByIdPatientWithDependencies(idPatient);
 		model.addAttribute("patient", patient);
 
 		List<ChuTumeur> listTumeurs = tumeurService.listByIdPatientWithDependencies(patient.getIdPatient(), "phases");

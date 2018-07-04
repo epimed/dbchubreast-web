@@ -23,6 +23,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -121,6 +122,23 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 			return null;
 		}
 
+	}
+	
+	/** ================================================= */
+	
+	public ChuPatient findByIdPatientWithDependencies(String idPatient) {
+		try {
+			CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+			CriteriaQuery<ChuPatient> criteria = builder.createQuery(ChuPatient.class);
+			Root<ChuPatient> root = criteria.from(ChuPatient.class);
+			criteria.select(root).where(builder.equal(root.get("idPatient"), idPatient));
+			ChuPatient patient = sessionFactory.getCurrentSession().createQuery(criteria).getSingleResult();
+			this.populateDependencies(patient);
+			return patient;
+		}
+		catch (NoResultException ex) {
+			return null;
+		}
 	}
 	
 	/** ================================================= */
@@ -249,5 +267,25 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 	}
 
 	/** ================================================= */
+	
+
+	private void populateDependencies(ChuPatient patient) {
+		if (patient != null) {
+			Hibernate.initialize(patient.getChuTumeurs());
+			Hibernate.initialize(patient.getChuCauseDeces());
+			Hibernate.initialize(patient.getChuTumeursCauseDeces());
+		}
+	}
+
+	/** ================================================= */
+
+	private void populateDependencies(List<ChuPatient> list) {
+		for (ChuPatient patient : list) {
+			this.populateDependencies(patient);
+		}
+	}
+	
+	/** ================================================= */
+
 
 }

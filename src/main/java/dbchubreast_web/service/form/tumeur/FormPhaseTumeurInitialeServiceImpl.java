@@ -46,7 +46,7 @@ import dbchubreast_web.service.util.FormatService;
 public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements FormPhaseTumeurInitialeService {
 
 	@Autowired
-	private ChuPatientDao patientDao;
+	private ChuPatientDao patientService;
 
 	@Autowired
 	private ChuPhaseTumeurDao phaseTumeurDao;
@@ -99,7 +99,7 @@ public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements F
 
 		// === Patient ===
 
-		ChuPatient patient = patientDao.find(form.getIdPatient());
+		ChuPatient patient = patientService.find(form.getIdPatient());
 		tumeur.setChuPatient(patient);
 
 		// === Tumeur ===
@@ -130,7 +130,9 @@ public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements F
 
 		tumeur.setCote(form.getCote());
 
-		tumeur.setDateEvolution(form.getDateEvolution());
+		// === Evolution / date derniere nouvelle ===
+
+		patient.setDateEvolution(form.getDateEvolution());
 		ChuEvolution evolution = evolutionDao.find(form.getIdEvolution());
 		tumeur.setChuEvolution(evolution);
 
@@ -206,7 +208,8 @@ public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements F
 				logger.debug("Saving pTnm {}", pTnm);
 				tnmDao.save(pTnm);
 			}
-		} else {
+		} 
+		else {
 
 			// update existing
 
@@ -225,6 +228,8 @@ public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements F
 
 		}
 
+		patientService.update(patient);
+		
 		// ====== UPDATE DEPENDENCIES =====
 
 		this.updateDependencies(tumeur, phaseTumeur);
@@ -250,7 +255,7 @@ public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements F
 		formTumeurInitiale.setConsentement(tumeur.getConsentement());
 
 		// === Evolution ===
-		formTumeurInitiale.setDateEvolution(tumeur.getDateEvolution());
+		formTumeurInitiale.setDateEvolution(patient.getDateEvolution());
 		formTumeurInitiale
 		.setIdEvolution(tumeur.getChuEvolution() == null ? null : tumeur.getChuEvolution().getIdEvolution());
 
@@ -301,7 +306,7 @@ public class FormPhaseTumeurInitialeServiceImpl extends BaseService implements F
 		return formTumeurInitiale;
 	}
 
-	
+
 	/** =================================================================== */
 
 	private void updateDependencies(ChuTumeur tumeur, ChuPhaseTumeur phaseTumeur) {
