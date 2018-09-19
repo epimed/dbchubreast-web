@@ -21,6 +21,7 @@ import dbchubreast_web.entity.ChuTraitement;
 public interface ChuTraitementDao {
 
 	public ChuTraitement find(Integer idTraitement);
+	public List<ChuTraitement> list();
 	public List<ChuTraitement> listByIdPatient(String idPatient);
 	public List<ChuTraitement> listByIdProtocole(Integer idProtocole);
 	public List<ChuTraitement> listByIdTumeur(Integer idTumeur);

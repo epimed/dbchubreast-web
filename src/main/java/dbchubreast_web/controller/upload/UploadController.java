@@ -11,7 +11,7 @@
  * Author: Ekaterina Bourova-Flin 
  *
  */
-package dbchubreast_web.controller;
+package dbchubreast_web.controller.upload;
 
 import java.io.File;
 import java.util.List;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import dbchubreast_web.controller.BaseController;
 import dbchubreast_web.form.FormUpload;
 import dbchubreast_web.service.form.FormUploadService;
 import dbchubreast_web.validator.FormUploadValidator;

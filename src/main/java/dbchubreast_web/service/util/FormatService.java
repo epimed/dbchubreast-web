@@ -14,6 +14,7 @@
 package dbchubreast_web.service.util;
 
 import java.text.Normalizer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +27,32 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FormatService {
+	
+	protected static SimpleDateFormat dateFormat = new SimpleDateFormat();
 
 	/** ================================================================================= */
 
+	public String convertDateToString(Date date, String pattern) {
+		if (date==null) {
+			return "";
+		}
+		if (pattern==null || pattern.isEmpty()) {
+			pattern = "dd/MM/yyyy";
+		}
+		
+		dateFormat.applyPattern(pattern);
+		try {
+			String dateString = dateFormat.format(date);
+			return dateString;
+		}
+		catch (Exception e) {
+			return "";
+		}
+
+	}
+	
+	/** ================================================================================= */
+	
 	public String[] convertStringToArray(String list) {
 		String[] array = null;
 

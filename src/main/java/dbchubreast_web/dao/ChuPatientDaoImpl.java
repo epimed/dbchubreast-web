@@ -84,6 +84,7 @@ public class ChuPatientDaoImpl extends BaseDao implements ChuPatientDao {
 		CriteriaQuery<String> criteria = builder.createQuery(String.class);
 		Root<ChuPatient> root = criteria.from(ChuPatient.class);
 		CompoundSelection<String> projection = builder.construct(String.class, root.get("idPatient"));
+		criteria.orderBy(builder.asc(root.get("idPatient")));
 		criteria.select(projection);
 		return sessionFactory.getCurrentSession().createQuery(criteria).getResultList();
 		

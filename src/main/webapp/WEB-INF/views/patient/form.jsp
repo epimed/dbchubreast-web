@@ -193,11 +193,6 @@
 			</spring:bind>
 
 
-
-
-
-
-
 			<!-- Buttons -->
 			<%@ include file="../inc/boutonsFormulaire.jsp"%>
 

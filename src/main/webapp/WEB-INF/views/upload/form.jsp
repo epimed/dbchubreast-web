@@ -41,7 +41,7 @@
 		<p class="text-danger">Attention, l'import peut prendre quelques
 			(LONGUES !) minutes</p>
 		<ul>
-			<li>Cliquez sur le bouton "Importer", sélectionneez votre fichier.</li>
+			<li>Cliquez sur le bouton "Importer", sélectionnez votre fichier.</li>
 			<li>Attendez patiemment le temps que les données s'enregistrent dans la base de données. Cela peut prendre plusieurs minutes.</li>
 			<li>Quand l'import est terminé, un écran de réussite d'import va s'afficher.</li>
 		</ul>
